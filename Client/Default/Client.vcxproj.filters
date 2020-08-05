@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{cc3f8290-d31c-4496-bd3d-335e0c624aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{d9a5f806-24c1-4792-bd7e-156e461f0101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="21.World">
+      <UniqueIdentifier>{b90dc1cb-774d-4bd5-82aa-9099aa3b6ecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine">
+      <UniqueIdentifier>{35a7a691-c595-41df-a5eb-8baf2d3f9f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System">
+      <UniqueIdentifier>{cc9c8cb8-661f-421a-9129-273a5dd3d436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\00.GraphicDevice">
+      <UniqueIdentifier>{63f07226-6808-4bf0-8f85-97171c2302ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\01.Timer">
+      <UniqueIdentifier>{28b6c3fc-fe95-4d7f-a982-6ccc65df58cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\02.Frame">
+      <UniqueIdentifier>{abf4ecad-0615-4ad9-9a99-8011aa2ac85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\01.Timer\Manager">
+      <UniqueIdentifier>{7bb7696c-c430-4690-afef-66e36355903c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\98.Headers">
+      <UniqueIdentifier>{45d142de-2bc4-411c-8ad4-881a583128d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\97.SuperClass">
+      <UniqueIdentifier>{f2f6b08c-2037-4dd9-8830-d934718428d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\97.SuperClass\00.Base">
+      <UniqueIdentifier>{e1beb463-5cb7-4dbf-8cdc-8009f1b4fc73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\02.Frame\Manager">
+      <UniqueIdentifier>{a0d04db1-6e4e-4c38-a56d-5483d1b20d2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\01.Core">
+      <UniqueIdentifier>{85bf7dce-445d-48d2-978b-c557eed0137c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\01.Core\00.World">
+      <UniqueIdentifier>{38c31f80-8da7-463c-8cc9-1d7ec4c9b5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\01.Core\01.Scene">
+      <UniqueIdentifier>{c18f5b3a-457a-4295-be0b-073d6d8c93cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD">
+      <UniqueIdentifier>{6275ab4d-8655-4d16-9dcb-34306e8824b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\01.GameObject">
+      <UniqueIdentifier>{6bcb25c2-982f-4959-900b-bc36347a0b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\00.Scene">
+      <UniqueIdentifier>{dbe87bfc-64bc-4383-bbe4-fe5e2d634cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\01.GameObject\00.Player">
+      <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component">
+      <UniqueIdentifier>{9050f6a5-f90d-4a72-9bc8-e10deeccc52f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\00.Transform">
+      <UniqueIdentifier>{4813ae59-d619-40c5-b387-4f81ae85bfb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\Manager">
+      <UniqueIdentifier>{a8f0da47-c72c-4461-9733-e2194ace3431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\01.DynamicMesh">
+      <UniqueIdentifier>{f0948765-b713-408f-a41d-4f780fee116b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\01.DynamicMesh\00.HierarchyLoader">
+      <UniqueIdentifier>{5c0b7b00-4815-4aa9-8075-a4a64f58dd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\01.DynamicMesh\01.AnimationCtrl">
+      <UniqueIdentifier>{847cec0a-8c7e-41c1-8bce-804a614f602b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\02.Renderer">
+      <UniqueIdentifier>{f6b149c6-198f-41bb-98cb-0787b11d20d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="21.World\00.OOD">
+      <UniqueIdentifier>{3c5a4a5d-5e70-4e7c-9167-d9b7b13f3e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="21.World\01.DOD">
+      <UniqueIdentifier>{e9b77212-737f-408d-a829-79f2f4b5da12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\03.DOD">
+      <UniqueIdentifier>{9797555a-5b42-4ada-97a9-2e36d70edff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\01.Core\10.PipeLine">
+      <UniqueIdentifier>{65dac24b-58bf-4fb9-9d52-8423ef1a25f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{504394de-501f-44f6-8d42-d1da41fd4636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\00.DearImgui">
+      <UniqueIdentifier>{883e0a26-e0a7-4fe2-b59c-5048e1d5298e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>99.Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>99.Default\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99.Default\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Base.cpp">
+      <Filter>90.Engine\97.SuperClass\00.Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainApp.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GraphicDevice.cpp">
+      <Filter>90.Engine\00.System\00.GraphicDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SystemManager.cpp">
+      <Filter>90.Engine\00.System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Timer.cpp">
+      <Filter>90.Engine\00.System\01.Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TimeManager.cpp">
+      <Filter>90.Engine\00.System\01.Timer\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Frame.cpp">
+      <Filter>90.Engine\00.System\02.Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FrameManager.cpp">
+      <Filter>90.Engine\00.System\02.Frame\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\World.cpp">
+      <Filter>90.Engine\01.Core\00.World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GameObject.cpp">
+      <Filter>90.Engine\02.OOD\01.GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scene.cpp">
+      <Filter>90.Engine\01.Core\01.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Object.cpp">
+      <Filter>90.Engine\02.OOD\00.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Component_Object.cpp">
+      <Filter>90.Engine\02.OOD\02.Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Transform_Object.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\00.Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DynamicMesh_Object.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HierarchyLoader.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\AnimationCtrl.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh\01.AnimationCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ComponentManager_Object.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Renderer_Object.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\02.Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\World_Object.cpp">
+      <Filter>21.World\00.OOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PipeLine.cpp">
+      <Filter>90.Engine\01.Core\10.PipeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bot.cpp">
+      <Filter>90.Engine\02.OOD\01.GameObject\00.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui_impl_dx9.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui_impl_win32.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui_widgets.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui_draw.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\DearImgui\imgui_demo.cpp">
+      <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Global.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Base.h">
+      <Filter>90.Engine\97.SuperClass\00.Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainApp.h">
+      <Filter>00.MainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Defines.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\GraphicDevice.h">
+      <Filter>90.Engine\00.System\00.GraphicDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Macro.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Function.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SystemManager.h">
+      <Filter>90.Engine\00.System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Timer.h">
+      <Filter>90.Engine\00.System\01.Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TimeManager.h">
+      <Filter>90.Engine\00.System\01.Timer\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Typedef.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Frame.h">
+      <Filter>90.Engine\00.System\02.Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FrameManager.h">
+      <Filter>90.Engine\00.System\02.Frame\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\World.h">
+      <Filter>90.Engine\01.Core\00.World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\GameObject.h">
+      <Filter>90.Engine\02.OOD\01.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scene.h">
+      <Filter>90.Engine\01.Core\01.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Object.h">
+      <Filter>90.Engine\02.OOD\00.Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Component_Object.h">
+      <Filter>90.Engine\02.OOD\02.Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Transform_Object.h">
+      <Filter>90.Engine\02.OOD\02.Component\00.Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DynamicMesh_Object.h">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HierarchyLoader.h">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Struct.h">
+      <Filter>90.Engine\98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\AnimationCtrl.h">
+      <Filter>90.Engine\02.OOD\02.Component\01.DynamicMesh\01.AnimationCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ComponentManager_Object.h">
+      <Filter>90.Engine\02.OOD\02.Component\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Renderer_Object.h">
+      <Filter>90.Engine\02.OOD\02.Component\02.Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\World_Object.h">
+      <Filter>21.World\00.OOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PipeLine.h">
+      <Filter>90.Engine\01.Core\10.PipeLine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bot.h">
+      <Filter>90.Engine\02.OOD\01.GameObject\00.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imconfig.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imgui.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imgui_impl_dx9.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imgui_impl_win32.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imgui_internal.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imstb_rectpack.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imstb_textedit.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\DearImgui\imstb_truetype.h">
+      <Filter>External\00.DearImgui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>99.Default</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
