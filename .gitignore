@@ -354,3 +354,6 @@ MigrationBackup/
 
 # Resources(ex. Model)
 Client/Resources/
+
+# Dependency Project
+Dependency/
