@@ -115,7 +115,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;..\Headers\;..\External\DearImgui\;..\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Headers\;..\External\DearImgui\;..\External\easy_profiler\;..\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,7 +155,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;..\Headers\;..\External\DearImgui\;..\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Headers\;..\External\DearImgui\;..\External\easy_profiler\;..\Shader\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -223,6 +223,22 @@
     <ClInclude Include="..\External\DearImgui\imstb_rectpack.h" />
     <ClInclude Include="..\External\DearImgui\imstb_textedit.h" />
     <ClInclude Include="..\External\DearImgui\imstb_truetype.h" />
+    <ClInclude Include="..\External\easy_profiler\arbitrary_value.h" />
+    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_aux.h" />
+    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_public_types.h" />
+    <ClInclude Include="..\External\easy_profiler\details\easy_compiler_support.h" />
+    <ClInclude Include="..\External\easy_profiler\details\profiler_aux.h" />
+    <ClInclude Include="..\External\easy_profiler\details\profiler_colors.h" />
+    <ClInclude Include="..\External\easy_profiler\details\profiler_in_use.h" />
+    <ClInclude Include="..\External\easy_profiler\details\profiler_public_types.h" />
+    <ClInclude Include="..\External\easy_profiler\easy_net.h" />
+    <ClInclude Include="..\External\easy_profiler\easy_protocol.h" />
+    <ClInclude Include="..\External\easy_profiler\easy_socket.h" />
+    <ClInclude Include="..\External\easy_profiler\profiler.h" />
+    <ClInclude Include="..\External\easy_profiler\reader.h" />
+    <ClInclude Include="..\External\easy_profiler\serialized_block.h" />
+    <ClInclude Include="..\External\easy_profiler\utility.h" />
+    <ClInclude Include="..\External\easy_profiler\writer.h" />
     <ClInclude Include="..\Headers\AnimationCtrl.h" />
     <ClInclude Include="..\Headers\Base.h" />
     <ClInclude Include="..\Headers\ComponentManager_Object.h" />

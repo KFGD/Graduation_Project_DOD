@@ -110,6 +110,12 @@
     <Filter Include="90.Engine\02.OOD\01.GameObject\00.Bot">
       <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="External\01.easy_profiler">
+      <UniqueIdentifier>{734e477c-bd59-4a02-af13-bc5d8aa134de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External\01.easy_profiler\details">
+      <UniqueIdentifier>{e217d091-c943-403d-bd8c-b104e9844443}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -342,6 +348,54 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>90.Engine\02.OOD\02.Component\03.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\arbitrary_value.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\easy_net.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\easy_protocol.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\easy_socket.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\profiler.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\reader.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\serialized_block.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\utility.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\writer.h">
+      <Filter>External\01.easy_profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_aux.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_public_types.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\easy_compiler_support.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\profiler_aux.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\profiler_colors.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\profiler_in_use.h">
+      <Filter>External\01.easy_profiler\details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\easy_profiler\details\profiler_public_types.h">
+      <Filter>External\01.easy_profiler\details</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
