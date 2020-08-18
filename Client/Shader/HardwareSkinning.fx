@@ -78,8 +78,8 @@ VS_OUT VS_MAIN(VS_IN In)
 float4 PS_MAIN(VS_OUT In) : COLOR
 {
 	float4 Diffuse = tex2D(DiffuseSampler, In.TexUV);
-	float4 lightDir = normalize(gLightDir);
 
+	float4 lightDir = normalize(gLightDir);
 	float4 Shade = saturate(dot(lightDir * -1.f, In.Normal));
 
 	float4 Color = (gLightDiffuse * Diffuse) * (Shade + 0.3f);

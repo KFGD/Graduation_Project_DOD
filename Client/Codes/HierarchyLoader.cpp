@@ -3,7 +3,6 @@
 
 #include <fstream>
 
-//FILE* pFile2;
 
 HierarchyLoader::HierarchyLoader(LPDIRECT3DDEVICE9 graphicDevice)
 	: mGraphicDevice(graphicDevice)
@@ -21,8 +20,6 @@ HRESULT HierarchyLoader::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 
 	D3DXMatrixIdentity(&pFrame->TransformationMatrix);
 	D3DXMatrixIdentity(&pFrame->CombinedTransformationMatrix);
-
-	//pFrame->CombinedTransformationMatrix = *D3DXMatrixIdentity(&pFrame->TransformationMatrix);
 
 	*ppNewFrame = pFrame;
 	return S_OK;
@@ -43,14 +40,7 @@ HRESULT HierarchyLoader::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * p
 
 	pMeshContainer->pAdjacency = new _ulong[pMesh->GetNumFaces() * 3];
 	memcpy(pMeshContainer->pAdjacency, pAdjacency, sizeof(_ulong) * pMesh->GetNumFaces() * 3);
-
-	//for (int i = 0; i < pMesh->GetNumFaces() * 3; ++i)
-	//{
-	//	DWORD temp = pMeshContainer->pAdjacency[i];
-	//	fprintf(pFile2, "%d ", temp);
-	//}
-	//fprintf(pFile, "\n");
-
+	
 	_ulong dwFVF = pMesh->GetFVF();
 
 	if (false == (dwFVF & D3DFVF_NORMAL))
@@ -122,7 +112,6 @@ HRESULT HierarchyLoader::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * p
 	
 	pMeshContainer->dwNumPaletteEntries = min(26, pMeshContainer->dwNumBones);
 		
-	/*D3DXMESH_MANAGED | D3DXMESH_WRITEONLY*/
 	HRESULT result = pMeshContainer->pSkinInfo->ConvertToIndexedBlendedMesh(
 		pMeshContainer->pOriginalMesh, 
 		D3DXMESHOPT_VERTEXCACHE | D3DXMESH_MANAGED,
@@ -269,7 +258,6 @@ HierarchyLoader * HierarchyLoader::Create(LPDIRECT3DDEVICE9 graphicDevice, const
 
 void HierarchyLoader::Free()
 {
-	//fclose(pFile2);
 	mFilePath = nullptr;
 	SafeRelease(mGraphicDevice);
 }

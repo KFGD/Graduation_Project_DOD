@@ -32,8 +32,9 @@ void Bot::Render()
 	mShader->Get_EffectHandle()->SetMatrix("gMatWorld", &mTransform->GetWorldMatrix());
 	mShader->Get_EffectHandle()->SetMatrix("gMatVP", &matVP);
 	
-	mDynamicMesh->RenderHardwareSkinning(mShader, mTransform->GetWorldMatrix());
-
+	//mDynamicMesh->RenderHardwareSkinning(mShader, mTransform->GetWorldMatrix());
+	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
+		mDynamicMesh->Render(mShader, i);
 }
 
 _bool Bot::Initialize(const Bot::Data & data)
