@@ -18,10 +18,7 @@ public:
 	_bool	UpdateHardwareSkinnedMesh(const _int meshContainerIndex);
 	_bool	SetUpAnimation(const _uint index);
 	_bool	PlayAnimation(const _double timeDelta);
-	void	Render(LPDIRECT3DDEVICE9 graphicDevice, const _int meshContainerIndex);
 	void	Render(Shader* shader, const _int meshContainerIndex);
-	void	RenderHardwareSkinning(Shader* shader, const _int meshContainerIndex, const _matrix& worldMatrix);
-	void	RenderHardwareSkinning(Shader* shader, const _matrix& worldMatrix);
 
 public:
 	_size_t	GetMeshContinerSize() const { return mMeshContainerList.size(); }
