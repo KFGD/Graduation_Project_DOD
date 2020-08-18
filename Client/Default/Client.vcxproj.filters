@@ -62,9 +62,6 @@
     <Filter Include="90.Engine\02.OOD\00.Scene">
       <UniqueIdentifier>{dbe87bfc-64bc-4383-bbe4-fe5e2d634cfa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="90.Engine\02.OOD\01.GameObject\00.Player">
-      <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="90.Engine\02.OOD\02.Component">
       <UniqueIdentifier>{9050f6a5-f90d-4a72-9bc8-e10deeccc52f}</UniqueIdentifier>
     </Filter>
@@ -103,6 +100,15 @@
     </Filter>
     <Filter Include="External\00.DearImgui">
       <UniqueIdentifier>{883e0a26-e0a7-4fe2-b59c-5048e1d5298e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Shader">
+      <UniqueIdentifier>{f95271ab-3778-402c-824e-204916060362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\02.Component\03.Shader">
+      <UniqueIdentifier>{83f1750b-f00b-4c52-b122-70b72bbd0f38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\02.OOD\01.GameObject\00.Bot">
+      <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -189,7 +195,7 @@
       <Filter>90.Engine\01.Core\10.PipeLine</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bot.cpp">
-      <Filter>90.Engine\02.OOD\01.GameObject\00.Player</Filter>
+      <Filter>90.Engine\02.OOD\01.GameObject\00.Bot</Filter>
     </ClCompile>
     <ClCompile Include="..\External\DearImgui\imgui.cpp">
       <Filter>External\00.DearImgui</Filter>
@@ -208,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="..\External\DearImgui\imgui_demo.cpp">
       <Filter>External\00.DearImgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>90.Engine\02.OOD\02.Component\03.Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,7 +314,7 @@
       <Filter>90.Engine\01.Core\10.PipeLine</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bot.h">
-      <Filter>90.Engine\02.OOD\01.GameObject\00.Player</Filter>
+      <Filter>90.Engine\02.OOD\01.GameObject\00.Bot</Filter>
     </ClInclude>
     <ClInclude Include="..\External\DearImgui\imconfig.h">
       <Filter>External\00.DearImgui</Filter>
@@ -331,10 +340,18 @@
     <ClInclude Include="..\External\DearImgui\imstb_truetype.h">
       <Filter>External\00.DearImgui</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>90.Engine\02.OOD\02.Component\03.Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt">
       <Filter>99.Default</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Shader\HardwareSkinning.fx">
+      <Filter>98.Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

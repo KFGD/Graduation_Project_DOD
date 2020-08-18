@@ -3,6 +3,7 @@
 
 class HierarchyLoader;
 class AnimationCtrl;
+class Shader;
 
 class DynamicMesh_Object :
 	public Component_Object
@@ -13,10 +14,13 @@ private:
 	virtual ~DynamicMesh_Object() = default;	
 
 public:
-	_bool	UpdateSkinnedMesh(const _int meshContainerIndex);
+	_bool	UpdateSoftwareSkinnedMesh(const _int meshContainerIndex);
+	_bool	UpdateHardwareSkinnedMesh(const _int meshContainerIndex);
 	_bool	SetUpAnimation(const _uint index);
-	_bool	PlayerAnimation(const _double timeDelta);
-	void	Render(LPDIRECT3DDEVICE9 graphicDevice);
+	_bool	PlayAnimation(const _double timeDelta);
+	void	Render(LPDIRECT3DDEVICE9 graphicDevice, const _int meshContainerIndex);
+	void	RenderHardwareSkinning(Shader* shader, const _int meshContainerIndex, const _matrix& worldMatrix);
+	void	RenderHardwareSkinning(Shader* shader, const _matrix& worldMatrix);
 
 public:
 	_size_t	GetMeshContinerSize() const { return mMeshContainerList.size(); }
@@ -26,6 +30,8 @@ private:
 	_bool	UpdateCombinedTransformationMatrices(D3DXFRAME* frame, const _matrix& parentMatrix);
 	_bool	SetUpCombinedTransformationMatricesPointer(D3DXFRAME* frame);
 
+private:
+	void	RenderHardwareSkinningRecursive(Shader* shader, const _matrix& worldMatrix, D3DXFRAME* bone);
 
 private:
 	D3DXFRAME*	mRootFrame = nullptr;

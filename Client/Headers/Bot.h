@@ -3,6 +3,7 @@
 
 class Transform_Object;
 class DynamicMesh_Object;
+class Shader;
 
 class Bot :
 	public GameObject
@@ -34,6 +35,7 @@ private:
 private:
 	Transform_Object*	mTransform = nullptr;
 	DynamicMesh_Object*	mDynamicMesh = nullptr;
+	Shader*				mShader = nullptr;
 
 public:
 	virtual void Free() override;

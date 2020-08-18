@@ -40,23 +40,23 @@ typedef	struct tagIndex32
 
 }INDEX32;
 
-//struct MESHTEXTURE
-//{
-//	enum TYPE { TYPE_DIFFUSE, TYPE_NORMAL, TYPE_SPECULAR, TYPE_EMISSIVE, TYPE_END };
-//
-//	LPDIRECT3DTEXTURE9		pTextures[TYPE_END];
-//};
-
 struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER
 {
-	LPD3DXMESH			pOriginalMesh;
-	//MESHTEXTURE*		pMeshTexture;
-	LPDIRECT3DTEXTURE9*	pMeshTexture;
-	D3DXMATRIX*			pOffsetMatrices;
+	LPD3DXMESH			pOriginalMesh;						
+	LPDIRECT3DTEXTURE9*	pMeshTexture;						
+	D3DXMATRIX*			pOffsetMatrices;					
 	D3DXMATRIX**		ppCombinedTransformationMatrices;
 	D3DXMATRIX*			pRenderMatrices;
 	unsigned long		dwNumBones;
 
+	// For.Hardware Skinning
+	unsigned long		dwNumPaletteEntries;
+	unsigned long		dwNumInfl;
+	unsigned long		dwNumAttributeGroups;
+	LPD3DXBUFFER		pBoneCombinationBuf;
+
+
+	char empty[8] = "";	// 144
 };
 
 struct D3DXFRAME_DERIVED : public D3DXFRAME

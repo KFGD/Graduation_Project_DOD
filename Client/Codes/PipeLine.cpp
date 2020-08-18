@@ -36,6 +36,9 @@ _matrix PipeLine::GetTransform(D3DTRANSFORMSTATETYPE eType)
 	case D3DTS_PROJECTION:
 		ResultMatrix = mProjectionMatrix;
 		break;
+	default:
+		MSG_BOX("GetTransform Error");
+		break;
 	}
 
 	return ResultMatrix;

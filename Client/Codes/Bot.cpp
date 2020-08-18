@@ -5,6 +5,11 @@
 #include "DynamicMesh_Object.h"
 
 #include "World.h"
+#include "PipeLine.h"
+#include "Shader.h"
+
+#include <random>
+#include <time.h>
 
 Bot::Bot()
 {
@@ -17,21 +22,17 @@ void Bot::Update(const _double timeDelta)
 
 void Bot::LateUpdate(const _double timeDelta)
 {
-	mDynamicMesh->PlayerAnimation(timeDelta);
+	mDynamicMesh->PlayAnimation(timeDelta);
 }
 
 void Bot::Render()
 {
-	World* world = GetWorld();
-	LPDIRECT3DDEVICE9 graphicDevice = world->GetGraphicDevice();
-
-	const _matrix& worldMatrix = mTransform->GetWorldMatrix();
-	graphicDevice->SetTransform(D3DTS_WORLD, &worldMatrix);
-
-	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
-		mDynamicMesh->UpdateSkinnedMesh(i);
-
-	mDynamicMesh->Render(graphicDevice);
+	PipeLine* pipeLine = PipeLine::GetInstance();
+	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
+	mShader->Get_EffectHandle()->SetMatrix("gMatWorld", &mTransform->GetWorldMatrix());
+	mShader->Get_EffectHandle()->SetMatrix("gMatVP", &matVP);
+	
+	mDynamicMesh->RenderHardwareSkinning(mShader, mTransform->GetWorldMatrix());
 
 }
 
@@ -39,7 +40,8 @@ _bool Bot::Initialize(const Bot::Data & data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
 	GameObject::AddComponent("DynamicMesh_Player", "DynamicMesh_Player", (Component_Object**)&mDynamicMesh);
-
+	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
+	
 	return true;
 }
 

@@ -47,6 +47,16 @@ bool MainApp::Initialize()
 
 	//SetUpLighting();
 	mGraphicDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//mGraphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//
+	//mGraphicDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//mGraphicDevice->SetRenderState(D3DRS_DITHERENABLE, TRUE);
+	//mGraphicDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//mGraphicDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//mGraphicDevice->SetRenderState(D3DRS_AMBIENT, 0x33333333);
+	//mGraphicDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
+	//mGraphicDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	//mGraphicDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 
 	if (false == ReadyImGUI())
 		return false;

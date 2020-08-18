@@ -20,14 +20,16 @@ _bool GraphicDevice::ReadyGraphicDevice(const HWND windowHandle, const WINMODE m
 	if (FAILED(mSDK->GetDeviceCaps(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, &DeviceCaps)))
 		return false;
 
+	//	Hardware Skinning: Matrix Palette
+	mApproxNumBones = DeviceCaps.MaxVertexShaderConst / 4;
+
 	unsigned long		uFlag = 0;
 
 	if (DeviceCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
-		uFlag |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED;
+		uFlag |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED | D3DCREATE_FPU_PRESERVE;
 
 	else
-		uFlag |= D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED;
-
+		uFlag |= D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED | D3DCREATE_FPU_PRESERVE;
 
 	D3DPRESENT_PARAMETERS			presentParam;
 	ZeroMemory(&presentParam, sizeof(D3DPRESENT_PARAMETERS));

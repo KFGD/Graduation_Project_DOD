@@ -8,6 +8,7 @@
 #include "ComponentManager_Object.h"
 #include "Transform_Object.h"
 #include "DynamicMesh_Object.h"
+#include "Shader.h"
 
 //	GameObject
 #include "GameObject.h"
@@ -34,9 +35,9 @@ void World_Object::Update(const _double timeDelta)
 
 void World_Object::Render()
 {
-	LPDIRECT3DDEVICE9 graphicDevice = World::GetGraphicDev();
-	graphicDevice->SetTransform(D3DTS_VIEW, &mPipeLine->GetTransform(D3DTS_VIEW));
-	graphicDevice->SetTransform(D3DTS_PROJECTION, &mPipeLine->GetTransform(D3DTS_PROJECTION));
+	//LPDIRECT3DDEVICE9 graphicDevice = World::GetGraphicDev();
+	//graphicDevice->SetTransform(D3DTS_VIEW, &mPipeLine->GetTransform(D3DTS_VIEW));
+	//graphicDevice->SetTransform(D3DTS_PROJECTION, &mPipeLine->GetTransform(D3DTS_PROJECTION));
 	
 	for (GameObject* gameObject : mGameObjectList)
 		gameObject->Render();
@@ -60,8 +61,9 @@ _bool World_Object::Initialize()
 	if (false == ReadyGameObject())
 		return false;
 	
-	//_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 5.f, -5.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
-	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, -2.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
+	//_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 1.f, -2.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
+	//_matrix projMatrix = *D3DXMatrixPerspectiveFovLH(&projMatrix, D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.01f, 100.f);
+	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, 3.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	_matrix projMatrix = *D3DXMatrixPerspectiveFovLH(&projMatrix, D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.01f, 1000.f);
 
 	mPipeLine->SetTransform(D3DTS_VIEW, viewMatrix);
@@ -78,6 +80,7 @@ _bool World_Object::ReadyComponent()
 	//	Ready: Component
 	mComponentManager->AddPrototype("Transform", Transform_Object::Create());
 	mComponentManager->AddPrototype("DynamicMesh_Player", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X"));
+	mComponentManager->AddPrototype("Shader_HardwareSkinning", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareSkinning.fx"));
 
 	return true;
 }
@@ -94,6 +97,8 @@ _bool World_Object::ReadyGameObject()
 _bool World_Object::SetUpBot(const _vec3 position)
 {
 	GameObject* gameObject = nullptr;
+	//gameObject = Bot::Create(Bot::Data(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), position));
+	//gameObject = Bot::Create(Bot::Data(_vec3(0.1f, 0.1f, 0.1f), _vec3(0.f, 0.f, 0.f), position));
 	gameObject = Bot::Create(Bot::Data(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), position));
 	
 	if (nullptr == gameObject)
