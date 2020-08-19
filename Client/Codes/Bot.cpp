@@ -8,9 +8,6 @@
 #include "PipeLine.h"
 #include "Shader.h"
 
-#include <random>
-#include <time.h>
-
 Bot::Bot()
 {
 }
@@ -27,12 +24,13 @@ void Bot::LateUpdate(const _double timeDelta)
 
 void Bot::Render()
 {
+	EASY_FUNCTION(profiler::colors::Magenta);
+
 	PipeLine* pipeLine = PipeLine::GetInstance();
 	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
 	mShader->Get_EffectHandle()->SetMatrix("gMatWorld", &mTransform->GetWorldMatrix());
 	mShader->Get_EffectHandle()->SetMatrix("gMatVP", &matVP);
 	
-	//mDynamicMesh->RenderHardwareSkinning(mShader, mTransform->GetWorldMatrix());
 	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
 		mDynamicMesh->Render(mShader, i);
 }
@@ -40,7 +38,7 @@ void Bot::Render()
 _bool Bot::Initialize(const Bot::Data & data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
-	GameObject::AddComponent("DynamicMesh_Player", "DynamicMesh_Player", (Component_Object**)&mDynamicMesh);
+	GameObject::AddComponent("DynamicMesh_Bot", "DynamicMesh_Bot", (Component_Object**)&mDynamicMesh);
 	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
 	
 	return true;
@@ -58,7 +56,7 @@ Bot * Bot::Create(const Bot::Data & data)
 	if (false == pInstnace->Initialize(data))
 	{
 		SafeRelease(pInstnace);
-		MSG_BOX("Failed To Create Player Instance");
+		MSG_BOX("Failed To Create Bot Instance");
 	}
 
 	return pInstnace;

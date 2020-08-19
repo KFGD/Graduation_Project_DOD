@@ -9,6 +9,8 @@ class GraphicDevice;
 //	Core
 class World;
 
+class ModeController;
+
 class MainApp final : public Base
 {
 private:
@@ -26,24 +28,19 @@ public:
 public:
 	int		Update(const double tiemDelta);
 	bool	Render();
-
-private:
-	_bool	UpdateImGUI();
-	_bool	RenderImGUI();
-
+	
 private:
 	bool	ReadySystem(const HWND hWnd, const bool bWinMode, const UINT sizeX, const UINT sizeY);
 	bool	ReadyWorld();
-	_bool	SetUpLighting();
-	_bool	ReadyImGUI();
-
+	
 private:
 	GraphicDevice* mGraphicDeviceSys = nullptr;
+	
+private:
+	ModeController*		mModeController = nullptr;
 
 private:
 	LPDIRECT3DDEVICE9	mGraphicDevice = nullptr;
-	_bool	mIsWindowMode = true;
-	_bool	mIsShowAnotherWindow = false;
 
 private:
 	//	World

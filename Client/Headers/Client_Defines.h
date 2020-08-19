@@ -1,7 +1,20 @@
 #pragma once
 
-enum class Mode
+namespace Program
 {
-	GAME,
-	CREATIVE
+	enum Mode : int
+	{
+		GAME,
+		CREATIVE
+	};
 };
+
+namespace Game
+{
+	enum ObjectType
+	{
+		Player,
+		Bot,
+		End
+	};
+}

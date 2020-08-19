@@ -120,7 +120,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;..\External\easy_profiler\easy_profiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>2.0</ShaderModel>
@@ -162,7 +162,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;..\External\easy_profiler\easy_profiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderModel>2.0</ShaderModel>
@@ -181,21 +181,26 @@
     <ClCompile Include="..\Codes\Base.cpp" />
     <ClCompile Include="..\Codes\ComponentManager_Object.cpp" />
     <ClCompile Include="..\Codes\Component_Object.cpp" />
+    <ClCompile Include="..\Codes\CreativeMode.cpp" />
     <ClCompile Include="..\Codes\DynamicMesh_Object.cpp" />
     <ClCompile Include="..\Codes\Frame.cpp" />
     <ClCompile Include="..\Codes\FrameManager.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GraphicDevice.cpp" />
     <ClCompile Include="..\Codes\HierarchyLoader.cpp" />
+    <ClCompile Include="..\Codes\KObject.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\PipeLine.cpp" />
     <ClCompile Include="..\Codes\Bot.cpp" />
+    <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Renderer_Object.cpp" />
     <ClCompile Include="..\Codes\Scene.cpp" />
+    <ClCompile Include="..\Codes\StaticMesh_Object.cpp" />
     <ClCompile Include="..\Codes\SystemManager.cpp" />
     <ClCompile Include="..\Codes\TimeManager.cpp" />
     <ClCompile Include="..\Codes\Timer.cpp" />
     <ClCompile Include="..\Codes\Transform_Object.cpp" />
+    <ClCompile Include="..\Codes\ModeController.cpp" />
     <ClCompile Include="..\Codes\World.cpp" />
     <ClCompile Include="..\Codes\World_Object.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui.cpp" />
@@ -223,26 +228,28 @@
     <ClInclude Include="..\External\DearImgui\imstb_rectpack.h" />
     <ClInclude Include="..\External\DearImgui\imstb_textedit.h" />
     <ClInclude Include="..\External\DearImgui\imstb_truetype.h" />
-    <ClInclude Include="..\External\easy_profiler\arbitrary_value.h" />
-    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_aux.h" />
-    <ClInclude Include="..\External\easy_profiler\details\arbitrary_value_public_types.h" />
-    <ClInclude Include="..\External\easy_profiler\details\easy_compiler_support.h" />
-    <ClInclude Include="..\External\easy_profiler\details\profiler_aux.h" />
-    <ClInclude Include="..\External\easy_profiler\details\profiler_colors.h" />
-    <ClInclude Include="..\External\easy_profiler\details\profiler_in_use.h" />
-    <ClInclude Include="..\External\easy_profiler\details\profiler_public_types.h" />
-    <ClInclude Include="..\External\easy_profiler\easy_net.h" />
-    <ClInclude Include="..\External\easy_profiler\easy_protocol.h" />
-    <ClInclude Include="..\External\easy_profiler\easy_socket.h" />
-    <ClInclude Include="..\External\easy_profiler\profiler.h" />
-    <ClInclude Include="..\External\easy_profiler\reader.h" />
-    <ClInclude Include="..\External\easy_profiler\serialized_block.h" />
-    <ClInclude Include="..\External\easy_profiler\utility.h" />
-    <ClInclude Include="..\External\easy_profiler\writer.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\arbitrary_value.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\arbitrary_value_aux.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\arbitrary_value_public_types.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\easy_compiler_support.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\profiler_aux.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\profiler_colors.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\profiler_in_use.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\details\profiler_public_types.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\easy_net.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\easy_protocol.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\easy_socket.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\profiler.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\reader.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\serialized_block.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\utility.h" />
+    <ClInclude Include="..\External\easy_profiler\easy\writer.h" />
     <ClInclude Include="..\Headers\AnimationCtrl.h" />
     <ClInclude Include="..\Headers\Base.h" />
+    <ClInclude Include="..\Headers\Client_Defines.h" />
     <ClInclude Include="..\Headers\ComponentManager_Object.h" />
     <ClInclude Include="..\Headers\Component_Object.h" />
+    <ClInclude Include="..\Headers\CreativeMode.h" />
     <ClInclude Include="..\Headers\Defines.h" />
     <ClInclude Include="..\Headers\DynamicMesh_Object.h" />
     <ClInclude Include="..\Headers\Frame.h" />
@@ -252,18 +259,22 @@
     <ClInclude Include="..\Headers\Global.h" />
     <ClInclude Include="..\Headers\GraphicDevice.h" />
     <ClInclude Include="..\Headers\HierarchyLoader.h" />
+    <ClInclude Include="..\Headers\KObject.h" />
     <ClInclude Include="..\Headers\Macro.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\PipeLine.h" />
     <ClInclude Include="..\Headers\Bot.h" />
+    <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Renderer_Object.h" />
     <ClInclude Include="..\Headers\Scene.h" />
+    <ClInclude Include="..\Headers\StaticMesh_Object.h" />
     <ClInclude Include="..\Headers\Struct.h" />
     <ClInclude Include="..\Headers\SystemManager.h" />
     <ClInclude Include="..\Headers\TimeManager.h" />
     <ClInclude Include="..\Headers\Timer.h" />
     <ClInclude Include="..\Headers\Transform_Object.h" />
     <ClInclude Include="..\Headers\Typedef.h" />
+    <ClInclude Include="..\Headers\ModeController.h" />
     <ClInclude Include="..\Headers\World.h" />
     <ClInclude Include="..\Headers\World_Object.h" />
     <ClInclude Include="Client.h" />

@@ -16,6 +16,19 @@
 #include <ctime>
 #include <process.h>
 
+#include <chrono>
+#include <thread>
+#include <condition_variable>
+#include <cstdlib>
+#include <math.h>
+
+//	easy_profiler
+
+#define BUILD_WITH_EASY_PROFILER
+#include <easy/profiler.h>
+#include <easy/arbitrary_value.h>
+#include <easy/reader.h>
+
 using namespace std;
 
 //	Direct3D
