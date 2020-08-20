@@ -95,7 +95,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		const _double time = pTimerManager->GetTimeDelta("Timer_Default");
-		if (pFrameManager->IsPermitCall("Frame60", time))
+		//if (pFrameManager->IsPermitCall("Frame60", time))
 		{
 			if (nullptr == pMainApp)
 				break;

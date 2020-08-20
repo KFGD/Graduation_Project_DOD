@@ -46,27 +46,26 @@ CreativeMode::CreativeMode()
 void CreativeMode::Active(IWorldController* worldController)
 {
 	InitSampleData();
-	worldController->ClearObjectList();
-	worldController->SetUpObjectList(mObjectList);
+	ReloadWorld(worldController);
 
 	mbDisplayObjectFilter.fill(true);
 	mDisplayObjectList.reserve(mObjectList.size());
 	UpdateDisplayList();
 }
 
-void CreativeMode::InActive()
+void CreativeMode::InActive(IWorldController* worldController)
 {
 	ClearDisplayObjectList();
 	ClearObjectList();
 }
 
-void CreativeMode::Update()
+void CreativeMode::Update(IWorldController* worldController)
 {
-	UpdateDisplayObjectListUI();
+	UpdateDisplayObjectListUI(worldController);
 	UpdateEditorUI();
 }
 
-void CreativeMode::UpdateDisplayObjectListUI()
+void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 	ImGui::BeginChild("ObjectList", ImVec2(0, 250), true, 0);
@@ -116,6 +115,8 @@ void CreativeMode::UpdateDisplayObjectListUI()
 		UpdateDisplayList();
 
 		mSelectedObjectListIndex = -1;
+
+		ReloadWorld(worldController);
 	}
 
 	ImGui::EndChild();
@@ -137,8 +138,10 @@ void CreativeMode::UpdateEditorUI()
 
 }
 
-void CreativeMode::UpdateObjectList()
+void CreativeMode::ReloadWorld(IWorldController* worldController)
 {
+	worldController->ClearObjectList();
+	worldController->SetUpObjectList(mObjectList);
 }
 
 void CreativeMode::UpdateDisplayList()
@@ -180,9 +183,14 @@ void CreativeMode::InitSampleData()
 		KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(0.f, 0.f, 0.f)))));
 
 	constexpr _float gap = 0.5f;
-	for (_int i = -4; i < -1; ++i)
-		for (_int j = -4; j < -1; ++j)
+	for (_int i = -4; i < 0; ++i)
+		for (_int j = 0; j < 4; ++j)
 			mObjectList.emplace_back(KObject::Create(KObject::Info(Game::ObjectType::Bot,
+				KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(i * gap, 0.f, j * gap)))));
+
+	for (_int i = 4; i > 0; --i)
+		for (_int j = 0; j < 4; ++j)
+			mObjectList.emplace_back(KObject::Create(KObject::Info(Game::ObjectType::Block,
 				KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(i * gap, 0.f, j * gap)))));
 }
 

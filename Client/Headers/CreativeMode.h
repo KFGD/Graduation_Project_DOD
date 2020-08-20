@@ -17,15 +17,15 @@ private:
 	
 public:
 	virtual void	Active(IWorldController* worldController)	override;
-	virtual void	InActive()	override;
-	virtual void	Update()	override;
+	virtual void	InActive(IWorldController* worldController)	override;
+	virtual void	Update(IWorldController* worldController)	override;
 	
 private:
-	void	UpdateDisplayObjectListUI();
+	void	UpdateDisplayObjectListUI(IWorldController* worldController);
 	void	UpdateEditorUI();
 
 private:
-	void	UpdateObjectList();
+	void	ReloadWorld(IWorldController* worldController);
 	void	UpdateDisplayList();
 	void	ClearObjectList();
 	void	ClearDisplayObjectList();
@@ -39,7 +39,7 @@ private:
 private:
 	//	Display Object List
 	_int	mSelectedObjectListIndex;
-	array<_bool, Game::Type_End> mbDisplayObjectFilter;
+	array<_bool, Game::Type_End>	mbDisplayObjectFilter;
 	vector<pair<_int, KObject*>>	mDisplayObjectList;
 
 	typedef pair<_int, KObject*>	DISPLAY_PAIR;

@@ -135,7 +135,7 @@ void ModeController::UpdateModeController(IWorldController* worldController)
 	{
 		if (Mode::GAME == mCurMode)
 		{
-			mCreativeMode->InActive();
+			mCreativeMode->InActive(worldController);
 		}
 		else if (Mode::CREATIVE == mCurMode)
 		{
@@ -169,7 +169,7 @@ void ModeController::UpdateModeController(IWorldController* worldController)
 			break;
 
 		case Mode::CREATIVE:
-			mCreativeMode->Update();
+			mCreativeMode->Update(worldController);
 			break;
 		}
 	}

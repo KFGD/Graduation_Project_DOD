@@ -10,11 +10,11 @@ void GameMode::Active(IWorldController* worldController)
 {
 }
 
-void GameMode::InActive()
+void GameMode::InActive(IWorldController* worldController)
 {
 }
 
-void GameMode::Update()
+void GameMode::Update(IWorldController* worldController)
 {
 }
 

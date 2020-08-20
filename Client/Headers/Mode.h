@@ -10,6 +10,6 @@ protected:
 
 public:
 	virtual void	Active(IWorldController* worldController) = 0;
-	virtual void	InActive() = 0;
-	virtual void	Update() = 0;
+	virtual void	InActive(IWorldController* worldController) = 0;
+	virtual void	Update(IWorldController* worldController) = 0;
 };

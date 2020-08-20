@@ -54,6 +54,7 @@ int MainApp::Update(const double tiemDelta)
 		return -1;
 
 	mWorlds[mCurMode]->Update(tiemDelta);
+	
 	mModeController->Update(this);
 
 	return 0;

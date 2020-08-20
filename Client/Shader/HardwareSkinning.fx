@@ -1,4 +1,4 @@
-float4 gLightDir = { 0.0f, -1.0f, -1.0f, 1.0f };    //light Direction 
+float4 gLightDir = { 0.0f, -1.0f, 1.0f, 1.0f };    //light Direction 
 float4 gLightDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f }; // Light Diffuse
 
 float4x3	gMatrixPalette[26] : WORLDMATRIXARRAY;

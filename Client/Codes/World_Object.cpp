@@ -56,8 +56,8 @@ void World_Object::Render()
 		gameObject->Render();
 	for (GameObject* gameObject : mBotList)
 		gameObject->Render();
-	for (GameObject* gameObject : mBlockList)
-		gameObject->Render();
+
+	RenderBlock();
 }
 
 _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
@@ -118,11 +118,34 @@ _bool World_Object::Initialize()
 	if (false == ReadyComponent())
 		return false;
 	
-	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, 3.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
+	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, -3.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	_matrix projMatrix = *D3DXMatrixPerspectiveFovLH(&projMatrix, D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.01f, 1000.f);
 
 	mPipeLine->SetTransform(D3DTS_VIEW, viewMatrix);
 	mPipeLine->SetTransform(D3DTS_PROJECTION, projMatrix);
+
+	D3DVERTEXELEMENT9 vertexElem[] =
+	{
+		{ 0, 0,		D3DDECLTYPE_FLOAT3,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_POSITION, 0 },
+		{ 0, 12,	D3DDECLTYPE_FLOAT3,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_NORMAL,   0 },
+		{ 0, 24,	D3DDECLTYPE_FLOAT2,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_TEXCOORD, 0 },
+		{ 1, 0,		D3DDECLTYPE_FLOAT4,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_TEXCOORD, 1 },
+		{ 1, 16,	D3DDECLTYPE_FLOAT4,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_TEXCOORD, 2 },
+		{ 1, 32,	D3DDECLTYPE_FLOAT4,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_TEXCOORD, 3 },
+		{ 1, 48,	D3DDECLTYPE_FLOAT4,		D3DDECLMETHOD_DEFAULT,	D3DDECLUSAGE_TEXCOORD, 4 },
+		D3DDECL_END()
+	};
+
+	//	For. Hardware Instancing
+	HRESULT hr = 0;
+
+	hr = GetGraphicDevice()->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, 0, D3DPOOL_MANAGED, &mVertexBuffer, nullptr);
+	if (FAILED(hr))
+		return false;
+
+	hr = GetGraphicDevice()->CreateVertexDeclaration(vertexElem, &mVertexDeclaration);
+	if (FAILED(hr))
+		return false;
 
 	return true;
 }
@@ -146,9 +169,84 @@ _bool World_Object::ReadyComponent()
 	return true;
 }
 
+void World_Object::RenderBlock()
+{
+	if (0 == mBlockList.size())
+		return;
+
+	Shader*	shader = mBlockList[0]->GetSahder();
+	StaticMesh_Object*	staticMesh = mBlockList[0]->GetStaticMesh();
+
+	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
+
+	shader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+	shader->SetTexture("gDiffuseTexture", staticMesh->GetTexutre(0));
+
+	shader->BeginShader(nullptr);
+	shader->BeginPass(0);
+
+	_int numBlock = 0;
+	_matrix*	worldMatrixList = nullptr;
+
+	mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
+	for (_int i = 0; i < mBlockList.size(); ++i)
+	{
+		memcpy(worldMatrixList[i], mBlockList[i]->GetTransform()->GetWorldMatrix(), sizeof(_matrix));
+
+		++numBlock;
+
+		if (mBlockRenderBatchSize == numBlock)
+		{
+			mVertexBuffer->Unlock();
+			RenderHardwareInstancing(staticMesh, numBlock, shader);
+			numBlock = 0;
+			mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
+		}
+	}
+	mVertexBuffer->Unlock();
+
+	if (0 < numBlock)
+		RenderHardwareInstancing(staticMesh, numBlock, shader);
+
+	worldMatrixList = nullptr;
+
+	shader->EndPass();
+	shader->EndShader();
+}
+
+void World_Object::RenderHardwareInstancing(StaticMesh_Object* staticMesh, _int numBlock, Shader* shader)
+{
+	LPDIRECT3DVERTEXBUFFER9 blockVB = nullptr;
+	staticMesh->GetVertexBuffer(blockVB);
+
+	LPDIRECT3DINDEXBUFFER9	blockIB = nullptr;
+	staticMesh->GetIndexBuffer(blockIB);
+
+	const _ulong blockVertexSize = staticMesh->GetVertexSize();
+
+	GetGraphicDevice()->SetVertexDeclaration(mVertexDeclaration);
+	GetGraphicDevice()->SetStreamSource(0, blockVB, 0, blockVertexSize);
+	GetGraphicDevice()->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | numBlock);
+
+	GetGraphicDevice()->SetStreamSource(1, mVertexBuffer, 0, sizeof(_matrix));
+	GetGraphicDevice()->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
+	GetGraphicDevice()->SetIndices(blockIB);
+	
+	GetGraphicDevice()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, staticMesh->GetVertexNum(), 0, staticMesh->GetFacesNum());
+
+	SafeRelease(blockIB);
+	SafeRelease(blockVB);
+
+	GetGraphicDevice()->SetStreamSourceFreq(0, 1);
+	GetGraphicDevice()->SetStreamSourceFreq(1, 1);
+}
+
 void World_Object::Free()
 {
 	Clear();
+
+	SafeRelease(mVertexBuffer);
+	SafeRelease(mVertexDeclaration);
 
 	SafeRelease(mPipeLine);
 	SafeRelease(mComponentManager);

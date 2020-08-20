@@ -30,6 +30,11 @@ public:
 	virtual void LateUpdate(const _double timeDelta) override;
 	virtual void Render() override;
 
+public:
+	Transform_Object*	GetTransform() { return mTransform; }
+	StaticMesh_Object*	GetStaticMesh() { return mStaticMesh; }
+	Shader*				GetSahder() { return mShader; }
+
 private:
 	_bool	Initialize(const BlockObj::Data& data);
 

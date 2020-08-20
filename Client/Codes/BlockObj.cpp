@@ -42,6 +42,14 @@ void BlockObj::Free()
 
 BlockObj * BlockObj::Create(const BlockObj::Data & data)
 {
-	return nullptr;
+	BlockObj*	pInstnace = new BlockObj();
+
+	if (false == pInstnace->Initialize(data))
+	{
+		SafeRelease(pInstnace);
+		MSG_BOX("Failed To Create BlockObj Instance");
+	}
+
+	return pInstnace;
 }
 

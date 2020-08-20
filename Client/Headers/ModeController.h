@@ -18,6 +18,7 @@ private:
 
 public:
 	_bool	Ready(LPDIRECT3DDEVICE9 graphicDevice);
+	Program::Mode	GetMode() const { return mCurMode; }
 
 public:
 	void	Update(IWorldController* worldController);

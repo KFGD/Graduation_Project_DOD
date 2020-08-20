@@ -18,8 +18,8 @@ private:
 
 public:
 	virtual void	Active(IWorldController* worldController)	override;
-	virtual void	InActive()	override;
-	virtual void	Update()	override;
+	virtual void	InActive(IWorldController* worldController)	override;
+	virtual void	Update(IWorldController* worldController)	override;
 
 private:
 	vector<KObject*>	mObjectList;

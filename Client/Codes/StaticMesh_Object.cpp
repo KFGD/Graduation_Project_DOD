@@ -30,11 +30,41 @@ void StaticMesh_Object::Render(Shader * shader)
 {
 	shader->BeginShader(nullptr);
 	shader->BeginPass(0);
-
-
-
+	
 	shader->EndPass();
 	shader->EndShader();
+}
+
+_bool StaticMesh_Object::GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9 & vertexBuffer)
+{
+	const HRESULT hr = mMesh->GetVertexBuffer(&vertexBuffer);
+	return FAILED(hr);
+}
+
+_bool StaticMesh_Object::GetIndexBuffer(LPDIRECT3DINDEXBUFFER9 & indexBuffer)
+{
+	const HRESULT hr = mMesh->GetIndexBuffer(&indexBuffer);
+	return FAILED(hr);
+}
+
+_ulong StaticMesh_Object::GetVertexSize() const
+{
+	return mMesh->GetNumBytesPerVertex();
+}
+
+_ulong StaticMesh_Object::GetVertexNum() const
+{
+	return mMesh->GetNumVertices();
+}
+
+_ulong StaticMesh_Object::GetFacesNum() const
+{
+	return mMesh->GetNumFaces();
+}
+
+LPDIRECT3DTEXTURE9 StaticMesh_Object::GetTexutre(const _ulong index)
+{
+	return mTextures[index];
 }
 
 _bool StaticMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)

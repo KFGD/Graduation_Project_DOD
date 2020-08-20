@@ -14,6 +14,16 @@ private:
 public:
 	void	Render(Shader* shader);
 
+public:
+	_bool	GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9& vertexBuffer);
+	_bool	GetIndexBuffer(LPDIRECT3DINDEXBUFFER9& indexBuffer);
+	_ulong	GetVertexSize() const;
+	_ulong	GetVertexNum() const;
+	_ulong	GetFacesNum() const;
+
+public:
+	LPDIRECT3DTEXTURE9	GetTexutre(const _ulong index);
+
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
 
@@ -27,7 +37,7 @@ private:
 	_ulong			mNumMaterials = 0;
 	D3DXMATERIAL*	mMaterials = nullptr;
 	LPDIRECT3DTEXTURE9*	mTextures = nullptr;
-
+	
 private:
 	_matrix			mPivotMatrix;
 
