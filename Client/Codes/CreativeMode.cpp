@@ -27,16 +27,16 @@ static bool Items_DisplayVectorGetter(void* data, int idx, const char** out_text
 {
 	static char buff[128] = "";
 
-	const vector<pair<_int, KObject*>>& displayList = *(vector<pair<_int, KObject*>>*)data;
+	const vector<KObject*>& objectList = *(vector<KObject*>*)data;
 
-	if (0 == displayList.size())
+	if (0 == objectList.size())
 		return false;
 
 	if (out_text)
 	{
-		const pair<_int, KObject*>& pair = displayList[idx];
-		const KObject::Info& info = pair.second->GetInfo();
-		sprintf_s(buff, "%s \t\t\t(%.3f, %.3f, %.3f)", pair.second->GetObjectTypeName(), info.Transform.Position.x, info.Transform.Position.y, info.Transform.Position.z);
+		KObject* object = objectList[idx];
+		const KObject::Info& info = object->GetInfo();
+		sprintf_s(buff, "%s \t\t\t(%.3f, %.3f, %.3f)", object->GetObjectTypeName(), info.Transform.Position.x, info.Transform.Position.y, info.Transform.Position.z);
 		*out_text = buff;
 	}
 	return true;
@@ -50,24 +50,20 @@ void CreativeMode::Active(IWorldController* worldController)
 {
 	InitSampleData();
 	/*ReloadWorld(worldController);*/
-
-	mbDisplayObjectFilter.fill(true);
-	mDisplayObjectList.reserve(mObjectList.size());
-	UpdateDisplayList();
 }
 
 void CreativeMode::InActive(IWorldController* worldController)
 {
-	ClearDisplayObjectList();
 	ClearObjectList();
 }
 
 void CreativeMode::Update(IWorldController* worldController)
 {
 	UpdateDisplayObjectListUI(worldController);
-	UpdateEditorUI();
+	UpdateCreateUI();
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-		PickingObject();
+		if (PickingObject())
+			MappingObjectToUI(mSelectedObjectListIndex);
 }
 
 void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
@@ -154,7 +150,7 @@ void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
 	//graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
-void CreativeMode::PickingObject()
+_bool CreativeMode::PickingObject()
 {
 	POINT mouse;
 	::GetCursorPos(&mouse);
@@ -162,7 +158,8 @@ void CreativeMode::PickingObject()
 
 	PipeLine::RayCast rayCast = PipeLine::GetInstance()->ConvertScreenPosToRayCast(_vec2(mouse.x, mouse.y));
 
-	_float nearestDis = 3.402823466e+38f;
+	constexpr _float MAX_FLOAT = 3.402823466e+38f;
+	_float nearestDis = MAX_FLOAT;
 	for (_int i = 0; i < mObjectList.size(); ++i)
 	{
 		KObject*& object = mObjectList[i];
@@ -232,57 +229,82 @@ void CreativeMode::PickingObject()
 
 		}
 	}
+
+	return nearestDis != MAX_FLOAT;
 }
 
 void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::BeginChild("ObjectList", ImVec2(0, 250), true, 0);
+	ImGui::BeginChild("ObjectList", ImVec2(0, 350), true, 0);
 
 	constexpr char* objectTypeName[Game::Type_End] = { "Player", "Bot", "Block" };
 
 	ImGui::Text("[ObjectList]");
 
-	ImGui::Text("Filter: ");
-	ImGui::SameLine();
-
-	_bool bNeedUpdate = false;
-	for (_int i = 0; i < Game::Type_End; ++i)
-	{
-		const _bool curValue = mbDisplayObjectFilter[i];
-		ImGui::Checkbox(objectTypeName[i], &mbDisplayObjectFilter[i]);
-		ImGui::SameLine();
-		if (curValue != mbDisplayObjectFilter[i])
-			bNeedUpdate = true;
-	}
-	ImGui::NewLine();
-
-	if (bNeedUpdate)
-	{
-		ClearDisplayObjectList();
-		UpdateDisplayList();
-	}
-
 	ImGui::SetNextItemWidth(-1);
-	ImGui::ListBox("", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mDisplayObjectList, mDisplayObjectList.size(), 8);
+	if (ImGui::ListBox("", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mObjectList, mObjectList.size(), 8))
+		MappingObjectToUI(mSelectedObjectListIndex);
+
+	ImGui::NewLine();
+	
+	_bool bChanged = false;
+
+	ImGui::Text("Scale:");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	if (ImGui::InputFloat3("EditScale", mEditScale))
+		bChanged = true;
+
+	ImGui::Text("Rotation:");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	if (ImGui::InputFloat3("EditRotation", mEditRotation))
+		bChanged = true;
+
+	ImGui::Text("Position:");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(-1);
+	if (ImGui::InputFloat3("EdiotPosition", mEditPosition))
+		bChanged = true;
+
+	ImGui::Text("ObjectType:");
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Player##Edit", Game::Player == mEditObjectType))
+	{
+		mEditObjectType = Game::Player;
+		bChanged = true;
+	}
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Bot##Edit", Game::Bot == mEditObjectType))
+	{
+		mEditObjectType = Game::Bot;
+		bChanged = true;
+	}
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Block##Edit", Game::Block == mEditObjectType))
+	{
+		mEditObjectType = Game::Block;
+		bChanged = true;
+	}
+
+	if (bChanged)
+		MappingUIToObject(mSelectedObjectListIndex);
 
 	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 70.f);
 	if (ImGui::Button("Delete") && -1 != mSelectedObjectListIndex)
 	{
-		DISPLAY_PAIR& pair = mDisplayObjectList[mSelectedObjectListIndex];
-		SafeRelease(pair.second);
-
 		auto iter = mObjectList.begin();
-		for (_int i = 0; i < pair.first; ++i)
+		for (_int i = 0; i < mSelectedObjectListIndex; ++i)
 			++iter;
 
 		SafeRelease((*iter));
 		mObjectList.erase(iter);
-
-		ClearDisplayObjectList();
-		UpdateDisplayList();
-
+		
 		mSelectedObjectListIndex = -1;
 
 		//ReloadWorld(worldController);
@@ -294,44 +316,49 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 	//ImGui::Separator();
 }
 
-void CreativeMode::UpdateEditorUI()
+void CreativeMode::UpdateCreateUI()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::BeginChild("Editor", ImVec2(0, 250), true, 0);
+	ImGui::BeginChild("Create", ImVec2(0, 150), true, 0);
 
 	ImGui::Text("[Editor]");
 
 	ImGui::Text("Scale:");
 	ImGui::SameLine();
-	ImGui::InputFloat3("", mCreateScale);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputFloat3("CreateScale", mCreateScale);
 
 	ImGui::Text("Rotation:");
 	ImGui::SameLine();
-	ImGui::InputFloat3("", mCreateRotation);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputFloat3("CreateRotation", mCreateRotation);
 
 	ImGui::Text("Position:");
 	ImGui::SameLine();
-	ImGui::InputFloat3("", mCreatePos);
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputFloat3("CreatePosition", mCreatePos);
 
 	ImGui::Text("ObjectType:");
 
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Player", Game::Player == mCurSelectedObjectType))
-		mCurSelectedObjectType = Game::Player;
+	if (ImGui::RadioButton("Player##Create", Game::Player == mCreateObjectType))
+		mCreateObjectType = Game::Player;
 
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Bot", Game::Bot == mCurSelectedObjectType))
-		mCurSelectedObjectType = Game::Bot;
+	if (ImGui::RadioButton("Bot##Create", Game::Bot == mCreateObjectType))
+		mCreateObjectType = Game::Bot;
 
 	ImGui::SameLine();
-	if (ImGui::RadioButton("Block", Game::Block == mCurSelectedObjectType))
-		mCurSelectedObjectType = Game::Block;
+	if (ImGui::RadioButton("Block##Create", Game::Block == mCreateObjectType))
+		mCreateObjectType = Game::Block;
 
 	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
 	if (ImGui::Button("Add"))
 	{
-
+		KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, mCreatePos));
+		KObject* newObject = KObject::Create(info);
+		mObjectList.emplace_back(newObject);
 	}
 
 	ImGui::EndChild();
@@ -345,23 +372,22 @@ void CreativeMode::ReloadWorld(IWorldController* worldController)
 	worldController->SetUpObjectList(mObjectList);
 }
 
-void CreativeMode::UpdateDisplayList()
+void CreativeMode::MappingObjectToUI(const _int objectIndex)
 {
-	_int flag = 0;
-	for (_int i = 0; i < Game::Type_End; ++i)
-		if (mbDisplayObjectFilter[i])
-			flag |= 1 << i;
+	const KObject::Info& info = mObjectList[objectIndex]->GetInfo();
+	mEditScale = info.Transform.Scale;
+	mEditRotation = info.Transform.Rotation;
+	mEditPosition = info.Transform.Position;
 
-	for (_int i = 0; i < mObjectList.size(); ++i)
-	{
-		KObject* object = mObjectList[i];
-		const KObject::Info& info = object->GetInfo();
-		if (flag & (1 << info.Objecttype))
-		{
-			SafeAddRef(object);
-			mDisplayObjectList.emplace_back(i, object);
-		}
-	}
+	mEditObjectType = info.Objecttype;
+}
+
+void CreativeMode::MappingUIToObject(const _int objectIndex)
+{
+	if (0 > objectIndex)
+		return;
+	KObject::Info info(mEditObjectType, KEngine::Transform(mEditScale, mEditRotation, mEditPosition));
+	mObjectList[objectIndex]->SetInfo(info);
 }
 
 void CreativeMode::ClearObjectList()
@@ -371,12 +397,6 @@ void CreativeMode::ClearObjectList()
 	mObjectList.clear();
 }
 
-void CreativeMode::ClearDisplayObjectList()
-{
-	for (DISPLAY_PAIR& pair : mDisplayObjectList)
-		SafeRelease(pair.second);
-	mDisplayObjectList.clear();
-}
 
 _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
@@ -556,7 +576,6 @@ void CreativeMode::Free()
 	SafeRelease(mBotMesh);
 	SafeRelease(mBlockMesh);
 
-	ClearDisplayObjectList();
 	ClearObjectList();
 
 	Mode::Free();

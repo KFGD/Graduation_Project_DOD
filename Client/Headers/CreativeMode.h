@@ -26,17 +26,20 @@ public:
 	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
 
 private:
-	void	PickingObject();
+	_bool	PickingObject();
 
 private:
 	void	UpdateDisplayObjectListUI(IWorldController* worldController);
-	void	UpdateEditorUI();
+	void	UpdateCreateUI();
 
 private:
 	void	ReloadWorld(IWorldController* worldController);
-	void	UpdateDisplayList();
+
+	//	Edit
+	void	MappingObjectToUI(const _int objectIndex);
+	void	MappingUIToObject(const _int objectIndex);
+	
 	void	ClearObjectList();
-	void	ClearDisplayObjectList();
 	
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
@@ -51,17 +54,22 @@ private:
 private:
 	//	Display Object List
 	_int	mSelectedObjectListIndex;
-	array<_bool, Game::Type_End>	mbDisplayObjectFilter;
-	vector<pair<_int, KObject*>>	mDisplayObjectList;
+	//array<_bool, Game::Type_End>	mbDisplayObjectFilter;
+	//vector<pair<_int, KObject*>>	mDisplayObjectList;
 
-	typedef pair<_int, KObject*>	DISPLAY_PAIR;
+	//typedef pair<_int, KObject*>	DISPLAY_PAIR;
+
+	_vec3				mEditScale;
+	_vec3				mEditRotation;
+	_vec3				mEditPosition;
+	Game::ObjectType	mEditObjectType = Game::Player;
 
 private:
-	//	Editor
+	//	Create
 	_vec3				mCreateScale;
 	_vec3				mCreateRotation;
 	_vec3				mCreatePos;
-	Game::ObjectType	mCurSelectedObjectType = Game::Player;
+	Game::ObjectType	mCreateObjectType = Game::Player;
 	
 private:
 	Shader*				mInstancingShader = nullptr;
