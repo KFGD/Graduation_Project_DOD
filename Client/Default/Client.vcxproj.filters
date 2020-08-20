@@ -260,6 +260,7 @@
     <ClCompile Include="..\Codes\Shader.cpp">
       <Filter>24.Component\00.OOD\04.Shader</Filter>
     </ClCompile>
+    <ClCompile Include="..\Headers\Mode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -468,6 +469,12 @@
       <Filter>97.Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Shader\HardwareInstancing.fx">
+      <Filter>97.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\MeshRender.fx">
+      <Filter>97.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\SelectedMeshRender.fx">
       <Filter>97.Shader</Filter>
     </FxCompile>
   </ItemGroup>

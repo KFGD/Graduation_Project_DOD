@@ -159,10 +159,8 @@ HRESULT HierarchyLoader::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * p
 	// ~ Hardware Skinning
 	//
 	//////////////////////////////////////////////////////////////////////////
-
-	//	ConvertToIndexedBlendedMesh 함수 호출 이후에는 불가
-	//if (FAILED(pMeshContainer->MeshData.pMesh->CloneMeshFVF(pMeshContainer->MeshData.pMesh->GetOptions(), pMeshContainer->MeshData.pMesh->GetFVF(), mGraphicDevice, &pMeshContainer->pOriginalMesh)))
-	//	return E_FAIL;
+	
+	pMeshContainer->pOriginalMesh->CloneMeshFVF(pMeshContainer->pOriginalMesh->GetOptions(), pMeshContainer->pOriginalMesh->GetFVF(), mGraphicDevice, &pMeshContainer->pSoftwareMesh);
 
 	*ppNewMeshContainer = pMeshContainer;
 
@@ -218,6 +216,8 @@ HRESULT HierarchyLoader::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainer
 	///////////////////////////
 	//	~Hardware Skinning
 	///////////////////////////
+
+	SafeRelease(pMeshContainer->pSoftwareMesh);
 
 	SafeDeleteArray(pMeshContainer);
 	return S_OK;

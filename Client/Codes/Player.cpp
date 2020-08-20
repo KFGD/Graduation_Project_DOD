@@ -33,12 +33,26 @@ void Player::Render()
 
 	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
 		mDynamicMesh->Render(mShader, i);
+
+	LPDIRECT3DDEVICE9 graphicDevice = GetWorld()->GetGraphicDevice();
+
+	graphicDevice->SetTransform(D3DTS_VIEW, &PipeLine::GetInstance()->GetTransform(D3DTS_VIEW));
+	graphicDevice->SetTransform(D3DTS_PROJECTION, &PipeLine::GetInstance()->GetTransform(D3DTS_PROJECTION));
+	graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
+		mDynamicMesh->GetMeshContainer(i)->pSoftwareMesh->DrawSubset(0);
+
+
+	graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	graphicDevice->SetTransform(D3DTS_VIEW, &IDENTITY_MATRIX);
+	graphicDevice->SetTransform(D3DTS_PROJECTION, &IDENTITY_MATRIX);
 }
 
 _bool Player::Initialize(const Player::Data& data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
-	GameObject::AddComponent("DynamicMesh_Bot", "DynamicMesh_Bot", (Component_Object**)&mDynamicMesh);	
+	GameObject::AddComponent("DynamicMesh_Player", "DynamicMesh_Player", (Component_Object**)&mDynamicMesh);	
 	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
 	mDynamicMesh->SetUpAnimation(1);
 

@@ -25,24 +25,6 @@ DynamicMesh_Object::DynamicMesh_Object(const DynamicMesh_Object & rhs)
 	SafeAddRef(mHierarchyLoader);
 }
 
-_bool DynamicMesh_Object::UpdateSoftwareSkinnedMesh(const _int meshContainerIndex)
-{
-	for (_ulong i = 0; i < mMeshContainerList[meshContainerIndex]->dwNumBones; ++i)
-		mMeshContainerList[meshContainerIndex]->pRenderMatrices[i] = mMeshContainerList[meshContainerIndex]->pOffsetMatrices[i] * *mMeshContainerList[meshContainerIndex]->ppCombinedTransformationMatrices[i];
-
-	void	*pSourVtx = nullptr, *pDestVtx = nullptr;
-
-	mMeshContainerList[meshContainerIndex]->pOriginalMesh->LockVertexBuffer(0, &pSourVtx);
-	mMeshContainerList[meshContainerIndex]->MeshData.pMesh->LockVertexBuffer(0, &pDestVtx);
-
-	mMeshContainerList[meshContainerIndex]->pSkinInfo->UpdateSkinnedMesh(mMeshContainerList[meshContainerIndex]->pRenderMatrices, nullptr, pSourVtx, pDestVtx);
-
-	mMeshContainerList[meshContainerIndex]->pOriginalMesh->UnlockVertexBuffer();
-	mMeshContainerList[meshContainerIndex]->MeshData.pMesh->UnlockVertexBuffer();
-
-	return true;
-}
-
 _bool DynamicMesh_Object::UpdateHardwareSkinnedMesh(const _int meshContainerIndex)
 {
 	D3DXMESHCONTAINER_DERIVED* meshContainer = mMeshContainerList[meshContainerIndex];
@@ -117,7 +99,7 @@ void DynamicMesh_Object::Render(Shader * shader, const _int meshContainerIndex)
 	shader->EndShader();
 }
 
-_bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName)
+_bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
 
@@ -141,12 +123,48 @@ _bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tch
 
 	SafeRelease(dxAniCtrl);
 
-	_matrix scale = *D3DXMatrixScaling(&scale, 0.01f, 0.01f, 0.01f);
-
-	mPivotMatrix = scale;
+	mPivotMatrix = pivotMatrix;
 
 	SetUpCombinedTransformationMatricesPointer(mRootFrame);
 	UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
+	
+	for (_int i = 0; i < mMeshContainerList.size(); ++i)
+		UpdateSoftwareSkinnedMesh(i);
+
+	//for (_int i = 0; i < mMeshContainerList.size(); ++i)
+	//{
+	//	LPD3DXMESH mesh = mMeshContainerList[i]->pOriginalMesh;
+	//	
+	//	const _ulong numVertices = mesh->GetNumVertices();
+	//	const _ulong stride = D3DXGetFVFVertexSize(mesh->GetFVF());
+
+	//	D3DVERTEXELEMENT9 decl[MAX_FVF_DECL_SIZE];
+	//	mesh->GetDeclaration(decl);
+
+	//	_ushort normalOffset = 0;
+	//	for (_size_t i = 0; i < MAX_FVF_DECL_SIZE; ++i)
+	//	{
+	//		if (D3DDECLUSAGE_NORMAL == decl[i].Usage)
+	//		{
+	//			normalOffset = decl[i].Offset;
+	//			break;
+	//		}
+	//	}
+
+	//	_byte*	vertices = nullptr;
+	//	mesh->LockVertexBuffer(0, (void**)&vertices);
+
+	//	for (_ulong i = 0; i < numVertices; ++i)
+	//	{
+	//		_vec3* pos = (_vec3*)(vertices + (i * stride));
+	//		_vec3* normal = (_vec3*)(vertices + (i * stride) + normalOffset);
+	//		D3DXVec3TransformCoord(pos, pos, &mPivotMatrix);
+	//		D3DXVec3TransformNormal(normal, normal, &mPivotMatrix);
+	//	}
+
+	//	mesh->UnlockVertexBuffer();
+
+	//}
 
 	return true;
 }
@@ -193,6 +211,25 @@ _bool DynamicMesh_Object::SetUpCombinedTransformationMatricesPointer(D3DXFRAME *
 
 	if (nullptr != frame->pFrameSibling)
 		SetUpCombinedTransformationMatricesPointer(frame->pFrameSibling);
+
+	return true;
+}
+
+
+_bool DynamicMesh_Object::UpdateSoftwareSkinnedMesh(const _int meshContainerIndex)
+{
+	for (_ulong i = 0; i < mMeshContainerList[meshContainerIndex]->dwNumBones; ++i)
+		mMeshContainerList[meshContainerIndex]->pRenderMatrices[i] = mMeshContainerList[meshContainerIndex]->pOffsetMatrices[i] * *mMeshContainerList[meshContainerIndex]->ppCombinedTransformationMatrices[i];
+
+	void	*pSourVtx = nullptr, *pDestVtx = nullptr;
+
+	mMeshContainerList[meshContainerIndex]->pOriginalMesh->LockVertexBuffer(0, &pSourVtx);
+	mMeshContainerList[meshContainerIndex]->pSoftwareMesh->LockVertexBuffer(0, &pDestVtx);
+
+	mMeshContainerList[meshContainerIndex]->pSkinInfo->UpdateSkinnedMesh(mMeshContainerList[meshContainerIndex]->pRenderMatrices, nullptr, pSourVtx, pDestVtx);
+
+	mMeshContainerList[meshContainerIndex]->pOriginalMesh->UnlockVertexBuffer();
+	mMeshContainerList[meshContainerIndex]->pSoftwareMesh->UnlockVertexBuffer();
 
 	return true;
 }
@@ -251,10 +288,10 @@ void DynamicMesh_Object::RenderHardwareSkinningRecursive(Shader * shader, const 
 	
 }
 
-DynamicMesh_Object * DynamicMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName)
+DynamicMesh_Object * DynamicMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	DynamicMesh_Object*	pInstance = new DynamicMesh_Object();
-	if (false == pInstance->Initialize(graphicDevice, filePath, fileName))
+	if (false == pInstance->Initialize(graphicDevice, filePath, fileName, pivotMatrix))
 	{
 		MSG_BOX("Failed To Create DynamicMesh_Object Instance");
 		SafeRelease(pInstance);

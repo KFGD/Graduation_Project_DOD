@@ -49,6 +49,9 @@ struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER
 	D3DXMATRIX*			pRenderMatrices;
 	unsigned long		dwNumBones;
 
+	//	For.Software Skinning
+	LPD3DXMESH			pSoftwareMesh;
+
 	// For.Hardware Skinning
 	unsigned long		dwNumPaletteEntries;
 	unsigned long		dwNumInfl;

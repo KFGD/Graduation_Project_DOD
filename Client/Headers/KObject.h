@@ -40,11 +40,20 @@ private:
 	virtual ~KObject() = default;
 	
 public:
-	const Info& GetInfo() const { return mInfo; }
-	const char* GetObjectTypeName() const;
+	const Info&		GetInfo() const { return mInfo; }
+	const char*		GetObjectTypeName() const;
+	const _matrix&	GetWorldMatrix() const { return mWorldMatrix; }
+	const _matrix&	GetWorldInverseMatrix() const { return mWorldInverseMatrix; }
+	void			SetInfo(const KObject::Info& info);
+
+private:
+	_bool		Initialize();
+	void		CalculateWorldMatirx();
 
 private:
 	Info	mInfo;
+	_matrix	mWorldMatrix;
+	_matrix	mWorldInverseMatrix;
 
 public:
 	static KObject*	Create(const Info& objectInfo);

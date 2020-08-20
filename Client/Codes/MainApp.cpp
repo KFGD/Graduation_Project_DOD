@@ -52,8 +52,8 @@ int MainApp::Update(const double tiemDelta)
 {
 	if (nullptr == mWorlds[mCurMode])
 		return -1;
-
-	mWorlds[mCurMode]->Update(tiemDelta);
+	if (Program::GAME == mModeController->GetCurProgramMode())
+		mWorlds[mCurMode]->Update(tiemDelta);
 	
 	mModeController->Update(this);
 
@@ -70,8 +70,8 @@ bool MainApp::Render()
 
 	if (FAILED(mGraphicDevice->BeginScene()))
 		return false;
-
-	mWorlds[mCurMode]->Render();
+	if (Program::GAME == mModeController->GetCurProgramMode())
+		mWorlds[mCurMode]->Render();
 	mModeController->Render(mGraphicDevice);
 
 	if (FAILED(mGraphicDevice->EndScene()))
@@ -103,6 +103,9 @@ bool MainApp::ReadySystem(const HWND hWnd, const bool bWinMode, const UINT sizeX
 {
 	if (false == mGraphicDeviceSys->ReadyGraphicDevice(hWnd, (bWinMode == true ? GraphicDevice::WINMODE::WIN : GraphicDevice::WINMODE::FULL), sizeX, sizeY, mGraphicDevice))
 		return false;
+
+	if (false == PipeLine::GetInstance()->Ready(mGraphicDevice))
+		return false;
 	
 	return true;
 }
@@ -131,6 +134,10 @@ MainApp * MainApp::Create()
 
 void MainApp::Free()
 {
+	for (World* world : mWorlds)
+		if(nullptr != world)
+			world->Clear();
+
 	for (World* world : mWorlds)
 		SafeRelease(world);
 	mWorlds.fill(nullptr);

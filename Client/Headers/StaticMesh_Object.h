@@ -15,11 +15,12 @@ public:
 	void	Render(Shader* shader);
 
 public:
-	_bool	GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9& vertexBuffer);
-	_bool	GetIndexBuffer(LPDIRECT3DINDEXBUFFER9& indexBuffer);
-	_ulong	GetVertexSize() const;
-	_ulong	GetVertexNum() const;
-	_ulong	GetFacesNum() const;
+	LPD3DXMESH	GetMesh() { return mMesh; }
+	_bool		GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9& vertexBuffer);
+	_bool		GetIndexBuffer(LPDIRECT3DINDEXBUFFER9& indexBuffer);
+	_ulong		GetVertexSize() const;
+	_ulong		GetVertexNum() const;
+	_ulong		GetFacesNum() const;
 
 public:
 	LPDIRECT3DTEXTURE9	GetTexutre(const _ulong index);

@@ -5,7 +5,7 @@
 #include "Client_Defines.h"
 
 class IWorldController;
-class CreativeMode;
+class Mode;
 
 class ModeController :
 	public Base
@@ -18,7 +18,7 @@ private:
 
 public:
 	_bool	Ready(LPDIRECT3DDEVICE9 graphicDevice);
-	Program::Mode	GetMode() const { return mCurMode; }
+	Program::Mode	GetCurProgramMode() const { return mCurMode; }
 
 public:
 	void	Update(IWorldController* worldController);
@@ -35,7 +35,7 @@ private:
 	_bool	mbShowWindow = true;
 
 private:
-	CreativeMode*	mCreativeMode = nullptr;
+	array<Mode*, Program::Mode_End>	mMode;
 
 public:
 	virtual	void	Free() override;

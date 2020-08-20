@@ -24,6 +24,8 @@ void Bot::LateUpdate(const _double timeDelta)
 
 void Bot::Render()
 {
+	return;
+
 	mDynamicMesh->PlayAnimation(mTimeDelta);
 
 	PipeLine* pipeLine = PipeLine::GetInstance();

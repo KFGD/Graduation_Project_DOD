@@ -25,9 +25,6 @@ private:
 public:
 	virtual void	Update(const _double timeDelta) override;
 	virtual void	Render() override;
-
-
-
 	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList) override;
 	virtual _bool	Clear() override;
 	

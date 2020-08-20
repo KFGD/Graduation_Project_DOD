@@ -56,13 +56,13 @@ _matrix PipeLine::GetTransform(D3DTRANSFORMSTATETYPE eType)
 PipeLine::RayCast PipeLine::ConvertScreenPosToRayCast(const _vec2& screenPos)
 {
 	//	Clip Space
-	const _vec3 clipPos = { screenPos.x / (mViewPort.Width * 0.5f) - 1.f, screenPos.y / (mViewPort.Height * 0.5f) + 1.f, 0.f };
+	const _vec3 clipPos = { screenPos.x / (mViewPort.Width * 0.5f) - 1.f, screenPos.y / (mViewPort.Height * -0.5f) + 1.f, 0.f };
 
 	//	View Space
 	_vec3 viewPos = *D3DXVec3TransformCoord(&viewPos, &clipPos, &mProjectionInverseMatirx);
 	
 	_vec3 rayPos(0.f, 0.f, 0.f);
-	_vec3 rayDir = viewPos - rayPos;
+	_vec3 rayDir(viewPos - rayPos);
 	D3DXVec3Normalize(&rayDir, &rayDir);
 
 	//	World Space

@@ -93,6 +93,15 @@ _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
 		}
 	}
 
+	for (GameObject* object : mPlayerList)
+		object->SetUp(this);
+
+	for (GameObject* object : mBotList)
+		object->SetUp(this);
+
+	for (GameObject* object : mBlockList)
+		object->SetUp(this);
+
 	return true;
 }
 
@@ -160,7 +169,8 @@ _bool World_Object::ReadyComponent()
 	//	Ready: Component
 	mComponentManager->AddPrototype("Transform", Transform_Object::Create());
 	
-	mComponentManager->AddPrototype("DynamicMesh_Bot", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X"));
+	mComponentManager->AddPrototype("DynamicMesh_Player", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Player\\", L"Player.X", scaleMatrix));
+	mComponentManager->AddPrototype("DynamicMesh_Bot", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X", scaleMatrix));
 	mComponentManager->AddPrototype("Shader_HardwareSkinning", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareSkinning.fx"));
 
 	mComponentManager->AddPrototype("StaticMesh_GrayBlock", StaticMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Block\\", L"Block.X", scaleMatrix));
@@ -243,8 +253,6 @@ void World_Object::RenderHardwareInstancing(StaticMesh_Object* staticMesh, _int 
 
 void World_Object::Free()
 {
-	Clear();
-
 	SafeRelease(mVertexBuffer);
 	SafeRelease(mVertexDeclaration);
 

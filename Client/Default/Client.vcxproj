@@ -211,6 +211,7 @@
     <ClCompile Include="..\External\DearImgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\Headers\Mode.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -292,6 +293,8 @@
   <ItemGroup>
     <FxCompile Include="..\Shader\HardwareInstancing.fx" />
     <FxCompile Include="..\Shader\HardwareSkinning.fx" />
+    <FxCompile Include="..\Shader\MeshRender.fx" />
+    <FxCompile Include="..\Shader\SelectedMeshRender.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

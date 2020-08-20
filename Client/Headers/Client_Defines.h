@@ -5,7 +5,8 @@ namespace Program
 	enum Mode : int
 	{
 		GAME,
-		CREATIVE
+		CREATIVE,
+		Mode_End
 	};
 };
 

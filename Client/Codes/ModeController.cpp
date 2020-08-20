@@ -12,12 +12,14 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx9.h>
 
+#include "GameMode.h"
 #include "CreativeMode.h"
 
 IMPLEMENT_SINGLETON(ModeController)
 
 ModeController::ModeController()
 {
+	mMode.fill(nullptr);
 }
 
 _bool ModeController::Ready(LPDIRECT3DDEVICE9 graphicDevice)
@@ -36,9 +38,8 @@ _bool ModeController::Ready(LPDIRECT3DDEVICE9 graphicDevice)
 	ImGui_ImplWin32_Init(g_hWnd);
 	ImGui_ImplDX9_Init(graphicDevice);
 
-	mCreativeMode = CreativeMode::Create();
-	if (nullptr == mCreativeMode)
-		return false;
+	mMode[Program::GAME] = GameMode::Create(graphicDevice);
+	mMode[Program::CREATIVE] = CreativeMode::Create(graphicDevice);
 
 	return true;
 }
@@ -99,13 +100,15 @@ void ModeController::Update(IWorldController* worldController)
 
 void ModeController::Render(LPDIRECT3DDEVICE9 graphicDevice)
 {
+	mMode[mCurMode]->Render(graphicDevice);
+
 	graphicDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	graphicDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	graphicDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
 
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
+	
 	graphicDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	graphicDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	graphicDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, TRUE);
@@ -133,14 +136,8 @@ void ModeController::UpdateModeController(IWorldController* worldController)
 
 	if (preMode != mCurMode)
 	{
-		if (Mode::GAME == mCurMode)
-		{
-			mCreativeMode->InActive(worldController);
-		}
-		else if (Mode::CREATIVE == mCurMode)
-		{
-			mCreativeMode->Active(worldController);
-		}
+		mMode[preMode]->InActive(worldController);
+		mMode[mCurMode]->Active(worldController);
 	}
 
 	//	Explain mode
@@ -162,25 +159,16 @@ void ModeController::UpdateModeController(IWorldController* worldController)
 	}
 
 	//	Mode
-	{
-		switch (mCurMode)
-		{
-		case Mode::GAME:
-			break;
-
-		case Mode::CREATIVE:
-			mCreativeMode->Update(worldController);
-			break;
-		}
-	}
-
+	mMode[mCurMode]->Update(worldController);
 	ImGui::End();
 
 }
 
 void ModeController::Free()
 {
-	SafeRelease(mCreativeMode);
+	for(Mode* mode : mMode)
+		SafeRelease(mode);
+	mMode.fill(nullptr);
 
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();

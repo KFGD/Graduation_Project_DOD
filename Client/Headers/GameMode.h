@@ -8,7 +8,7 @@
 class KObject;
 
 class GameMode :
-	public Base, public IMode
+	public Mode
 {
 	typedef Game::ObjectType Type;
 
@@ -20,11 +20,19 @@ public:
 	virtual void	Active(IWorldController* worldController)	override;
 	virtual void	InActive(IWorldController* worldController)	override;
 	virtual void	Update(IWorldController* worldController)	override;
+	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
+
+private:
+	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
+	void	ClearObjectList();
 
 private:
 	vector<KObject*>	mObjectList;
 
 
+public:
+	static GameMode*	Create(LPDIRECT3DDEVICE9 graphicDevice);
+	virtual void	Free() override;
 
 };
 
