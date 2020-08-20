@@ -17,6 +17,9 @@ const char * KObject::GetObjectTypeName() const
 	case Type::Bot:
 		return "Bot";
 
+	case Type::Block:
+		return "Block";
+
 	default:
 		return "";
 	}

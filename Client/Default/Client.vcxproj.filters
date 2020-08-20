@@ -43,9 +43,6 @@
     <Filter Include="90.Engine\01.Core\00.World">
       <UniqueIdentifier>{38c31f80-8da7-463c-8cc9-1d7ec4c9b5c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="90.Engine\01.Core\01.Scene">
-      <UniqueIdentifier>{c18f5b3a-457a-4295-be0b-073d6d8c93cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="21.World\00.OOD">
       <UniqueIdentifier>{3c5a4a5d-5e70-4e7c-9167-d9b7b13f3e23}</UniqueIdentifier>
     </Filter>
@@ -63,12 +60,6 @@
     </Filter>
     <Filter Include="External\01.easy_profiler">
       <UniqueIdentifier>{734e477c-bd59-4a02-af13-bc5d8aa134de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="22.Scene">
-      <UniqueIdentifier>{7111cf37-0e45-4f43-828f-870ea8d4df06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="22.Scene\00.OOD">
-      <UniqueIdentifier>{2d7fc31f-6182-4863-bc0d-c67469270729}</UniqueIdentifier>
     </Filter>
     <Filter Include="23.Object">
       <UniqueIdentifier>{e2cfb538-f589-41cf-a957-866b504b6b11}</UniqueIdentifier>
@@ -100,9 +91,6 @@
     <Filter Include="23.Object\00.OOD\00.GameObject\00.Player">
       <UniqueIdentifier>{27eecf0d-2792-4f8a-8c15-de920c307995}</UniqueIdentifier>
     </Filter>
-    <Filter Include="31.GameProfiler">
-      <UniqueIdentifier>{6409b55b-c0c6-4dcb-9810-92389d276397}</UniqueIdentifier>
-    </Filter>
     <Filter Include="30.ModeController">
       <UniqueIdentifier>{64e20785-115a-41c3-8327-93ada3dff4bf}</UniqueIdentifier>
     </Filter>
@@ -118,12 +106,6 @@
     </Filter>
     <Filter Include="98.Headers">
       <UniqueIdentifier>{3bdd3f4c-8edf-4ad0-8fc1-f9e9507ee4c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="30.ModeController\00. GameMode">
-      <UniqueIdentifier>{73c1b7bb-e4a5-4078-8885-c7c7042cfce2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="30.ModeController\01. CreativeMode">
-      <UniqueIdentifier>{399cff84-4ae7-4653-ba77-507ff338bdcb}</UniqueIdentifier>
     </Filter>
     <Filter Include="24.Component\00.OOD\02.DynamicMesh">
       <UniqueIdentifier>{f0948765-b713-408f-a41d-4f780fee116b}</UniqueIdentifier>
@@ -142,6 +124,18 @@
     </Filter>
     <Filter Include="24.Component\00.OOD\01.StaticMesh">
       <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\02.BlockObj">
+      <UniqueIdentifier>{f9b9ff29-5319-4833-9322-77e81f89b581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="30.ModeController\Mode">
+      <UniqueIdentifier>{dc79c9f1-b549-4a42-8c04-62651ca98df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="30.ModeController\Mode\01. CreativeMode">
+      <UniqueIdentifier>{399cff84-4ae7-4653-ba77-507ff338bdcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="30.ModeController\Mode\00. GameMode">
+      <UniqueIdentifier>{73c1b7bb-e4a5-4078-8885-c7c7042cfce2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -194,9 +188,6 @@
     <ClCompile Include="..\Codes\GameObject.cpp">
       <Filter>23.Object\00.OOD\00.GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Scene.cpp">
-      <Filter>90.Engine\01.Core\01.Scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Transform_Object.cpp">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
     </ClCompile>
@@ -242,12 +233,6 @@
     <ClCompile Include="..\External\DearImgui\imgui_demo.cpp">
       <Filter>External\00.DearImgui</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>24.Component\00.OOD\04.Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene_Object.cpp">
-      <Filter>22.Scene\00.OOD</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Component_Object.cpp">
       <Filter>24.Component\00.OOD</Filter>
     </ClCompile>
@@ -255,7 +240,7 @@
       <Filter>23.Object\00.OOD\00.GameObject\00.Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\CreativeMode.cpp">
-      <Filter>30.ModeController\01. CreativeMode</Filter>
+      <Filter>30.ModeController\Mode\01. CreativeMode</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ModeController.cpp">
       <Filter>30.ModeController</Filter>
@@ -265,6 +250,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\StaticMesh_Object.cpp">
       <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BlockObj.cpp">
+      <Filter>23.Object\00.OOD\00.GameObject\02.BlockObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GameMode.cpp">
+      <Filter>30.ModeController\Mode\00. GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shader.cpp">
+      <Filter>24.Component\00.OOD\04.Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -325,9 +319,6 @@
     <ClInclude Include="..\Headers\GameObject.h">
       <Filter>23.Object\00.OOD\00.GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Scene.h">
-      <Filter>90.Engine\01.Core\01.Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Transform_Object.h">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
     </ClInclude>
@@ -381,12 +372,6 @@
     </ClInclude>
     <ClInclude Include="..\External\DearImgui\imstb_truetype.h">
       <Filter>External\00.DearImgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>24.Component\00.OOD\04.Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene_Object.h">
-      <Filter>22.Scene\00.OOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Component_Object.h">
       <Filter>24.Component\00.OOD</Filter>
@@ -446,7 +431,7 @@
       <Filter>98.Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\CreativeMode.h">
-      <Filter>30.ModeController\01. CreativeMode</Filter>
+      <Filter>30.ModeController\Mode\01. CreativeMode</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ModeController.h">
       <Filter>30.ModeController</Filter>
@@ -457,6 +442,21 @@
     <ClInclude Include="..\Headers\StaticMesh_Object.h">
       <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\BlockObj.h">
+      <Filter>23.Object\00.OOD\00.GameObject\02.BlockObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\GameMode.h">
+      <Filter>30.ModeController\Mode\00. GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Mode.h">
+      <Filter>30.ModeController\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\WorldController.h">
+      <Filter>21.World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shader.h">
+      <Filter>24.Component\00.OOD\04.Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt">
@@ -465,6 +465,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Shader\HardwareSkinning.fx">
+      <Filter>97.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\HardwareInstancing.fx">
       <Filter>97.Shader</Filter>
     </FxCompile>
   </ItemGroup>

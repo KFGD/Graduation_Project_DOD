@@ -4,15 +4,22 @@
 //	Core
 #include "PipeLine.h"
 
+#include "KObject.h"
+
 //	Component
 #include "ComponentManager_Object.h"
 #include "Transform_Object.h"
+#include "StaticMesh_Object.h"
 #include "DynamicMesh_Object.h"
 #include "Shader.h"
 
+#include "KObject.h"
+
 //	GameObject
 #include "GameObject.h"
+#include "Player.h"
 #include "Bot.h"
+#include "BlockObj.h"
 
 World_Object::World_Object(const LPDIRECT3DDEVICE9 graphicDev)
 	: World(graphicDev)
@@ -26,29 +33,82 @@ World_Object::World_Object(const LPDIRECT3DDEVICE9 graphicDev)
 
 void World_Object::Update(const _double timeDelta)
 {
-	for (GameObject* gameObject : mGameObjectList)
+	//	Update
+	for (GameObject* gameObject : mPlayerList)
+		gameObject->Update(timeDelta);
+	for (GameObject* gameObject : mBotList)
+		gameObject->Update(timeDelta);
+	for (GameObject* gameObject : mBlockList)
 		gameObject->Update(timeDelta);
 
-	for (GameObject* gameObject : mGameObjectList)
+	//	LateUpdate
+	for (GameObject* gameObject : mPlayerList)
+		gameObject->LateUpdate(timeDelta);
+	for (GameObject* gameObject : mBotList)
+		gameObject->LateUpdate(timeDelta);
+	for (GameObject* gameObject : mBlockList)
 		gameObject->LateUpdate(timeDelta);
 }
 
 void World_Object::Render()
 {
-	//LPDIRECT3DDEVICE9 graphicDevice = World::GetGraphicDev();
-	//graphicDevice->SetTransform(D3DTS_VIEW, &mPipeLine->GetTransform(D3DTS_VIEW));
-	//graphicDevice->SetTransform(D3DTS_PROJECTION, &mPipeLine->GetTransform(D3DTS_PROJECTION));
-	
-	for (GameObject* gameObject : mGameObjectList)
+	for (GameObject* gameObject : mPlayerList)
 		gameObject->Render();
+	for (GameObject* gameObject : mBotList)
+		gameObject->Render();
+	for (GameObject* gameObject : mBlockList)
+		gameObject->Render();
+}
+
+_bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
+{
+	for (KObject* object : objectList)
+	{
+		KObject::Info info = object->GetInfo();
+		switch (info.Objecttype)
+		{
+		case Game::Player:
+		{
+			typedef	Player::Data	Data;
+			mPlayerList.emplace_back(Player::Create(Data(info.Transform.Scale, info.Transform.Rotation, info.Transform.Position)));
+		}
+			break;
+
+		case Game::Bot:
+		{
+			typedef	Bot::Data	Data;
+			mBotList.emplace_back(Bot::Create(Data(info.Transform.Scale, info.Transform.Rotation, info.Transform.Position)));
+		}
+			break;
+
+		case Game::Block:
+		{
+			typedef	BlockObj::Data	Data;
+			mBlockList.emplace_back(BlockObj::Create(Data(info.Transform.Scale, info.Transform.Rotation, info.Transform.Position)));
+		}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	return true;
 }
 
 _bool World_Object::Clear()
 {
-	for (GameObject* gameObject : mGameObjectList)
+	for (GameObject* gameObject : mPlayerList)
 		SafeRelease(gameObject);
+	mPlayerList.clear();
 
-	mGameObjectList.clear();
+	for (GameObject* gameObject : mBotList)
+		SafeRelease(gameObject);
+	mBotList.clear();
+
+	for (GameObject* gameObject : mBlockList)
+		SafeRelease(gameObject);
+	mBlockList.clear();
 
 	return true;
 }
@@ -57,10 +117,7 @@ _bool World_Object::Initialize()
 {
 	if (false == ReadyComponent())
 		return false;
-
-	if (false == ReadyGameObject())
-		return false;
-
+	
 	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, 3.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
 	_matrix projMatrix = *D3DXMatrixPerspectiveFovLH(&projMatrix, D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.01f, 1000.f);
 
@@ -75,40 +132,24 @@ _bool World_Object::ReadyComponent()
 	if (nullptr == mComponentManager)
 		return false;
 
+	_matrix scaleMatrix = *D3DXMatrixScaling(&scaleMatrix, 0.01f, 0.01f, 0.01f);
+
 	//	Ready: Component
 	mComponentManager->AddPrototype("Transform", Transform_Object::Create());
+	
 	mComponentManager->AddPrototype("DynamicMesh_Bot", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X"));
 	mComponentManager->AddPrototype("Shader_HardwareSkinning", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareSkinning.fx"));
 
-	return true;
-}
+	mComponentManager->AddPrototype("StaticMesh_GrayBlock", StaticMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Block\\", L"Block.X", scaleMatrix));
+	mComponentManager->AddPrototype("Shader_HardwareInstancing", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareInstancing.fx"));
 
-_bool World_Object::ReadyGameObject()
-{
-	for(_int i = -5; i < 5; ++i)
-		for(_int j = -5; j < 5; ++j)
-			SetUpBot(_vec3(i * 0.35f, 0.f, j * 0.35f));
-	//SetUpBot(_vec3(0.f, 0.f, 0.f));
-	return true;
-}
-
-_bool World_Object::SetUpBot(const _vec3 position)
-{
-	GameObject* gameObject = nullptr;
-	//gameObject = Bot::Create(Bot::Data(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), position));
-	//gameObject = Bot::Create(Bot::Data(_vec3(0.1f, 0.1f, 0.1f), _vec3(0.f, 0.f, 0.f), position));
-	gameObject = Bot::Create(Bot::Data(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), position));
-	
-	if (nullptr == gameObject)
-		return false;
-
-	gameObject->SetUp(this);
-	mGameObjectList.emplace_back(gameObject);
 	return true;
 }
 
 void World_Object::Free()
 {
+	Clear();
+
 	SafeRelease(mPipeLine);
 	SafeRelease(mComponentManager);
 

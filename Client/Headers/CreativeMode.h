@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+#include "Mode.h"
 
 #include "Defines.h"
 #include "Client_Defines.h"
@@ -7,22 +8,18 @@
 class KObject;
 
 class CreativeMode :
-	public Base
+	public Base, public IMode
 {
-	typedef Game::ObjectType Type;
 
 private:
 	explicit CreativeMode();
 	virtual ~CreativeMode() = default;
 	
 public:
-	void	Active();
-	void	InActive();
-
-public:
-	void	Update();
-
-
+	virtual void	Active(IWorldController* worldController)	override;
+	virtual void	InActive()	override;
+	virtual void	Update()	override;
+	
 private:
 	void	UpdateDisplayObjectListUI();
 	void	UpdateEditorUI();
@@ -34,16 +31,22 @@ private:
 	void	ClearDisplayObjectList();
 
 private:
-	//	Display Object List
+	void	InitSampleData();
+
+private:
 	vector<KObject*>	mObjectList;
+
+private:
+	//	Display Object List
 	_int	mSelectedObjectListIndex;
-	array<_bool, Type::End> mbDisplayObjectFilter;
+	array<_bool, Game::Type_End> mbDisplayObjectFilter;
 	vector<pair<_int, KObject*>>	mDisplayObjectList;
 
 	typedef pair<_int, KObject*>	DISPLAY_PAIR;
 
+private:
 	//	Editor
-	Type	mCurSelectedObjectType = Type::Player;
+	Game::ObjectType	mCurSelectedObjectType = Game::Player;
 
 public:
 	static CreativeMode*	Create();

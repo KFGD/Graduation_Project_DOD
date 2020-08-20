@@ -2,10 +2,10 @@
 #include "GameObject.h"
 
 class Transform_Object;
-class DynamicMesh_Object;
+class StaticMesh_Object;
 class Shader;
 
-class Bot :
+class BlockObj :
 	public GameObject
 {
 public:
@@ -15,14 +15,15 @@ public:
 		_vec3	Rotation;
 		_vec3	Position;
 
-		Data(const _vec3& scale = _vec3(0.f, 0.f, 0.f), const _vec3& rotation = _vec3(0.f, 0.f, 0.f), const _vec3 position = _vec3(0.f, 0.f, 0.f))
+		Data(const _vec3& scale = _vec3(0.f, 0.f, 0.f), const _vec3& rotation = _vec3(0.f, 0.f, 0.f), const _vec3& position = _vec3(0.f, 0.f, 0.f))
 			: Scale(scale), Rotation(rotation), Position(position)
 		{
 		}
 	};
+
 private:
-	explicit Bot();
-	virtual ~Bot() = default;
+	explicit BlockObj();
+	virtual ~BlockObj() = default;
 
 public:
 	virtual void Update(const _double timeDelta) override;
@@ -30,18 +31,16 @@ public:
 	virtual void Render() override;
 
 private:
-	_bool	Initialize(const Bot::Data& data);
+	_bool	Initialize(const BlockObj::Data& data);
 
 private:
 	Transform_Object*	mTransform = nullptr;
-	DynamicMesh_Object*	mDynamicMesh = nullptr;
+	StaticMesh_Object*	mStaticMesh = nullptr;
 	Shader*				mShader = nullptr;
-
-private:
-	_double	mTimeDelta = 0.0;
 
 public:
 	virtual void Free() override;
-	static Bot*	Create(const Bot::Data& data = Bot::Data());
+	static BlockObj*	Create(const BlockObj::Data& data = BlockObj::Data());
+
 };
 

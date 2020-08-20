@@ -19,12 +19,12 @@ void Bot::Update(const _double timeDelta)
 
 void Bot::LateUpdate(const _double timeDelta)
 {
-	mDynamicMesh->PlayAnimation(timeDelta);
+	mTimeDelta = timeDelta;
 }
 
 void Bot::Render()
 {
-	EASY_FUNCTION(profiler::colors::Magenta);
+	mDynamicMesh->PlayAnimation(mTimeDelta);
 
 	PipeLine* pipeLine = PipeLine::GetInstance();
 	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
@@ -41,6 +41,8 @@ _bool Bot::Initialize(const Bot::Data & data)
 	GameObject::AddComponent("DynamicMesh_Bot", "DynamicMesh_Bot", (Component_Object**)&mDynamicMesh);
 	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
 	
+	mDynamicMesh->SetUpAnimation(0);
+
 	return true;
 }
 

@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
 
-#include "Scene.h"
-
 World::World(const LPDIRECT3DDEVICE9 graphicDev)
 	: mGraphicDevice(graphicDev)
 {
@@ -16,6 +14,5 @@ void World::SetState(const STATE sceneState)
 
 void World::Free()
 {
-	SafeRelease(mScene);
 	SafeRelease(mGraphicDevice);
 }

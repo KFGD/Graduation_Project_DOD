@@ -179,12 +179,14 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\AnimationCtrl.cpp" />
     <ClCompile Include="..\Codes\Base.cpp" />
+    <ClCompile Include="..\Codes\BlockObj.cpp" />
     <ClCompile Include="..\Codes\ComponentManager_Object.cpp" />
     <ClCompile Include="..\Codes\Component_Object.cpp" />
     <ClCompile Include="..\Codes\CreativeMode.cpp" />
     <ClCompile Include="..\Codes\DynamicMesh_Object.cpp" />
     <ClCompile Include="..\Codes\Frame.cpp" />
     <ClCompile Include="..\Codes\FrameManager.cpp" />
+    <ClCompile Include="..\Codes\GameMode.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GraphicDevice.cpp" />
     <ClCompile Include="..\Codes\HierarchyLoader.cpp" />
@@ -194,7 +196,7 @@
     <ClCompile Include="..\Codes\Bot.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Renderer_Object.cpp" />
-    <ClCompile Include="..\Codes\Scene.cpp" />
+    <ClCompile Include="..\Codes\Shader.cpp" />
     <ClCompile Include="..\Codes\StaticMesh_Object.cpp" />
     <ClCompile Include="..\Codes\SystemManager.cpp" />
     <ClCompile Include="..\Codes\TimeManager.cpp" />
@@ -210,8 +212,6 @@
     <ClCompile Include="..\External\DearImgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui_widgets.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="Scene_Object.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -246,6 +246,7 @@
     <ClInclude Include="..\External\easy_profiler\easy\writer.h" />
     <ClInclude Include="..\Headers\AnimationCtrl.h" />
     <ClInclude Include="..\Headers\Base.h" />
+    <ClInclude Include="..\Headers\BlockObj.h" />
     <ClInclude Include="..\Headers\Client_Defines.h" />
     <ClInclude Include="..\Headers\ComponentManager_Object.h" />
     <ClInclude Include="..\Headers\Component_Object.h" />
@@ -255,18 +256,21 @@
     <ClInclude Include="..\Headers\Frame.h" />
     <ClInclude Include="..\Headers\FrameManager.h" />
     <ClInclude Include="..\Headers\Function.h" />
+    <ClInclude Include="..\Headers\GameMode.h" />
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\Global.h" />
     <ClInclude Include="..\Headers\GraphicDevice.h" />
     <ClInclude Include="..\Headers\HierarchyLoader.h" />
+    <ClInclude Include="..\Headers\Shader.h" />
+    <ClInclude Include="..\Headers\WorldController.h" />
     <ClInclude Include="..\Headers\KObject.h" />
     <ClInclude Include="..\Headers\Macro.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
+    <ClInclude Include="..\Headers\Mode.h" />
     <ClInclude Include="..\Headers\PipeLine.h" />
     <ClInclude Include="..\Headers\Bot.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Renderer_Object.h" />
-    <ClInclude Include="..\Headers\Scene.h" />
     <ClInclude Include="..\Headers\StaticMesh_Object.h" />
     <ClInclude Include="..\Headers\Struct.h" />
     <ClInclude Include="..\Headers\SystemManager.h" />
@@ -279,8 +283,6 @@
     <ClInclude Include="..\Headers\World_Object.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Scene_Object.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -288,6 +290,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Shader\HardwareInstancing.fx" />
     <FxCompile Include="..\Shader\HardwareSkinning.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

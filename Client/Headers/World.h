@@ -3,7 +3,7 @@
 
 #include "Defines.h"
 
-class Scene;
+class KObject;
 
 class World :
 	public Base
@@ -19,6 +19,7 @@ protected:
 public:
 	virtual void	Update(const _double timeDelta) = 0;
 	virtual void	Render() = 0;
+	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList) = 0;
 	virtual _bool	Clear() = 0;
 public:
 	void	SetState(const STATE sceneState);
@@ -33,7 +34,6 @@ private:
 
 private:
 	STATE	mWorldState = STATE::START;
-	Scene*	mScene = nullptr;
 
 public:
 	virtual void	Free()	override;

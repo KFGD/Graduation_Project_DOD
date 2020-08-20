@@ -14,6 +14,8 @@
 
 #include "KObject.h"
 
+#include "WorldController.h"
+
 
 //	Function
 //	For: DearImgui
@@ -38,14 +40,15 @@ static bool Items_DisplayVectorGetter(void* data, int idx, const char** out_text
 }
 
 CreativeMode::CreativeMode()
-{
-	for(_int i = 0; i < 50; ++i)
-		mObjectList.emplace_back(KObject::Create(KObject::Info(KObject::Type::Bot)));
-	
+{	
 }
 
-void CreativeMode::Active()
+void CreativeMode::Active(IWorldController* worldController)
 {
+	InitSampleData();
+	worldController->ClearObjectList();
+	worldController->SetUpObjectList(mObjectList);
+
 	mbDisplayObjectFilter.fill(true);
 	mDisplayObjectList.reserve(mObjectList.size());
 	UpdateDisplayList();
@@ -68,7 +71,7 @@ void CreativeMode::UpdateDisplayObjectListUI()
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 	ImGui::BeginChild("ObjectList", ImVec2(0, 250), true, 0);
 
-	constexpr char* objectTypeName[Type::End] = { "Player", "Bot" };
+	constexpr char* objectTypeName[Game::Type_End] = { "Player", "Bot", "Block" };
 
 	ImGui::Text("[ObjectList]");
 
@@ -76,7 +79,7 @@ void CreativeMode::UpdateDisplayObjectListUI()
 	ImGui::SameLine();
 
 	_bool bNeedUpdate = false;
-	for (_int i = 0; i < Type::End; ++i)
+	for (_int i = 0; i < Game::Type_End; ++i)
 	{
 		const _bool curValue = mbDisplayObjectFilter[i];
 		ImGui::Checkbox(objectTypeName[i], &mbDisplayObjectFilter[i]);
@@ -93,7 +96,7 @@ void CreativeMode::UpdateDisplayObjectListUI()
 	}
 
 	ImGui::SetNextItemWidth(-1);
-	ImGui::ListBox("", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mDisplayObjectList, sizeof(mDisplayObjectList), 8);
+	ImGui::ListBox("", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mDisplayObjectList, mDisplayObjectList.size(), 8);
 
 	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 70.f);
@@ -141,7 +144,7 @@ void CreativeMode::UpdateObjectList()
 void CreativeMode::UpdateDisplayList()
 {
 	_int flag = 0;
-	for (_int i = 0; i < Type::End; ++i)
+	for (_int i = 0; i < Game::Type_End; ++i)
 		if (mbDisplayObjectFilter[i])
 			flag |= 1 << i;
 
@@ -169,6 +172,18 @@ void CreativeMode::ClearDisplayObjectList()
 	for (DISPLAY_PAIR& pair : mDisplayObjectList)
 		SafeRelease(pair.second);
 	mDisplayObjectList.clear();
+}
+
+void CreativeMode::InitSampleData()
+{
+	mObjectList.emplace_back(KObject::Create(KObject::Info(Game::ObjectType::Player,
+		KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(0.f, 0.f, 0.f)))));
+
+	constexpr _float gap = 0.5f;
+	for (_int i = -4; i < -1; ++i)
+		for (_int j = -4; j < -1; ++j)
+			mObjectList.emplace_back(KObject::Create(KObject::Info(Game::ObjectType::Bot,
+				KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(i * gap, 0.f, j * gap)))));
 }
 
 CreativeMode * CreativeMode::Create()

@@ -2,9 +2,14 @@
 #include "World.h"
 
 class PipeLine;
-
 class ComponentManager_Object;
+
+class KObject;
 class GameObject;
+class Player;
+class Bot;
+class BlockObj;
+
 
 class World_Object :
 	public World
@@ -15,22 +20,23 @@ private:
 	virtual ~World_Object() = default;
 
 public:
-	virtual void Update(const _double timeDelta) override;
-	virtual void Render() override;
-	virtual _bool Clear() override;
-
+	virtual void	Update(const _double timeDelta) override;
+	virtual void	Render() override;
+	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList) override;
+	virtual _bool	Clear() override;
+	
 private:
 	_bool	Initialize();
 	_bool	ReadyComponent();
-	_bool	ReadyGameObject();
-	_bool	SetUpBot(const _vec3 position);
 
 private:
 	PipeLine*	mPipeLine = nullptr;
 	ComponentManager_Object*	mComponentManager = nullptr;
 
 private:
-	vector<GameObject*>	mGameObjectList;
+	vector<Player*>		mPlayerList;
+	vector<Bot*>		mBotList;
+	vector<BlockObj*>	mBlockList;
 
 public:
 	virtual void	Free() override;

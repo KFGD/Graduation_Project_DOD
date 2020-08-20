@@ -38,6 +38,9 @@ private:
 	DynamicMesh_Object*	mDynamicMesh = nullptr;
 	Shader*				mShader = nullptr;
 
+private:
+	_double	mTimeDelta = 0.0;
+
 public:
 	virtual void	Free() override;
 	static Player*	Create(const Player::Data& data = Player::Data());

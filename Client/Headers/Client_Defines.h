@@ -11,10 +11,18 @@ namespace Program
 
 namespace Game
 {
+	enum WorldType
+	{
+		Data_Oriented,
+		Object_Oriented,
+		WorldEnd
+	};
+
 	enum ObjectType
 	{
 		Player,
 		Bot,
-		End
+		Block,
+		Type_End
 	};
 }

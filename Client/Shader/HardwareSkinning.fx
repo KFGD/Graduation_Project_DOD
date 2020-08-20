@@ -8,8 +8,6 @@ float4x4	gMatWorld;
 float4x4	gMatVP;
 
 texture		gDiffuseTexture;
-
-
 sampler DiffuseSampler = sampler_state
 {
 	MinFilter = linear;
@@ -22,10 +20,11 @@ sampler DiffuseSampler = sampler_state
 struct VS_IN
 {
 	float4	Position		: POSITION;
-	float4	BlendWeights	: BLENDWEIGHT;
-	float4	BlendIndices	: BLENDINDICES;
 	float3	Normal			: NORMAL;
 	float2	TexUV			: TEXCOORD0;
+
+	float4	BlendWeights	: BLENDWEIGHT;
+	float4	BlendIndices	: BLENDINDICES;
 };
 
 struct VS_OUT
@@ -88,9 +87,9 @@ float4 PS_MAIN(VS_OUT In) : COLOR
 }
 
 
-technique Default_Technique
+technique HardwareSkinning
 {
-	pass HardwareSkinning
+	pass Skinning
 	{
 		VertexShader = compile vs_3_0 VS_MAIN();
 		PixelShader = compile ps_3_0 PS_MAIN();

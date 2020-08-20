@@ -1,29 +1,27 @@
 #pragma once
 #include "Base.h"
-
-#include "Defines.h"
+#include "WorldController.h"
 
 //	System
 class GraphicDevice;
-
-//	Core
 class World;
 
 class ModeController;
 
-class MainApp final : public Base
+class MainApp final : 
+	public Base, public IWorldController
 {
-private:
-	enum MODE
-	{
-		OOD, DOD
-	};
 private:
 	explicit MainApp();
 	virtual ~MainApp() = default;
 
-public:
+private:
 	bool Initialize();
+
+public:
+	virtual _bool	ChangeWorld(const Game::WorldType worldType)		override;
+	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList)	override;
+	virtual _bool	ClearObjectList()									override;
 
 public:
 	int		Update(const double tiemDelta);
@@ -44,10 +42,9 @@ private:
 
 private:
 	//	World
-	MODE	mCurMode;
-	World*	mCurWorld = nullptr;
-	array<World*, 2>	mWorlds;
-
+	Game::WorldType	mCurMode;
+	array<World*, Game::WorldEnd>	mWorlds;
+	
 public:
 	static MainApp*	Create();
 	virtual	void	Free()	override;

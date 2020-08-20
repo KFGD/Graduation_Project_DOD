@@ -4,6 +4,7 @@
 
 #include "Client_Defines.h"
 
+class IWorldController;
 class CreativeMode;
 
 class ModeController :
@@ -19,11 +20,11 @@ public:
 	_bool	Ready(LPDIRECT3DDEVICE9 graphicDevice);
 
 public:
-	void	Update();
+	void	Update(IWorldController* worldController);
 	void	Render(LPDIRECT3DDEVICE9 graphicDevice);
 
 private:
-	void	UpdateModeController();
+	void	UpdateModeController(IWorldController* worldController);
 
 private:
 	_bool	mIsWindowMode = true;

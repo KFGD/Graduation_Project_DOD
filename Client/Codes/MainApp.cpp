@@ -30,29 +30,31 @@ MainApp::MainApp()
 	mWorlds.fill(nullptr);
 }
 
-bool MainApp::Initialize()
+_bool MainApp::ChangeWorld(const Game::WorldType worldType)
 {
-	if (false == ReadySystem(g_hWnd, true, WINCX, WINCY))
-		return false;
-	
-	if (false == ReadyWorld())
-		return false;
+	mCurMode = worldType;
+	return true;
+}
 
-	mGraphicDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	 
-	if (false == mModeController->Ready(mGraphicDevice))
-		return false;
-		
+_bool MainApp::SetUpObjectList(const vector<KObject*>& objectList)
+{
+	mWorlds[mCurMode]->SetUpObjectList(objectList);
+	return true;
+}
+
+_bool MainApp::ClearObjectList()
+{
+	mWorlds[mCurMode]->Clear();
 	return true;
 }
 
 int MainApp::Update(const double tiemDelta)
 {
-	if (nullptr == mCurWorld)
+	if (nullptr == mWorlds[mCurMode])
 		return -1;
 
-	mCurWorld->Update(tiemDelta);
-	mModeController->Update();
+	mWorlds[mCurMode]->Update(tiemDelta);
+	mModeController->Update(this);
 
 	return 0;
 }
@@ -68,13 +70,29 @@ bool MainApp::Render()
 	if (FAILED(mGraphicDevice->BeginScene()))
 		return false;
 
-	mCurWorld->Render();
+	mWorlds[mCurMode]->Render();
 	mModeController->Render(mGraphicDevice);
 
 	if (FAILED(mGraphicDevice->EndScene()))
 		return false;
 
 	if (FAILED(mGraphicDevice->Present(nullptr, nullptr, 0, nullptr)))
+		return false;
+
+	return true;
+}
+
+bool MainApp::Initialize()
+{
+	if (false == ReadySystem(g_hWnd, true, WINCX, WINCY))
+		return false;
+
+	if (false == ReadyWorld())
+		return false;
+
+	mGraphicDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	if (false == mModeController->Ready(mGraphicDevice))
 		return false;
 
 	return true;
@@ -90,9 +108,9 @@ bool MainApp::ReadySystem(const HWND hWnd, const bool bWinMode, const UINT sizeX
 
 bool MainApp::ReadyWorld()
 {
-	mWorlds[OOD] = World_Object::Create(mGraphicDevice);
+	mWorlds[Game::Object_Oriented] = World_Object::Create(mGraphicDevice);
 
-	mCurWorld = mWorlds[000];
+	mCurMode = Game::Object_Oriented;
 
 	return true;
 }
@@ -112,13 +130,6 @@ MainApp * MainApp::Create()
 
 void MainApp::Free()
 {
-
-	mCurWorld = nullptr;
-
-	for (World* world : mWorlds)
-		if(nullptr != world)
-			world->Clear();
-
 	for (World* world : mWorlds)
 		SafeRelease(world);
 	mWorlds.fill(nullptr);
