@@ -195,7 +195,9 @@ void World_Object::RenderBlock()
 	mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
 	for (_int i = 0; i < mBlockList.size(); ++i)
 	{
-		memcpy(worldMatrixList[i], mBlockList[i]->GetTransform()->GetWorldMatrix(), sizeof(_matrix));
+		_int index = i % mBlockRenderBatchSize;
+		worldMatrixList[index] = mBlockList[i]->GetTransform()->GetWorldMatrix();
+		//memcpy(worldMatrixList[i], mBlockList[i]->GetTransform()->GetWorldMatrix(), sizeof(_matrix));
 
 		++numBlock;
 

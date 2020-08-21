@@ -89,10 +89,8 @@ private:
 	StaticMesh_Object*	mBlockMesh = nullptr;
 
 private:
-	static constexpr _uint			mBlockRenderBatchSize = 50;
-	LPDIRECT3DVERTEXBUFFER9			mCurVertexBuffer = nullptr;
-	//LPDIRECT3DVERTEXBUFFER9			mVertexBuffer[2];
-	_int							mVertexBufferIdx = 0;
+	static constexpr _uint			mBlockRenderBatchSize = 500;
+	LPDIRECT3DVERTEXBUFFER9			mVertexBuffer;
 	
 	LPDIRECT3DVERTEXDECLARATION9	mVertexDeclaration = nullptr;
 

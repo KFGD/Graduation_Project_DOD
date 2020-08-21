@@ -124,7 +124,7 @@ void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
 
 	for (KObject*& object : botList)
 		RenderSkinnedMesh(mMeshShader, object, mBotMesh);
-	
+
 	mMeshShader->EndPass();
 	mMeshShader->EndShader();
 
@@ -251,14 +251,14 @@ void CreativeMode::UpdateFileUI()
 	ImGui::BeginChild("FileSelector", ImVec2(0, 100), true, 0);
 
 	ImGui::Text("[FileSelector]");
-	
+
 	ImGui::Text("Path: ");
-	
+
 	ImGui::SameLine();
-	
+
 	ImGui::SetNextItemWidth(200);
 	ImGui::InputText("##InputFilePath", mFilePath, sizeof(mFilePath), ImGuiInputTextFlags_ReadOnly);
-	
+
 	ImGui::SameLine(ImGui::GetWindowWidth() - 50.f);
 	if (ImGui::Button("Open##FileSelector"))
 	{
@@ -288,17 +288,17 @@ void CreativeMode::UpdateFileUI()
 
 			_size_t size = 0;
 			ReadFile(hFile, &size, sizeof(_size_t), &dwBytes, nullptr);
-			
+
 			vector<KObject::Info> infoList(size);
-			for(_int i = 0; i < size; ++i)
+			for (_int i = 0; i < size; ++i)
 				ReadFile(hFile, &infoList[i], sizeof(KObject::Info), &dwBytes, nullptr);
-		
+
 			CloseHandle(hFile);
 
 			mObjectList.reserve(size);
 			for (_int i = 0; i < size; ++i)
 				mObjectList.emplace_back(KObject::Create(infoList[i]));
-			
+
 			WideCharToMultiByte(CP_ACP, 0, selectFilePath, -1, mFilePath, MAX_PATH, 0, 0);
 
 		}
@@ -340,9 +340,9 @@ void CreativeMode::UpdateFileUI()
 			}
 
 			CloseHandle(hFile);
-				
+
 		}
-	
+
 	}
 
 
@@ -364,7 +364,7 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 		MappingObjectToUI(mSelectedObjectListIndex);
 
 	ImGui::NewLine();
-	
+
 	_bool bChanged = false;
 
 	ImGui::Text("Scale:");
@@ -421,7 +421,7 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 
 		SafeRelease((*iter));
 		mObjectList.erase(iter);
-		
+
 		mSelectedObjectListIndex = -1;
 
 		//ReloadWorld(worldController);
@@ -586,9 +586,11 @@ _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 	//	For. Hardware Instancing
 	HRESULT hr = 0;
 
-	hr = graphicDevice->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, 0, D3DPOOL_MANAGED, &mCurVertexBuffer, nullptr);
+
+	hr = graphicDevice->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, D3DUSAGE_WRITEONLY, D3DPOOL_MANAGED, &mVertexBuffer, nullptr);
 	if (FAILED(hr))
 		return false;
+
 
 	hr = graphicDevice->CreateVertexDeclaration(vertexElem, &mVertexDeclaration);
 	if (FAILED(hr))
@@ -641,28 +643,29 @@ void CreativeMode::RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KO
 
 	_int numBlock = 0;
 	_matrix*	worldMatrixList = nullptr;
-	
-	mCurVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
-	
+
+	mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
+
 	for (_int i = 0; i < objectList.size(); ++i)
 	{
 		//memcpy(&worldMatrixList[i], &objectList[i]->GetWorldMatrix(), sizeof(_matrix));
-		worldMatrixList[i] = objectList[i]->GetWorldMatrix();
+		_int index = i % mBlockRenderBatchSize;
+		worldMatrixList[index] = objectList[i]->GetWorldMatrix();
 
 		++numBlock;
 
 		if (mBlockRenderBatchSize == numBlock)
 		{
-			mCurVertexBuffer->Unlock();
-			
+			mVertexBuffer->Unlock();
+
 			RenderHardwareInstancing(graphicDevice, staticMesh, numBlock, mInstancingShader);
 			numBlock = 0;
 
-			mCurVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
+			mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
 		}
 	}
-	mCurVertexBuffer->Unlock();
-	
+	mVertexBuffer->Unlock();
+
 	if (0 < numBlock)
 	{
 		RenderHardwareInstancing(graphicDevice, staticMesh, numBlock, mInstancingShader);
@@ -680,7 +683,7 @@ void CreativeMode::RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, Sta
 	graphicDevice->SetStreamSource(0, staticMesh->GetVertexBuffer(), 0, staticMesh->GetVertexSize());
 	graphicDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | numBlock);
 
-	graphicDevice->SetStreamSource(1, mCurVertexBuffer, 0, sizeof(_matrix));
+	graphicDevice->SetStreamSource(1, mVertexBuffer, 0, sizeof(_matrix));
 	graphicDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
 	graphicDevice->SetIndices(staticMesh->GetIndexBuffer());
 
@@ -712,7 +715,8 @@ CreativeMode * CreativeMode::Create(LPDIRECT3DDEVICE9 graphicDevice)
 
 void CreativeMode::Free()
 {
-	SafeRelease(mCurVertexBuffer);
+	SafeRelease(mVertexBuffer);
+
 	SafeRelease(mVertexDeclaration);
 
 	SafeRelease(mSelectedMeshShader);
