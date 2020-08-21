@@ -59,7 +59,7 @@ CreativeMode::CreativeMode()
 
 void CreativeMode::Active(IWorldController* worldController)
 {
-	InitSampleData();
+	//InitSampleData();
 	/*ReloadWorld(worldController);*/
 }
 
@@ -469,13 +469,41 @@ void CreativeMode::UpdateCreateUI()
 	if (ImGui::RadioButton("Block##Create", Game::Block == mCreateObjectType))
 		mCreateObjectType = Game::Block;
 
-	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
 	if (ImGui::Button("Add"))
 	{
 		KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, mCreatePos));
 		KObject* newObject = KObject::Create(info);
 		mObjectList.emplace_back(newObject);
+	}
+
+	ImGui::Text("Gap: ");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(50.f);
+	ImGui::InputFloat("##MultiAddGap", &mMultiCreateGap);
+
+	ImGui::SameLine();
+	ImGui::Text("Count: ");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(50.f);
+	ImGui::InputInt("##MultiAddCount", &mMultiCreateCount, 0, 0, 0);
+
+	ImGui::SameLine(ImGui::GetWindowWidth() - 75);
+	if (ImGui::Button("MultiAdd"))
+	{
+		const _int begin = mMultiCreateCount * -1.f;
+		const _int end = mMultiCreateCount;
+		for (_int i = begin; i < end; ++i)
+		{
+			for (_int j = begin; j < end; ++j)
+			{
+				KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, _vec3(mCreatePos.x + i * mMultiCreateGap, mCreatePos.y, mCreatePos.z + j * mMultiCreateGap)));
+				KObject* newObject = KObject::Create(info);
+				mObjectList.emplace_back(newObject);
+			}
+		}
 	}
 
 	ImGui::EndChild();

@@ -75,6 +75,9 @@ private:
 	_vec3				mCreateRotation;
 	_vec3				mCreatePos;
 	Game::ObjectType	mCreateObjectType = Game::Player;
+
+	_float				mMultiCreateGap = 0.f;
+	_int				mMultiCreateCount = 0;
 	
 private:
 	Shader*				mInstancingShader = nullptr;
