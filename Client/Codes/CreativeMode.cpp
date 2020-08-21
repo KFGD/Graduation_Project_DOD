@@ -12,6 +12,17 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx9.h>
 
+////////////////////////////
+//
+//
+//	Windows
+//
+//
+////////////////////////////
+#include <commdlg.h>
+#include<PathCch.h>
+
+
 #include "KObject.h"
 #include "DynamicMesh_Object.h"
 #include "StaticMesh_Object.h"
@@ -248,10 +259,49 @@ void CreativeMode::UpdateFileUI()
 	ImGui::SetNextItemWidth(200);
 	ImGui::InputText("##InputFilePath", mFilePath, sizeof(mFilePath), ImGuiInputTextFlags_ReadOnly);
 	
-	ImGui::SameLine();
-	if (ImGui::Button("Select##FileSelector"))
+	ImGui::SameLine(ImGui::GetWindowWidth() - 50.f);
+	if (ImGui::Button("Open##FileSelector"))
 	{
 		// File Select
+		_tchar initFilePath[MAX_PATH] = L"";
+		GetCurrentDirectory(MAX_PATH, initFilePath);
+		PathCchRemoveFileSpec(initFilePath, sizeof(initFilePath));
+		lstrcat(initFilePath, L"\\Data");
+
+		_tchar selectFilePath[MAX_PATH] = L"";
+
+		OPENFILENAME ofn;
+		::ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = g_hWnd;
+		ofn.lpstrFilter = L"All File(*.*)\0*.*\0Data File(.data)\0*.data;*.doc\0";
+		ofn.lpstrFile = selectFilePath;
+		ofn.nMaxFile = 256;
+		ofn.lpstrInitialDir = initFilePath;
+		if (0 != GetOpenFileName(&ofn))
+		{
+			ClearObjectList();
+
+			HANDLE hFile = CreateFile(selectFilePath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+			DWORD dwBytes = 0;
+
+			_size_t size = 0;
+			ReadFile(hFile, &size, sizeof(_size_t), &dwBytes, nullptr);
+			
+			vector<KObject::Info> infoList(size);
+			for(_int i = 0; i < size; ++i)
+				ReadFile(hFile, &infoList[i], sizeof(KObject::Info), &dwBytes, nullptr);
+		
+			CloseHandle(hFile);
+
+			mObjectList.reserve(size);
+			for (_int i = 0; i < size; ++i)
+				mObjectList.emplace_back(KObject::Create(infoList[i]));
+			
+			WideCharToMultiByte(CP_ACP, 0, selectFilePath, -1, mFilePath, MAX_PATH, 0, 0);
+
+		}
 	}
 
 	ImGui::NewLine();
@@ -260,6 +310,39 @@ void CreativeMode::UpdateFileUI()
 	if (ImGui::Button("Save##FileSelector"))
 	{
 		//	Save File
+		_tchar initFilePath[MAX_PATH] = L"";
+		GetCurrentDirectory(MAX_PATH, initFilePath);
+		PathCchRemoveFileSpec(initFilePath, sizeof(initFilePath));
+		lstrcat(initFilePath, L"\\Data");
+
+		_tchar selectFilePath[MAX_PATH] = L"";
+
+		OPENFILENAME ofn;
+		::ZeroMemory(&ofn, sizeof(OPENFILENAME));
+		ofn.lStructSize = sizeof(OPENFILENAME);
+		ofn.hwndOwner = g_hWnd;
+		ofn.lpstrFilter = L"Data File(.data)\0*.data\0All File(*.*)\0*.*;*.doc\0";
+		ofn.lpstrFile = selectFilePath;
+		ofn.nMaxFile = 256;
+		ofn.lpstrInitialDir = initFilePath;
+		if (0 != GetSaveFileName(&ofn))
+		{
+			const _size_t size = mObjectList.size();
+
+			HANDLE hFile = CreateFile(selectFilePath, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+			DWORD dwBytes = 0;
+			WriteFile(hFile, &size, sizeof(_size_t), &dwBytes, nullptr);
+
+			for (_int i = 0; i < mObjectList.size(); ++i)
+			{
+				WriteFile(hFile, &mObjectList[i]->GetInfo(), sizeof(KObject::Info), &dwBytes, nullptr);
+			}
+
+			CloseHandle(hFile);
+				
+		}
+	
 	}
 
 

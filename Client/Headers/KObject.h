@@ -29,7 +29,7 @@ public:
 		Type Objecttype;
 		KEngine::Transform Transform;
 
-		Info(const Type objectType, const KEngine::Transform transform = KEngine::Transform())
+		Info(const Type objectType = Game::Player, const KEngine::Transform transform = KEngine::Transform())
 			: Objecttype(objectType), Transform(transform)
 		{
 		}
