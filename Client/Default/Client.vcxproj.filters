@@ -16,15 +16,6 @@
     <Filter Include="90.Engine\00.System\00.GraphicDevice">
       <UniqueIdentifier>{63f07226-6808-4bf0-8f85-97171c2302ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="90.Engine\00.System\01.Timer">
-      <UniqueIdentifier>{28b6c3fc-fe95-4d7f-a982-6ccc65df58cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="90.Engine\00.System\02.Frame">
-      <UniqueIdentifier>{abf4ecad-0615-4ad9-9a99-8011aa2ac85b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="90.Engine\00.System\01.Timer\Manager">
-      <UniqueIdentifier>{7bb7696c-c430-4690-afef-66e36355903c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="90.Engine\98.Headers">
       <UniqueIdentifier>{45d142de-2bc4-411c-8ad4-881a583128d3}</UniqueIdentifier>
     </Filter>
@@ -33,9 +24,6 @@
     </Filter>
     <Filter Include="90.Engine\97.SuperClass\00.Base">
       <UniqueIdentifier>{e1beb463-5cb7-4dbf-8cdc-8009f1b4fc73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="90.Engine\00.System\02.Frame\Manager">
-      <UniqueIdentifier>{a0d04db1-6e4e-4c38-a56d-5483d1b20d2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="90.Engine\01.Core">
       <UniqueIdentifier>{85bf7dce-445d-48d2-978b-c557eed0137c}</UniqueIdentifier>
@@ -137,6 +125,33 @@
     <Filter Include="30.ModeController\Mode\00. GameMode">
       <UniqueIdentifier>{73c1b7bb-e4a5-4078-8885-c7c7042cfce2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="31.CameraController">
+      <UniqueIdentifier>{7d0b39e8-2348-427b-9f69-ef000ac7f9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="31.CameraController\Camera">
+      <UniqueIdentifier>{de4b08c6-118e-433e-b5f6-e072fbbaec79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="31.CameraController\Camera\00.FreeCamera">
+      <UniqueIdentifier>{19e9e938-9b13-47f7-bb0f-9de3291a4448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\02.Timer">
+      <UniqueIdentifier>{28b6c3fc-fe95-4d7f-a982-6ccc65df58cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\02.Timer\Manager">
+      <UniqueIdentifier>{7bb7696c-c430-4690-afef-66e36355903c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\03.Frame">
+      <UniqueIdentifier>{abf4ecad-0615-4ad9-9a99-8011aa2ac85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\03.Frame\Manager">
+      <UniqueIdentifier>{a0d04db1-6e4e-4c38-a56d-5483d1b20d2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.Engine\00.System\01.InputDevice">
+      <UniqueIdentifier>{e625be18-161f-4bef-9c44-b76c41fe3963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="31.CameraController\32.KeyManager">
+      <UniqueIdentifier>{3274a6e4-b50b-42f8-a60d-4b31f5284fca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -171,16 +186,16 @@
       <Filter>90.Engine\00.System</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Timer.cpp">
-      <Filter>90.Engine\00.System\01.Timer</Filter>
+      <Filter>90.Engine\00.System\02.Timer</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TimeManager.cpp">
-      <Filter>90.Engine\00.System\01.Timer\Manager</Filter>
+      <Filter>90.Engine\00.System\02.Timer\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Frame.cpp">
-      <Filter>90.Engine\00.System\02.Frame</Filter>
+      <Filter>90.Engine\00.System\03.Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\FrameManager.cpp">
-      <Filter>90.Engine\00.System\02.Frame\Manager</Filter>
+      <Filter>90.Engine\00.System\03.Frame\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\World.cpp">
       <Filter>90.Engine\01.Core\00.World</Filter>
@@ -261,6 +276,21 @@
       <Filter>24.Component\00.OOD\04.Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\Headers\Mode.cpp" />
+    <ClCompile Include="..\Codes\Camera.cpp">
+      <Filter>31.CameraController\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FreeCamera.cpp">
+      <Filter>31.CameraController\Camera\00.FreeCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CameraController.cpp">
+      <Filter>31.CameraController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InputDevice.cpp">
+      <Filter>90.Engine\00.System\01.InputDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\KeyManager.cpp">
+      <Filter>31.CameraController\32.KeyManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -300,19 +330,19 @@
       <Filter>90.Engine\00.System</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Timer.h">
-      <Filter>90.Engine\00.System\01.Timer</Filter>
+      <Filter>90.Engine\00.System\02.Timer</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TimeManager.h">
-      <Filter>90.Engine\00.System\01.Timer\Manager</Filter>
+      <Filter>90.Engine\00.System\02.Timer\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Typedef.h">
       <Filter>90.Engine\98.Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Frame.h">
-      <Filter>90.Engine\00.System\02.Frame</Filter>
+      <Filter>90.Engine\00.System\03.Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\FrameManager.h">
-      <Filter>90.Engine\00.System\02.Frame\Manager</Filter>
+      <Filter>90.Engine\00.System\03.Frame\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\World.h">
       <Filter>90.Engine\01.Core\00.World</Filter>
@@ -457,6 +487,21 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shader.h">
       <Filter>24.Component\00.OOD\04.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Camera.h">
+      <Filter>31.CameraController\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CameraController.h">
+      <Filter>31.CameraController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FreeCamera.h">
+      <Filter>31.CameraController\Camera\00.FreeCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InputDevice.h">
+      <Filter>90.Engine\00.System\01.InputDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\KeyManager.h">
+      <Filter>31.CameraController\32.KeyManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

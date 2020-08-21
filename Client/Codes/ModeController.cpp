@@ -14,6 +14,8 @@
 
 #include "GameMode.h"
 #include "CreativeMode.h"
+#include "CameraController.h"
+#include "FreeCamera.h"
 
 IMPLEMENT_SINGLETON(ModeController)
 
@@ -40,12 +42,13 @@ _bool ModeController::Ready(LPDIRECT3DDEVICE9 graphicDevice)
 
 	mMode[Program::GAME] = GameMode::Create(graphicDevice);
 	mMode[Program::CREATIVE] = CreativeMode::Create(graphicDevice);
-
+	
 	return true;
 }
 
-void ModeController::Update(IWorldController* worldController)
+void ModeController::Update(IWorldController* worldController, CameraController* cameraController)
 {
+	MappingCameraControllerToData(cameraController);
 	// Start the Dear ImGui frame
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -53,49 +56,24 @@ void ModeController::Update(IWorldController* worldController)
 	ImGui::NewFrame();
 
 	//	Mode Controller
-	ImGui::SetNextWindowPos(ImVec2(10.f, 10.f));
-	UpdateModeController(worldController);
+	ImGui::SetNextWindowPos(ImVec2(10.f, 10.f), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(350.f, (_float)WINCY));
+	UpdateModeControllerUI(worldController);
+
+	ImGui::SetNextWindowPos(ImVec2(400.f, 10.f), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300.f, 200.f));
+	UpdateCameraControllerUI(cameraController);
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (mIsWindowMode)
 		ImGui::ShowDemoWindow(&mIsWindowMode);
 
-	{
-		//// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-		//{
-		//	static float f = 0.0f;
-		//	static int counter = 0;
-
-		//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		//	ImGui::Checkbox("Demo Window", &mIsWindowMode);      // Edit bools storing our window open/close state
-		//	ImGui::Checkbox("Another Window", &mIsShowAnotherWindow);
-
-		//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		//	ImGui::ColorEdit3("clear color", (float*)&ImVec4(0.45f, 0.55f, 0.60f, 1.00f)); // Edit 3 floats representing a color
-
-		//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		//		counter++;
-		//	ImGui::SameLine();
-		//	ImGui::Text("counter = %d", counter);
-
-		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		//	ImGui::End();
-		//}
-
-		//// 3. Show another simple window.
-		//if (mIsShowAnotherWindow)
-		//{
-		//	ImGui::Begin("Another Window", &mIsShowAnotherWindow);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		//	ImGui::Text("Hello from another window!");
-		//	if (ImGui::Button("Close Me"))
-		//		mIsShowAnotherWindow = false;
-		//	ImGui::End();
-		//}
-	}
-
 	ImGui::EndFrame();
+
+	if (ImGui::IsKeyReleased(VK_CONTROL))
+		mIsFreeCameraLocking = !mIsFreeCameraLocking;
+
+	MappingDataToCameraController(cameraController);
 }
 
 void ModeController::Render(LPDIRECT3DDEVICE9 graphicDevice)
@@ -108,20 +86,20 @@ void ModeController::Render(LPDIRECT3DDEVICE9 graphicDevice)
 
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-	
+
 	graphicDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	graphicDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	graphicDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, TRUE);
 }
 
-void ModeController::UpdateModeController(IWorldController* worldController)
+void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 {
 	typedef Program::Mode Mode;
-	
-	ImGui::Begin("Mode Controller", &mbShowWindow, ImGuiWindowFlags_AlwaysAutoResize);
-	
+
+	ImGui::Begin("Mode Controller", &mIsShowModeController);
+
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	
+
 	ImGui::NewLine();
 
 	Mode preMode = mCurMode;
@@ -164,9 +142,85 @@ void ModeController::UpdateModeController(IWorldController* worldController)
 
 }
 
+void ModeController::UpdateCameraControllerUI(CameraController* cameraController)
+{
+	ImGui::Begin("Camera Controller", &mIsShowCameraController);
+
+	ImGui::Text("Camera Type: ");
+
+	ImGui::RadioButton("Free", (int*)&mCurCameraType, CameraType::FREE_CAMERA);
+	
+	ImGui::NewLine();
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+
+	switch (mCurCameraType)
+	{
+	case CameraType::FREE_CAMERA:
+	{
+		ImGui::BeginChild("FreeCameraType", ImVec2(0, 100), true, 0);
+		
+		ImGui::Text("[Free Camera]");
+
+		ImGui::Text("MoveSpeed: ");
+		
+		ImGui::SameLine();
+		ImGui::SetNextItemWidth(50.f);
+		ImGui::InputFloat("##FreeCameraMoveSpeed", &mFreeCameraMoveSpeed);
+
+		ImGui::SameLine();
+		ImGui::Text("Locking: ");
+		
+		ImGui::SameLine();
+		ImGui::Checkbox("##FreeCameraLocking", &mIsFreeCameraLocking);
+
+		ImGui::EndChild();
+		
+	}
+	break;
+	}
+
+	ImGui::PopStyleVar();
+
+	ImGui::End();
+}
+
+void ModeController::MappingDataToCameraController(CameraController * cameraController)
+{
+	cameraController->ChangeCamera(mCurCameraType);
+
+	switch (mCurCameraType)
+	{
+	case CameraType::FREE_CAMERA:
+	{
+		FreeCamera*	freeCamera = static_cast<FreeCamera*>(cameraController->GetCamera(CameraType::FREE_CAMERA));
+		freeCamera->SetMoveSpeed(mFreeCameraMoveSpeed);
+		freeCamera->SetLocking(mIsFreeCameraLocking);
+	}
+		break;
+	}
+
+}
+
+void ModeController::MappingCameraControllerToData(CameraController * cameraController)
+{
+	mCurCameraType = cameraController->GetCurCameraType();
+
+	switch (mCurCameraType)
+	{
+	case CameraType::FREE_CAMERA:
+	{
+		FreeCamera*	freeCamera = static_cast<FreeCamera*>(cameraController->GetCamera(CameraType::FREE_CAMERA));
+		mFreeCameraMoveSpeed = freeCamera->GetMoveSpeed();
+		mIsFreeCameraLocking = freeCamera->GetLocking();
+	}
+		break;
+	}
+
+}
+
 void ModeController::Free()
 {
-	for(Mode* mode : mMode)
+	for (Mode* mode : mMode)
 		SafeRelease(mode);
 	mMode.fill(nullptr);
 

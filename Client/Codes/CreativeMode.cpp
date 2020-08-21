@@ -586,7 +586,7 @@ _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 	//	For. Hardware Instancing
 	HRESULT hr = 0;
 
-	hr = graphicDevice->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, 0, D3DPOOL_MANAGED, &mVertexBuffer, nullptr);
+	hr = graphicDevice->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, 0, D3DPOOL_MANAGED, &mCurVertexBuffer, nullptr);
 	if (FAILED(hr))
 		return false;
 
@@ -636,63 +636,65 @@ void CreativeMode::RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KO
 	mInstancingShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
 	mInstancingShader->SetTexture("gDiffuseTexture", staticMesh->GetTexutre(0));
 
-	mInstancingShader->BeginShader(nullptr);
-	mInstancingShader->BeginPass(0);
+	//mInstancingShader->BeginShader(nullptr);
+	//mInstancingShader->BeginPass(0);
 
 	_int numBlock = 0;
 	_matrix*	worldMatrixList = nullptr;
-
-	mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
+	
+	mCurVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
+	
 	for (_int i = 0; i < objectList.size(); ++i)
 	{
-		memcpy(worldMatrixList[i], objectList[i]->GetWorldMatrix(), sizeof(_matrix));
+		//memcpy(&worldMatrixList[i], &objectList[i]->GetWorldMatrix(), sizeof(_matrix));
+		worldMatrixList[i] = objectList[i]->GetWorldMatrix();
 
 		++numBlock;
 
 		if (mBlockRenderBatchSize == numBlock)
 		{
-			mVertexBuffer->Unlock();
+			mCurVertexBuffer->Unlock();
+			
 			RenderHardwareInstancing(graphicDevice, staticMesh, numBlock, mInstancingShader);
 			numBlock = 0;
-			mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
+
+			mCurVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, D3DLOCK_DISCARD);
 		}
 	}
-	mVertexBuffer->Unlock();
-
+	mCurVertexBuffer->Unlock();
+	
 	if (0 < numBlock)
+	{
 		RenderHardwareInstancing(graphicDevice, staticMesh, numBlock, mInstancingShader);
+	}
 
 	worldMatrixList = nullptr;
 
-	mInstancingShader->EndPass();
-	mInstancingShader->EndShader();
+	//mInstancingShader->EndPass();
+	//mInstancingShader->EndShader();
 }
 
 void CreativeMode::RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, StaticMesh_Object * staticMesh, _int numBlock, Shader * shader)
 {
-	LPDIRECT3DVERTEXBUFFER9 blockVB = nullptr;
-	staticMesh->GetVertexBuffer(blockVB);
-
-	LPDIRECT3DINDEXBUFFER9	blockIB = nullptr;
-	staticMesh->GetIndexBuffer(blockIB);
-
-	const _ulong blockVertexSize = staticMesh->GetVertexSize();
-
 	graphicDevice->SetVertexDeclaration(mVertexDeclaration);
-	graphicDevice->SetStreamSource(0, blockVB, 0, blockVertexSize);
+	graphicDevice->SetStreamSource(0, staticMesh->GetVertexBuffer(), 0, staticMesh->GetVertexSize());
 	graphicDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | numBlock);
 
-	graphicDevice->SetStreamSource(1, mVertexBuffer, 0, sizeof(_matrix));
+	graphicDevice->SetStreamSource(1, mCurVertexBuffer, 0, sizeof(_matrix));
 	graphicDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
-	graphicDevice->SetIndices(blockIB);
+	graphicDevice->SetIndices(staticMesh->GetIndexBuffer());
+
+	shader->BeginShader(nullptr);
+	shader->BeginPass(0);
 
 	graphicDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, staticMesh->GetVertexNum(), 0, staticMesh->GetFacesNum());
 
-	SafeRelease(blockIB);
-	SafeRelease(blockVB);
+	shader->EndPass();
+	shader->EndShader();
 
 	graphicDevice->SetStreamSourceFreq(0, 1);
 	graphicDevice->SetStreamSourceFreq(1, 1);
+
 }
 
 CreativeMode * CreativeMode::Create(LPDIRECT3DDEVICE9 graphicDevice)
@@ -710,7 +712,7 @@ CreativeMode * CreativeMode::Create(LPDIRECT3DDEVICE9 graphicDevice)
 
 void CreativeMode::Free()
 {
-	SafeRelease(mVertexBuffer);
+	SafeRelease(mCurVertexBuffer);
 	SafeRelease(mVertexDeclaration);
 
 	SafeRelease(mSelectedMeshShader);

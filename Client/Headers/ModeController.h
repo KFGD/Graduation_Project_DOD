@@ -5,6 +5,7 @@
 #include "Client_Defines.h"
 
 class IWorldController;
+class CameraController;
 class Mode;
 
 class ModeController :
@@ -21,22 +22,34 @@ public:
 	Program::Mode	GetCurProgramMode() const { return mCurMode; }
 
 public:
-	void	Update(IWorldController* worldController);
+	void	Update(IWorldController* worldController, CameraController* cameraController);
 	void	Render(LPDIRECT3DDEVICE9 graphicDevice);
 
 private:
-	void	UpdateModeController(IWorldController* worldController);
+	void	UpdateModeControllerUI(IWorldController* worldController);
+	void	UpdateCameraControllerUI(CameraController* cameraController);
 
+private:
+	void	MappingDataToCameraController(CameraController* cameraController);
+	void	MappingCameraControllerToData(CameraController* cameraController);
+	
 private:
 	_bool	mIsWindowMode = true;
 
 private:
 	Program::Mode	mCurMode = Program::Mode::GAME;
-	_bool	mbShowWindow = true;
+	_bool	mIsShowModeController = true;
+	array<Mode*, Program::MODE_END>	mMode;
 
 private:
-	array<Mode*, Program::Mode_End>	mMode;
+	_bool				mIsShowCameraController = true;
+	CameraType::Type	mCurCameraType = CameraType::FREE_CAMERA;
 
+private:
+	//	Free Camera
+	_float	mFreeCameraMoveSpeed = 0.f;
+	_bool	mIsFreeCameraLocking = false;
+	
 public:
 	virtual	void	Free() override;
 

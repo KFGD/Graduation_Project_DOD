@@ -14,16 +14,21 @@ StaticMesh_Object::StaticMesh_Object(const StaticMesh_Object & rhs)
 	, mMaterialBuff(rhs.mMaterialBuff)
 	, mNumMaterials(rhs.mNumMaterials)
 	, mTextures(rhs.mTextures)
+	, mVertexBuffer(rhs.mVertexBuffer)
+	, mIndexBuffer(rhs.mIndexBuffer)
 	, mIsClone(true)
 {
 	SafeAddRef(mMesh);
 	SafeAddRef(mAdjacencyBuff);
 	SafeAddRef(mMaterialBuff);
-
+	
 	mMaterials = (D3DXMATERIAL*)mMaterialBuff->GetBufferPointer();
 
 	for (_size_t i = 0; i < mNumMaterials; ++i)
 		SafeAddRef(mTextures[i]);
+
+	SafeAddRef(mVertexBuffer);
+	SafeAddRef(mIndexBuffer);
 }
 
 void StaticMesh_Object::Render(Shader * shader)
@@ -146,6 +151,8 @@ _bool StaticMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tcha
 
 	mMesh->UnlockVertexBuffer();
 
+	mMesh->GetVertexBuffer(&mVertexBuffer);
+	mMesh->GetIndexBuffer(&mIndexBuffer);
 
 	return true;
 }
@@ -175,6 +182,8 @@ void StaticMesh_Object::Free()
 	if (false == mIsClone)
 		SafeDeleteArray(mTextures);
 
+	SafeRelease(mIndexBuffer);
+	SafeRelease(mVertexBuffer);
 	SafeRelease(mAdjacencyBuff);
 	SafeRelease(mMaterialBuff);
 	SafeRelease(mMesh);

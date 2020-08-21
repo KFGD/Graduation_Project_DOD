@@ -6,7 +6,16 @@ namespace Program
 	{
 		GAME,
 		CREATIVE,
-		Mode_End
+		MODE_END
+	};
+};
+
+namespace CameraType
+{
+	enum Type : int 
+	{
+		FREE_CAMERA,
+		TYPE_END
 	};
 };
 

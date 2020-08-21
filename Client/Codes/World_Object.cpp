@@ -126,12 +126,6 @@ _bool World_Object::Initialize()
 {
 	if (false == ReadyComponent())
 		return false;
-	
-	_matrix viewMatrix = *D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, -3.f), &_vec3(0.f, 0.f, 0.f), &_vec3(0.f, 1.f, 0.f));
-	_matrix projMatrix = *D3DXMatrixPerspectiveFovLH(&projMatrix, D3DXToRadian(60.f), (_float)WINCX / (_float)WINCY, 0.01f, 1000.f);
-
-	mPipeLine->SetTransform(D3DTS_VIEW, viewMatrix);
-	mPipeLine->SetTransform(D3DTS_PROJECTION, projMatrix);
 
 	D3DVERTEXELEMENT9 vertexElem[] =
 	{

@@ -4,9 +4,12 @@
 
 //	System
 class GraphicDevice;
+class InputDevice;
 class World;
 
 class ModeController;
+class CameraController;
+class KeyManager;
 
 class MainApp final : 
 	public Base, public IWorldController
@@ -32,10 +35,13 @@ private:
 	bool	ReadyWorld();
 	
 private:
-	GraphicDevice* mGraphicDeviceSys = nullptr;
-	
+	GraphicDevice*	mGraphicDeviceSys = nullptr;
+	InputDevice*	mInputDevice = nullptr;
+
 private:
 	ModeController*		mModeController = nullptr;
+	CameraController*	mCameraController = nullptr;
+	KeyManager*			mKeyManager = nullptr;
 
 private:
 	LPDIRECT3DDEVICE9	mGraphicDevice = nullptr;

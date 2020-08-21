@@ -17,7 +17,9 @@ public:
 public:
 	LPD3DXMESH	GetMesh() { return mMesh; }
 	_bool		GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9& vertexBuffer);
+	LPDIRECT3DVERTEXBUFFER9	GetVertexBuffer() { return mVertexBuffer; }
 	_bool		GetIndexBuffer(LPDIRECT3DINDEXBUFFER9& indexBuffer);
+	LPDIRECT3DINDEXBUFFER9	GetIndexBuffer() { return mIndexBuffer; }
 	_ulong		GetVertexSize() const;
 	_ulong		GetVertexNum() const;
 	_ulong		GetFacesNum() const;
@@ -39,6 +41,10 @@ private:
 	D3DXMATERIAL*	mMaterials = nullptr;
 	LPDIRECT3DTEXTURE9*	mTextures = nullptr;
 	
+private:
+	LPDIRECT3DVERTEXBUFFER9	mVertexBuffer = nullptr;
+	LPDIRECT3DINDEXBUFFER9	mIndexBuffer = nullptr;
+
 private:
 	_matrix			mPivotMatrix;
 
