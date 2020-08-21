@@ -17,6 +17,10 @@ void KeyManager::Update(const _double timeDelta)
 		mKeyBuf |= KEY_S;
 	if (0x80 & inputDevice->GetDIKeyState(DIK_D))
 		mKeyBuf |= KEY_D;
+	if (0x80 & inputDevice->GetDIKeyState(DIK_LCONTROL))
+		mKeyBuf |= KEY_LCTRL;
+	if (0x80 & inputDevice->GetDIKeyState(DIK_LSHIFT))
+		mKeyBuf |= KEY_LSHIFT;
 
 
 	if (0x80 & inputDevice->GetDIMouseState(InputDevice::MOUSEKEYSTATE::DIM_LBUTTON))

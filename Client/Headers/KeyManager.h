@@ -14,6 +14,8 @@ public:
 
 	static constexpr _ulong KEY_LBUTTON = 0x00000010;
 	static constexpr _ulong KEY_RBUTTON = 0x00000020;
+	static constexpr _ulong KEY_LCTRL	= 0x00000040;
+	static constexpr _ulong KEY_LSHIFT	= 0x00000080;
 
 	DECLARE_SINGLETON(KeyManager)
 

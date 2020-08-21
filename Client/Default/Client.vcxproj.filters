@@ -149,7 +149,7 @@
     <Filter Include="90.Engine\00.System\01.InputDevice">
       <UniqueIdentifier>{e625be18-161f-4bef-9c44-b76c41fe3963}</UniqueIdentifier>
     </Filter>
-    <Filter Include="31.CameraController\32.KeyManager">
+    <Filter Include="32.KeyManager">
       <UniqueIdentifier>{3274a6e4-b50b-42f8-a60d-4b31f5284fca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -289,7 +289,7 @@
       <Filter>90.Engine\00.System\01.InputDevice</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\KeyManager.cpp">
-      <Filter>31.CameraController\32.KeyManager</Filter>
+      <Filter>32.KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -501,7 +501,7 @@
       <Filter>90.Engine\00.System\01.InputDevice</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\KeyManager.h">
-      <Filter>31.CameraController\32.KeyManager</Filter>
+      <Filter>32.KeyManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

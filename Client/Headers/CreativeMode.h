@@ -26,7 +26,7 @@ public:
 	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
 
 private:
-	_bool	PickingObject();
+	_bool	PickingObject(_int& selectedIndex, _vec3& hitWorldPos);
 
 private:
 	void	UpdateFileUI();
@@ -38,8 +38,11 @@ private:
 
 	//	Edit
 	void	MappingObjectToUI(const _int objectIndex);
-	void	MappingUIToObject(const _int objectIndex);
+	void	MappingEditUIToEditObject(const _int objectIndex);
 	
+	//	Create
+	void	CreateObject();
+
 	void	ClearObjectList();
 	
 private:

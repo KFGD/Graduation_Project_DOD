@@ -22,7 +22,7 @@
 #include <commdlg.h>
 #include<PathCch.h>
 
-
+#include "KeyManager.h"
 #include "KObject.h"
 #include "DynamicMesh_Object.h"
 #include "StaticMesh_Object.h"
@@ -59,6 +59,7 @@ CreativeMode::CreativeMode()
 
 void CreativeMode::Active(IWorldController* worldController)
 {
+	mSelectedObjectListIndex = -1;
 	//InitSampleData();
 	/*ReloadWorld(worldController);*/
 }
@@ -73,9 +74,41 @@ void CreativeMode::Update(IWorldController* worldController)
 	UpdateFileUI();
 	UpdateDisplayObjectListUI(worldController);
 	UpdateCreateUI();
+
+	_int selectedIndex;
+	_vec3 hitWorldPos;
+	const _bool isPicking = PickingObject(selectedIndex, hitWorldPos);
+
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-		if (PickingObject())
-			MappingObjectToUI(mSelectedObjectListIndex);
+	{
+		if (isPicking && KeyManager::GetInstance()->KeyPresseing(KeyManager::KEY_LSHIFT))
+		{
+			mCreatePos = hitWorldPos;
+			CreateObject();
+		}
+		mSelectedObjectListIndex = selectedIndex;
+	}
+
+	MappingObjectToUI(mSelectedObjectListIndex);
+	
+	if (-1 != mSelectedObjectListIndex && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+	{
+		if (isPicking && (selectedIndex != mSelectedObjectListIndex))
+		{
+			mEditPosition = hitWorldPos;
+			MappingEditUIToEditObject(mSelectedObjectListIndex);
+		}
+	}
+
+	//if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+	//	PickingObject(mSelectedObjectListIndex, hitPos);
+	//
+	//MappingObjectToUI(mSelectedObjectListIndex);
+
+	//if (-1 != mSelectedObjectListIndex && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+	//{
+	//	
+	//}
 }
 
 void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
@@ -162,24 +195,26 @@ void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
 	//graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
-_bool CreativeMode::PickingObject()
+_bool CreativeMode::PickingObject(_int& selectedIndex, _vec3& hitWorldPos)
 {
 	POINT mouse;
 	::GetCursorPos(&mouse);
 	::ScreenToClient(g_hWnd, &mouse);
 
-	PipeLine::RayCast rayCast = PipeLine::GetInstance()->ConvertScreenPosToRayCast(_vec2(mouse.x, mouse.y));
+	PipeLine::RayCast worldRayCast = PipeLine::GetInstance()->ConvertScreenPosToRayCast(_vec2(mouse.x, mouse.y));
 
 	constexpr _float MAX_FLOAT = 3.402823466e+38f;
 	_float nearestDis = MAX_FLOAT;
+	selectedIndex = -1;
+
 	for (_int i = 0; i < mObjectList.size(); ++i)
 	{
 		KObject*& object = mObjectList[i];
 		const _matrix matInverseWorld = object->GetWorldInverseMatrix();
 
 		_vec3 localRayPos, localRayDir;
-		D3DXVec3TransformCoord(&localRayPos, &rayCast.RayPos, &matInverseWorld);
-		D3DXVec3TransformNormal(&localRayDir, &rayCast.RayDir, &matInverseWorld);
+		D3DXVec3TransformCoord(&localRayPos, &worldRayCast.RayPos, &matInverseWorld);
+		D3DXVec3TransformNormal(&localRayDir, &worldRayCast.RayDir, &matInverseWorld);
 
 		BOOL	bHit = false;
 		_float	hitDis = 0.0;
@@ -197,7 +232,7 @@ _bool CreativeMode::PickingObject()
 				{
 					if (hitDis < nearestDis)
 					{
-						mSelectedObjectListIndex = i;
+						selectedIndex = i;
 						nearestDis = hitDis;
 					}
 				}
@@ -216,7 +251,7 @@ _bool CreativeMode::PickingObject()
 				{
 					if (hitDis < nearestDis)
 					{
-						mSelectedObjectListIndex = i;
+						selectedIndex = i;
 						nearestDis = hitDis;
 					}
 				}
@@ -232,7 +267,7 @@ _bool CreativeMode::PickingObject()
 			{
 				if (hitDis < nearestDis)
 				{
-					mSelectedObjectListIndex = i;
+					selectedIndex = i;
 					nearestDis = hitDis;
 				}
 			}
@@ -242,7 +277,12 @@ _bool CreativeMode::PickingObject()
 		}
 	}
 
-	return nearestDis != MAX_FLOAT;
+	const _bool isHit = nearestDis != MAX_FLOAT;
+
+	if (isHit)
+		hitWorldPos = worldRayCast.RayPos + worldRayCast.RayDir * nearestDis;
+
+	return isHit;
 }
 
 void CreativeMode::UpdateFileUI()
@@ -409,7 +449,7 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 	}
 
 	if (bChanged)
-		MappingUIToObject(mSelectedObjectListIndex);
+		MappingEditUIToEditObject(mSelectedObjectListIndex);
 
 	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 70.f);
@@ -471,11 +511,7 @@ void CreativeMode::UpdateCreateUI()
 
 	ImGui::SameLine(ImGui::GetWindowWidth() - 40);
 	if (ImGui::Button("Add"))
-	{
-		KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, mCreatePos));
-		KObject* newObject = KObject::Create(info);
-		mObjectList.emplace_back(newObject);
-	}
+		CreateObject();
 
 	ImGui::Text("Gap: ");
 
@@ -519,20 +555,39 @@ void CreativeMode::ReloadWorld(IWorldController* worldController)
 
 void CreativeMode::MappingObjectToUI(const _int objectIndex)
 {
-	const KObject::Info& info = mObjectList[objectIndex]->GetInfo();
-	mEditScale = info.Transform.Scale;
-	mEditRotation = info.Transform.Rotation;
-	mEditPosition = info.Transform.Position;
+	if (-1 == objectIndex)
+	{
+		KObject::Info info;
+		mEditScale = info.Transform.Scale;
+		mEditRotation = info.Transform.Rotation;
+		mEditPosition = info.Transform.Position;
 
-	mEditObjectType = info.Objecttype;
+		mEditObjectType = info.Objecttype;
+	}
+	else
+	{
+		const KObject::Info& info = mObjectList[objectIndex]->GetInfo();
+		mEditScale = info.Transform.Scale;
+		mEditRotation = info.Transform.Rotation;
+		mEditPosition = info.Transform.Position;
+
+		mEditObjectType = info.Objecttype;
+	}
 }
 
-void CreativeMode::MappingUIToObject(const _int objectIndex)
+void CreativeMode::MappingEditUIToEditObject(const _int objectIndex)
 {
 	if (0 > objectIndex)
 		return;
 	KObject::Info info(mEditObjectType, KEngine::Transform(mEditScale, mEditRotation, mEditPosition));
 	mObjectList[objectIndex]->SetInfo(info);
+}
+
+void CreativeMode::CreateObject()
+{
+	KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, mCreatePos));
+	KObject* newObject = KObject::Create(info);
+	mObjectList.emplace_back(newObject);
 }
 
 void CreativeMode::ClearObjectList()
