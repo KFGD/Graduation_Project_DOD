@@ -59,6 +59,7 @@ void CreativeMode::InActive(IWorldController* worldController)
 
 void CreativeMode::Update(IWorldController* worldController)
 {
+	UpdateFileUI();
 	UpdateDisplayObjectListUI(worldController);
 	UpdateCreateUI();
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
@@ -233,10 +234,43 @@ _bool CreativeMode::PickingObject()
 	return nearestDis != MAX_FLOAT;
 }
 
+void CreativeMode::UpdateFileUI()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	ImGui::BeginChild("FileSelector", ImVec2(0, 100), true, 0);
+
+	ImGui::Text("[FileSelector]");
+	
+	ImGui::Text("Path: ");
+	
+	ImGui::SameLine();
+	
+	ImGui::SetNextItemWidth(200);
+	ImGui::InputText("##InputFilePath", mFilePath, sizeof(mFilePath), ImGuiInputTextFlags_ReadOnly);
+	
+	ImGui::SameLine();
+	if (ImGui::Button("Select##FileSelector"))
+	{
+		// File Select
+	}
+
+	ImGui::NewLine();
+	ImGui::NewLine();
+	ImGui::SameLine(ImGui::GetWindowWidth() - 50.f);
+	if (ImGui::Button("Save##FileSelector"))
+	{
+		//	Save File
+	}
+
+
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
+}
+
 void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::BeginChild("ObjectList", ImVec2(0, 350), true, 0);
+	ImGui::BeginChild("ObjectList", ImVec2(0, 310), true, 0);
 
 	constexpr char* objectTypeName[Game::Type_End] = { "Player", "Bot", "Block" };
 

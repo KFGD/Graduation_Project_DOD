@@ -29,6 +29,7 @@ private:
 	_bool	PickingObject();
 
 private:
+	void	UpdateFileUI();
 	void	UpdateDisplayObjectListUI(IWorldController* worldController);
 	void	UpdateCreateUI();
 
@@ -50,6 +51,10 @@ private:
 	
 private:
 	vector<KObject*>	mObjectList;
+
+private:
+	//	File Selector
+	char mFilePath[MAX_PATH];
 
 private:
 	//	Display Object List
