@@ -25,12 +25,12 @@ private:
 public:
 	_bool	Ready(LPDIRECT3DDEVICE9 graphicDevice);
 	HRESULT SetTransform(D3DTRANSFORMSTATETYPE eType, const _matrix& Matrix);
-	_matrix GetTransform(D3DTRANSFORMSTATETYPE eType);
+	_matrix GetTransform(D3DTRANSFORMSTATETYPE eType) const;
 	_vec3 Get_Eye() {
 		return *(_vec3*)&mViewInverseMatrix.m[3][0];
 	}
 	const _matrix& Get_ViewInverseMatrix() const { return mViewInverseMatrix; }
-	PipeLine::RayCast	ConvertScreenPosToRayCast(const _vec2& screenPos);
+	PipeLine::RayCast	ConvertScreenPosToWorldRayCast(const _vec2& screenPos);
 private:
 	D3DVIEWPORT9	mViewPort;
 	_matrix		mViewMatrix;

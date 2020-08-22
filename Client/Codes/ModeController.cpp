@@ -57,7 +57,7 @@ void ModeController::Update(IWorldController* worldController, CameraController*
 
 	//	Mode Controller
 	ImGui::SetNextWindowPos(ImVec2(10.f, 10.f), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(350.f, (_float)WINCY));
+	ImGui::SetNextWindowSize(ImVec2(350.f, (_float)WINCY - 20.f));
 	UpdateModeControllerUI(worldController);
 
 	ImGui::SetNextWindowPos(ImVec2(400.f, 10.f), ImGuiCond_FirstUseEver);
@@ -139,7 +139,6 @@ void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 	//	Mode
 	mMode[mCurMode]->Update(worldController);
 	ImGui::End();
-
 }
 
 void ModeController::UpdateCameraControllerUI(CameraController* cameraController)
@@ -223,6 +222,7 @@ void ModeController::Free()
 	for (Mode* mode : mMode)
 		SafeRelease(mode);
 	mMode.fill(nullptr);
+
 
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();

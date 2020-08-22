@@ -10,11 +10,16 @@ class KObject;
 class DynamicMesh_Object;
 class StaticMesh_Object;
 class Shader;
+class NaviMeshData;
 
 class CreativeMode :
 	public Mode
 {
-
+	enum TargetMode
+	{
+		OBJECT_MODE,
+		NAVI_MODE
+	};
 private:
 	explicit CreativeMode();
 	virtual ~CreativeMode() = default;
@@ -29,21 +34,27 @@ private:
 	_bool	PickingObject(_int& selectedIndex, _vec3& hitWorldPos);
 
 private:
+	void	UpdateSelectTargetMode();
 	void	UpdateFileUI();
+
+	//	Object
 	void	UpdateDisplayObjectListUI(IWorldController* worldController);
 	void	UpdateCreateUI();
-
-private:
 	void	ReloadWorld(IWorldController* worldController);
 
 	//	Edit
-	void	MappingObjectToUI(const _int objectIndex);
+	void	MappingObjectToObjectUI(const _int objectIndex);
 	void	MappingEditUIToEditObject(const _int objectIndex);
 	
 	//	Create
 	void	CreateObject();
-
 	void	ClearObjectList();
+
+	//	Navi
+	void	UpdateNaviMeshDataUI();
+
+	void	MappingNaviMeshDataToNaviMeshUI();
+	void	MappingNaviMeshUIToNaviMeshData();
 	
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
@@ -56,16 +67,16 @@ private:
 	vector<KObject*>	mObjectList;
 
 private:
+	//	TargetMode
+	TargetMode	mCurMode;
+
+private:
 	//	File Selector
 	char mFilePath[MAX_PATH];
 
 private:
 	//	Display Object List
 	_int	mSelectedObjectListIndex;
-	//array<_bool, Game::Type_End>	mbDisplayObjectFilter;
-	//vector<pair<_int, KObject*>>	mDisplayObjectList;
-
-	//typedef pair<_int, KObject*>	DISPLAY_PAIR;
 
 	_vec3				mEditScale;
 	_vec3				mEditRotation;
@@ -82,6 +93,13 @@ private:
 	_float				mMultiCreateGap = 0.f;
 	_int				mMultiCreateCount = 0;
 	
+private:
+	//	NaviMeshData
+	NaviMeshData*		mNaviMeshData = nullptr;
+	_bool				mIsNaviMeshCreate;
+	_int				mSelectedNaviPointIndex = 0;
+	_vec3				mSelectedNaviPointPosition;
+
 private:
 	Shader*				mInstancingShader = nullptr;
 	Shader*				mMeshShader = nullptr;

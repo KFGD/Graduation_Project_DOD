@@ -8,6 +8,13 @@ namespace Program
 		CREATIVE,
 		MODE_END
 	};
+
+	enum NaviMesh : int 
+	{
+		NAVIMESH_DISABLED,
+		NAVIMESH_ADD,
+		NAVIMESH_EDIT
+	};
 };
 
 namespace CameraType

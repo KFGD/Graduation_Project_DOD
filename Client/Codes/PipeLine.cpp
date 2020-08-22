@@ -33,7 +33,7 @@ HRESULT PipeLine::SetTransform(D3DTRANSFORMSTATETYPE eType, const _matrix & Matr
 	return NOERROR;
 }
 
-_matrix PipeLine::GetTransform(D3DTRANSFORMSTATETYPE eType)
+_matrix PipeLine::GetTransform(D3DTRANSFORMSTATETYPE eType) const
 {
 	_matrix		ResultMatrix;
 
@@ -53,7 +53,7 @@ _matrix PipeLine::GetTransform(D3DTRANSFORMSTATETYPE eType)
 	return ResultMatrix;
 }
 
-PipeLine::RayCast PipeLine::ConvertScreenPosToRayCast(const _vec2& screenPos)
+PipeLine::RayCast PipeLine::ConvertScreenPosToWorldRayCast(const _vec2& screenPos)
 {
 	//	Clip Space
 	const _vec3 clipPos = { screenPos.x / (mViewPort.Width * 0.5f) - 1.f, screenPos.y / (mViewPort.Height * -0.5f) + 1.f, 0.f };

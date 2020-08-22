@@ -197,7 +197,6 @@
     <ClCompile Include="..\Codes\KeyManager.cpp" />
     <ClCompile Include="..\Codes\KObject.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
-    <ClCompile Include="..\Codes\Mode.cpp" />
     <ClCompile Include="..\Codes\NaviMeshData.cpp" />
     <ClCompile Include="..\Codes\PipeLine.cpp" />
     <ClCompile Include="..\Codes\Bot.cpp" />
@@ -306,7 +305,6 @@
     <FxCompile Include="..\Shader\HardwareInstancing.fx" />
     <FxCompile Include="..\Shader\HardwareSkinning.fx" />
     <FxCompile Include="..\Shader\MeshRender.fx" />
-    <FxCompile Include="..\Shader\NaviMesh.fx" />
     <FxCompile Include="..\Shader\SelectedMeshRender.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

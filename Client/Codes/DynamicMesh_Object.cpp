@@ -75,7 +75,7 @@ void DynamicMesh_Object::Render(Shader * shader, const _int meshContainerIndex)
 	shader->BeginShader(nullptr);
 	shader->BeginPass(0);
 
-	for (_int i = 0; i < meshContainer->dwNumAttributeGroups; ++i)
+	for (_int i = 0; i < (_int)meshContainer->dwNumAttributeGroups; ++i)
 	{
 		for (_int paletteEntry = 0; paletteEntry < (_int)meshContainer->dwNumPaletteEntries; ++paletteEntry)
 		{
@@ -250,7 +250,7 @@ void DynamicMesh_Object::RenderHardwareSkinningRecursive(Shader * shader, const 
 			LPD3DXBONECOMBINATION boneComb = reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
 
 
-			for (_int i = 0; i < meshContainer->dwNumAttributeGroups; ++i)
+			for (_int i = 0; i < (_int)meshContainer->dwNumAttributeGroups; ++i)
 			{
 				for (_int paletteEntry = 0; paletteEntry < (_int)meshContainer->dwNumPaletteEntries; ++paletteEntry)
 				{

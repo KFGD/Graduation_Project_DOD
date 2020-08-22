@@ -45,3 +45,5 @@
 			}														
 
 #define IDENTITY_MATRIX D3DXMATRIX{1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f}
+
+static constexpr float MAX_FLOAT = 3.402823466e+38f;

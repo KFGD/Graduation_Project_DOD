@@ -30,7 +30,7 @@ _bool InputDevice::Ready(HINSTANCE hInst, HWND hWnd)
 	mKeyBoard->Acquire();
 
 	if (FAILED(mInputSDK->CreateDevice(GUID_SysMouse, &mMouse, nullptr)))
-		return E_FAIL;
+		return false;
 
 	mMouse->SetDataFormat(&c_dfDIMouse);
 

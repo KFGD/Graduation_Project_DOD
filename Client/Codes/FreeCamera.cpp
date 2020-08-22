@@ -62,7 +62,7 @@ void FreeCamera::Update(const _double deltaTime)
 		ClientToScreen(g_hWnd, &mouse);
 		SetCursorPos(mouse.x, mouse.y);
 
-		_float mouseMove[2] = { inputDevice->GetDIMouseMove(InputDevice::DIMM_X), inputDevice->GetDIMouseMove(InputDevice::DIMM_Y) };
+		_float mouseMove[2] = { (_float)inputDevice->GetDIMouseMove(InputDevice::DIMM_X), (_float)inputDevice->GetDIMouseMove(InputDevice::DIMM_Y) };
 		_vec3 axis[2] = { Camera::AXIS_Y, GetRightVector() };
 
 		for (_int i = 0; i < 2; ++i)

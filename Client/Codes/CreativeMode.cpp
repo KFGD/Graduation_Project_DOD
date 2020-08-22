@@ -20,7 +20,7 @@
 //
 ////////////////////////////
 #include <commdlg.h>
-#include<PathCch.h>
+#include <PathCch.h>
 
 #include "KeyManager.h"
 #include "KObject.h"
@@ -29,7 +29,7 @@
 #include "WorldController.h"
 #include "PipeLine.h"
 #include "Shader.h"
-
+#include "NaviMeshData.h"
 
 //	Function
 //	For: DearImgui
@@ -71,44 +71,92 @@ void CreativeMode::InActive(IWorldController* worldController)
 
 void CreativeMode::Update(IWorldController* worldController)
 {
+	KeyManager* keyManager = KeyManager::GetInstance();
+	UpdateSelectTargetMode();
 	UpdateFileUI();
-	UpdateDisplayObjectListUI(worldController);
-	UpdateCreateUI();
-
-	_int selectedIndex;
-	_vec3 hitWorldPos;
-	const _bool isPicking = PickingObject(selectedIndex, hitWorldPos);
-
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+	if (TargetMode::OBJECT_MODE == mCurMode)
 	{
-		if (isPicking && KeyManager::GetInstance()->KeyPresseing(KeyManager::KEY_LSHIFT))
-		{
-			mCreatePos = hitWorldPos;
-			CreateObject();
-		}
-		mSelectedObjectListIndex = selectedIndex;
-	}
+		UpdateDisplayObjectListUI(worldController);
+		UpdateCreateUI();
 
-	MappingObjectToUI(mSelectedObjectListIndex);
-	
-	if (-1 != mSelectedObjectListIndex && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+
+		_int selectedIndex;
+		_vec3 hitWorldPos;
+		const _bool isPicking = PickingObject(selectedIndex, hitWorldPos);
+
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			if (isPicking && keyManager->KeyPresseing(KeyManager::KEY_LSHIFT))
+			{
+				mCreatePos = hitWorldPos;
+				CreateObject();
+			}
+
+			if (!ImGui::IsAnyItemHovered())
+				mSelectedObjectListIndex = selectedIndex;
+		}
+
+		MappingObjectToObjectUI(mSelectedObjectListIndex);
+
+		if (-1 != mSelectedObjectListIndex && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+		{
+			if (isPicking && (selectedIndex != mSelectedObjectListIndex))
+			{
+				mEditPosition = hitWorldPos;
+				MappingEditUIToEditObject(mSelectedObjectListIndex);
+			}
+		}
+
+	}
+	else
 	{
-		if (isPicking && (selectedIndex != mSelectedObjectListIndex))
+		MappingNaviMeshDataToNaviMeshUI();
+
+		UpdateNaviMeshDataUI();
+
+		MappingNaviMeshUIToNaviMeshData();
+
+		if (mIsNaviMeshCreate)
 		{
-			mEditPosition = hitWorldPos;
-			MappingEditUIToEditObject(mSelectedObjectListIndex);
+			if (keyManager->KeyDown(KeyManager::KEY_LSHIFT))
+				mNaviMeshData->PopNaviPoint();
+
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			{
+				_bool isPicking = false;
+				POINT mouse;
+				::GetCursorPos(&mouse);
+				::ScreenToClient(g_hWnd, &mouse);
+
+				PipeLine::RayCast worldRayCast = PipeLine::GetInstance()->ConvertScreenPosToWorldRayCast(_vec2((_float)mouse.x, (_float)mouse.y));
+				_int hitPointIndex = -1;
+				isPicking = mNaviMeshData->CheckHitPoint(worldRayCast.RayPos, worldRayCast.RayDir, hitPointIndex);
+
+				if (false == isPicking)
+				{
+					//	메시를 찍었을 경우
+					_int selectedIndex;
+					_vec3 hitWorldPos;
+					isPicking = PickingObject(selectedIndex, hitWorldPos);
+					if (isPicking)
+					{
+						NaviMeshData::PointStack newPointStack;
+						newPointStack.Position = hitWorldPos;
+						mNaviMeshData->PushNaviPoint(newPointStack, false);
+					}
+				}
+				else
+				{
+					//	네비 메시의 정점을 찍었을 경우
+					NaviMeshData::PointStack newPointStack;
+					newPointStack.Index = hitPointIndex;
+					mNaviMeshData->PushNaviPoint(newPointStack, true);
+				}
+				
+			}
 		}
+
 	}
-
-	//if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-	//	PickingObject(mSelectedObjectListIndex, hitPos);
-	//
-	//MappingObjectToUI(mSelectedObjectListIndex);
-
-	//if (-1 != mSelectedObjectListIndex && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
-	//{
-	//	
-	//}
 }
 
 void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
@@ -192,6 +240,8 @@ void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)
 	mSelectedMeshShader->EndPass();
 	mSelectedMeshShader->EndShader();
 
+	mNaviMeshData->Render(graphicDevice);
+
 	//graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
@@ -201,9 +251,7 @@ _bool CreativeMode::PickingObject(_int& selectedIndex, _vec3& hitWorldPos)
 	::GetCursorPos(&mouse);
 	::ScreenToClient(g_hWnd, &mouse);
 
-	PipeLine::RayCast worldRayCast = PipeLine::GetInstance()->ConvertScreenPosToRayCast(_vec2(mouse.x, mouse.y));
-
-	constexpr _float MAX_FLOAT = 3.402823466e+38f;
+	PipeLine::RayCast worldRayCast = PipeLine::GetInstance()->ConvertScreenPosToWorldRayCast(_vec2((_float)mouse.x, (_float)mouse.y));
 	_float nearestDis = MAX_FLOAT;
 	selectedIndex = -1;
 
@@ -285,21 +333,41 @@ _bool CreativeMode::PickingObject(_int& selectedIndex, _vec3& hitWorldPos)
 	return isHit;
 }
 
+void CreativeMode::UpdateSelectTargetMode()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	ImGui::BeginChild("TargetMode", ImVec2(0, 40), true, 0);
+
+	ImGui::Text("[Target Mode]");
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Object##ObjectCreate", mCurMode == TargetMode::OBJECT_MODE))
+		mCurMode = OBJECT_MODE;
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("NaviMesh##NaviMeshCreate", mCurMode == TargetMode::NAVI_MODE))
+		mCurMode = NAVI_MODE;
+
+
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
+}
+
 void CreativeMode::UpdateFileUI()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::BeginChild("FileSelector", ImVec2(0, 100), true, 0);
+	ImGui::BeginChild("FileSelector", ImVec2(0, 60), true, 0);
 
-	ImGui::Text("[FileSelector]");
+	ImGui::Text("[File Selector]");
 
 	ImGui::Text("Path: ");
 
 	ImGui::SameLine();
 
-	ImGui::SetNextItemWidth(200);
+	ImGui::SetNextItemWidth(150);
 	ImGui::InputText("##InputFilePath", mFilePath, sizeof(mFilePath), ImGuiInputTextFlags_ReadOnly);
 
-	ImGui::SameLine(ImGui::GetWindowWidth() - 50.f);
+	ImGui::SameLine(ImGui::GetWindowWidth() - 100.f);
 	if (ImGui::Button("Open##FileSelector"))
 	{
 		// File Select
@@ -344,8 +412,6 @@ void CreativeMode::UpdateFileUI()
 		}
 	}
 
-	ImGui::NewLine();
-	ImGui::NewLine();
 	ImGui::SameLine(ImGui::GetWindowWidth() - 50.f);
 	if (ImGui::Button("Save##FileSelector"))
 	{
@@ -400,8 +466,8 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 	ImGui::Text("[ObjectList]");
 
 	ImGui::SetNextItemWidth(-1);
-	if (ImGui::ListBox("", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mObjectList, mObjectList.size(), 8))
-		MappingObjectToUI(mSelectedObjectListIndex);
+	if (ImGui::ListBox("##ObjectList", &mSelectedObjectListIndex, Items_DisplayVectorGetter, (void*)&mObjectList, (_int)mObjectList.size(), 8))
+		MappingObjectToObjectUI(mSelectedObjectListIndex);
 
 	ImGui::NewLine();
 
@@ -529,7 +595,7 @@ void CreativeMode::UpdateCreateUI()
 	ImGui::SameLine(ImGui::GetWindowWidth() - 75);
 	if (ImGui::Button("MultiAdd"))
 	{
-		const _int begin = mMultiCreateCount * -1.f;
+		const _int begin = mMultiCreateCount * -1;
 		const _int end = mMultiCreateCount;
 		for (_int i = begin; i < end; ++i)
 		{
@@ -553,7 +619,7 @@ void CreativeMode::ReloadWorld(IWorldController* worldController)
 	worldController->SetUpObjectList(mObjectList);
 }
 
-void CreativeMode::MappingObjectToUI(const _int objectIndex)
+void CreativeMode::MappingObjectToObjectUI(const _int objectIndex)
 {
 	if (-1 == objectIndex)
 	{
@@ -597,6 +663,57 @@ void CreativeMode::ClearObjectList()
 	mObjectList.clear();
 }
 
+void CreativeMode::UpdateNaviMeshDataUI()
+{
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	ImGui::BeginChild("NaviMeshData", ImVec2(0, 150), true, 0);
+
+	ImGui::Text("[NaviMeshData]");
+	ImGui::Text("Mode: ");
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Create##NaviMeshCreate", mIsNaviMeshCreate))
+		mIsNaviMeshCreate = true;
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Edit##NaviMeshEdit", !mIsNaviMeshCreate))
+		mIsNaviMeshCreate = false;
+
+	ImGui::NewLine();
+	ImGui::Text("Selected Point: ");
+
+	ImGui::Text("Index:");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(30.f);
+
+	const _int tempIndex = mSelectedNaviPointIndex;
+	ImGui::InputInt("##SelectedNaviPointIndex", &mSelectedNaviPointIndex, 0, 0);
+	if (mIsNaviMeshCreate)
+		mSelectedNaviPointIndex = tempIndex;
+
+	ImGui::SameLine();
+	ImGui::Text("Pos:");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(180.f);
+	ImGui::InputFloat3("##SelectedNaviPointPos", mSelectedNaviPointPosition, "%.3f", ImGuiInputTextFlags_ReadOnly);
+
+
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
+}
+
+void CreativeMode::MappingNaviMeshDataToNaviMeshUI()
+{
+	mIsNaviMeshCreate = mNaviMeshData->IsCreateMode();
+
+}
+
+void CreativeMode::MappingNaviMeshUIToNaviMeshData()
+{
+	mNaviMeshData->SetCreateMode(mIsNaviMeshCreate);
+}
 
 _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
@@ -641,7 +758,6 @@ _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 	//	For. Hardware Instancing
 	HRESULT hr = 0;
 
-
 	hr = graphicDevice->CreateVertexBuffer(mBlockRenderBatchSize * sizeof(_matrix), 0, D3DUSAGE_WRITEONLY, D3DPOOL_MANAGED, &mVertexBuffer, nullptr);
 	if (FAILED(hr))
 		return false;
@@ -649,6 +765,12 @@ _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 
 	hr = graphicDevice->CreateVertexDeclaration(vertexElem, &mVertexDeclaration);
 	if (FAILED(hr))
+		return false;
+
+	mIsNaviMeshCreate = true;
+
+	mNaviMeshData = NaviMeshData::Create(graphicDevice);
+	if (nullptr == mNaviMeshData)
 		return false;
 
 	return true;
@@ -677,7 +799,7 @@ void CreativeMode::RenderSkinnedMesh(Shader* shader, KObject *& object, DynamicM
 	for (_int i = 0; i < dynamicMesh->GetMeshContinerSize(); ++i)
 	{
 		D3DXMESHCONTAINER_DERIVED* meshContainer = dynamicMesh->GetMeshContainer(i);
-		for (_int j = 0; j < meshContainer->NumMaterials; ++j)
+		for (_int j = 0; j < (_int)meshContainer->NumMaterials; ++j)
 		{
 			shader->SetTexture("gDiffuseTexture", meshContainer->pMeshTexture[j]);
 			shader->CommitChanges();
@@ -770,6 +892,8 @@ CreativeMode * CreativeMode::Create(LPDIRECT3DDEVICE9 graphicDevice)
 
 void CreativeMode::Free()
 {
+	SafeRelease(mNaviMeshData);
+
 	SafeRelease(mVertexBuffer);
 
 	SafeRelease(mVertexDeclaration);

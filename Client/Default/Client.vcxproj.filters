@@ -152,6 +152,15 @@
     <Filter Include="32.KeyManager">
       <UniqueIdentifier>{3274a6e4-b50b-42f8-a60d-4b31f5284fca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="25.NaviMesh">
+      <UniqueIdentifier>{987fbab4-84b4-4ff9-b465-e90aa4edf500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="25.NaviMesh\00.NaviLine">
+      <UniqueIdentifier>{5fca077e-4867-4561-a7ce-63ccfa63a772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="25.NaviMesh\01.NaviCell">
+      <UniqueIdentifier>{bde7cc8f-f544-4bfc-afe4-58bce6e68e13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -275,7 +284,6 @@
     <ClCompile Include="..\Codes\Shader.cpp">
       <Filter>24.Component\00.OOD\04.Shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\Headers\Mode.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp">
       <Filter>31.CameraController\Camera</Filter>
     </ClCompile>
@@ -290,6 +298,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\KeyManager.cpp">
       <Filter>32.KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NaviMeshData.cpp">
+      <Filter>25.NaviMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Mode.cpp">
+      <Filter>30.ModeController\Mode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -503,6 +517,9 @@
     <ClInclude Include="..\Headers\KeyManager.h">
       <Filter>32.KeyManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\NaviMeshData.h">
+      <Filter>25.NaviMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt">
@@ -520,6 +537,9 @@
       <Filter>97.Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Shader\SelectedMeshRender.fx">
+      <Filter>97.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Shader\NaviMesh.fx">
       <Filter>97.Shader</Filter>
     </FxCompile>
   </ItemGroup>
