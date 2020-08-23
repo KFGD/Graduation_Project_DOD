@@ -14,6 +14,7 @@ public:
 		_vec3	Position;
 		_matrix	WorldMatrix;
 		_matrix	WorldInverseMatrix;
+		_int	RefCnt;
 	};
 
 	struct CellInfo
@@ -51,8 +52,19 @@ public:
 	_bool	IsCreateMode() const { return mIsCreateMode; }
 	_bool	PushNaviPoint(const PointStack& point, const _bool isIndex);
 	void	PopNaviPoint();
+
+public:
+	_bool	IsSelectedNaviCell() const { return mIsSelectedNaviCell; }
+	void	SetSelectedNavi(const _bool isCell, const _int index);
+
+public:
 	_bool	CheckHitPoint(const _vec3& worldRayPos, const _vec3& worldRayDir, _int& hitIndex);
+	_bool	CheckHitCell(const _vec3& worldRayPos, const _vec3& worldRayDir, _int& hitIndex);
 	void	Render(LPDIRECT3DDEVICE9 graphicDevice);
+
+public:
+	void	ResetCreateMode();
+	void	ResetEditMode();
 
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
@@ -64,10 +76,16 @@ private:
 
 private:
 	Info	mInfo;
-
+	
 private:
 	_bool							mIsCreateMode;
+	//	Create
 	vector<pair<PointStack, _bool>>	mPointStack;
+
+	//	Edit
+	_bool	mIsSelectedNaviCell;
+	_int	mSelectedNaviPointIndex;
+	_int	mSelectedNaviCellIndex;
 
 public:
 	static NaviMeshData*	Create(LPDIRECT3DDEVICE9 graphicDevice, const Info& info = Info());

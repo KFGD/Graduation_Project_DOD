@@ -23,8 +23,9 @@ void NaviMeshData::SetCreateMode(const _bool value)
 {
 	mIsCreateMode = value;
 	if (false == mIsCreateMode)
-		mPointStack.clear();
-	
+		ResetCreateMode();
+	else
+		ResetEditMode();
 }
 
 _bool NaviMeshData::PushNaviPoint(const PointStack& point, const _bool isIndex)
@@ -73,10 +74,11 @@ _bool NaviMeshData::PushNaviPoint(const PointStack& point, const _bool isIndex)
 		{
 			//	index가 false라는 것은 PointList에 없음으로 PointList에 추가
 			Point newPoint;
+			::ZeroMemory(&newPoint, sizeof(Point));
 			newPoint.Position = mPointStack[i].first.Position;
 			D3DXMatrixTranslation(&newPoint.WorldMatrix, newPoint.Position.x, newPoint.Position.y, newPoint.Position.z);
 			D3DXMatrixInverse(&newPoint.WorldInverseMatrix, nullptr, &newPoint.WorldMatrix);
-
+			
 			const _int index = (_int)mInfo.PointList.size();
 			mInfo.PointList.emplace_back(newPoint);
 
@@ -88,12 +90,31 @@ _bool NaviMeshData::PushNaviPoint(const PointStack& point, const _bool isIndex)
 	CellInfo cellInfo = {mPointStack[0].first.Index, mPointStack[1].first.Index,mPointStack[2].first.Index };
 	mInfo.CellInfoList.emplace_back(cellInfo);
 	mPointStack.clear();
+
+	for (_int i = 0; i < 3; ++i)
+		++mInfo.PointList[cellInfo.PointIdx[i]].RefCnt;
+
 	return true;
 }
 
 void NaviMeshData::PopNaviPoint()
 {
 	mPointStack.pop_back();
+}
+
+void NaviMeshData::SetSelectedNavi(const _bool isCell, const _int index)
+{
+	mIsSelectedNaviCell = isCell;
+	if (isCell)
+	{
+		mSelectedNaviCellIndex = index;
+		mSelectedNaviPointIndex = -1;
+	}
+	else
+	{
+		mSelectedNaviCellIndex = -1;
+		mSelectedNaviPointIndex = index;
+	}
 }
 
 _bool NaviMeshData::CheckHitPoint(const _vec3 & worldRayPos, const _vec3 & worldRayDir, _int & hitIndex)
@@ -123,6 +144,38 @@ _bool NaviMeshData::CheckHitPoint(const _vec3 & worldRayPos, const _vec3 & world
 	if (-1 == nearestHitIndex)
 		return false;
 
+	hitIndex = nearestHitIndex;
+
+	return true;
+}
+
+_bool NaviMeshData::CheckHitCell(const _vec3 & worldRayPos, const _vec3 & worldRayDir, _int & hitIndex)
+{
+	_int nearestHitIndex = -1;
+	_float nearestHitDis = MAX_FLOAT;
+	for (_int i = 0; i < mInfo.CellInfoList.size(); ++i)
+	{
+		const CellInfo& cell = mInfo.CellInfoList[i];
+		const _int index[3] = { cell.PointIdx[0], cell.PointIdx[1], cell.PointIdx[2] };
+
+		BOOL isHit = FALSE;
+		_float dis = 0.f;
+		
+		D3DXIntersectTri(&mInfo.PointList[index[0]].Position, &mInfo.PointList[index[1]].Position, &mInfo.PointList[index[2]].Position, &worldRayPos, &worldRayDir, nullptr, nullptr, &dis);
+		
+		if (isHit)
+		{
+			if (nearestHitDis > dis)
+			{
+				nearestHitDis = dis;
+				nearestHitIndex = i;
+			}
+		}
+	}
+
+	if (MAX_FLOAT == nearestHitDis)
+		return false;
+	
 	hitIndex = nearestHitIndex;
 
 	return true;
@@ -214,6 +267,18 @@ _bool NaviMeshData::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 	mPointStack.reserve(3);
 
 	return true;
+}
+
+void NaviMeshData::ResetCreateMode()
+{
+	mPointStack.clear();
+}
+
+void NaviMeshData::ResetEditMode()
+{
+	mIsSelectedNaviCell = false;
+	mSelectedNaviPointIndex = -1;
+	mSelectedNaviCellIndex = -1;
 }
 
 NaviMeshData * NaviMeshData::Create(LPDIRECT3DDEVICE9 graphicDevice, const Info & info)

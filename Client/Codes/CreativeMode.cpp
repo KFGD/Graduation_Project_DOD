@@ -74,12 +74,12 @@ void CreativeMode::Update(IWorldController* worldController)
 	KeyManager* keyManager = KeyManager::GetInstance();
 	UpdateSelectTargetMode();
 	UpdateFileUI();
+
 	if (TargetMode::OBJECT_MODE == mCurMode)
 	{
 		UpdateDisplayObjectListUI(worldController);
 		UpdateCreateUI();
-
-
+		
 		_int selectedIndex;
 		_vec3 hitWorldPos;
 		const _bool isPicking = PickingObject(selectedIndex, hitWorldPos);
@@ -92,7 +92,7 @@ void CreativeMode::Update(IWorldController* worldController)
 				CreateObject();
 			}
 
-			if (!ImGui::IsAnyItemHovered())
+			if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered())
 				mSelectedObjectListIndex = selectedIndex;
 		}
 
@@ -152,7 +152,83 @@ void CreativeMode::Update(IWorldController* worldController)
 					newPointStack.Index = hitPointIndex;
 					mNaviMeshData->PushNaviPoint(newPointStack, true);
 				}
+
+			}
+		}
+		else
+		{
+
+			POINT mouse;
+			::GetCursorPos(&mouse);
+			::ScreenToClient(g_hWnd, &mouse);
+
+			PipeLine::RayCast worldRayCast = PipeLine::GetInstance()->ConvertScreenPosToWorldRayCast(_vec2((_float)mouse.x, (_float)mouse.y));
+
+			if (-1 != mSelectedNaviPointIndex)
+			{
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && )
+				{
+					_int hitIndex = -1;
+					_bool	isPicking = mNaviMeshData->CheckHitPoint(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
+					if (isPicking)
+					{
+
+					}
+					else
+					{
+
+					}
+
+
+				}
+
+				if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+				{
+					int selectedIndex = -1;
+					_vec3 hitWorldPos;
+					const _bool isObjectPicking = PickingObject(selectedIndex, hitWorldPos);
+					if (isObjectPicking)
+					{
+						mSelectedNaviPointPosition = hitWorldPos;
+					}
+				}
+			}
+			else if (-1 != mSelectedNaviCellIndex)
+			{
 				
+			}
+			else
+			{
+				_bool	isPicking = mNaviMeshData->CheckHitPoint(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
+
+				if (isPicking)
+				{
+					//	점이 피킹되었을 경우
+					if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+					{
+
+						if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered())
+						{
+							mSelectedNaviPointIndex = hitIndex;
+							mSelectedNaviCellIndex = -1;
+						}
+					}
+				}
+				else
+				{
+					isPicking = mNaviMeshData->CheckHitCell(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
+					if (isPicking)
+					{
+						if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+						{
+							if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered())
+							{
+								mSelectedNaviPointIndex = -1;
+								mSelectedNaviCellIndex = hitIndex;
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -530,7 +606,6 @@ void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
 
 		mSelectedObjectListIndex = -1;
 
-		//ReloadWorld(worldController);
 	}
 
 	ImGui::EndChild();
@@ -613,11 +688,11 @@ void CreativeMode::UpdateCreateUI()
 
 }
 
-void CreativeMode::ReloadWorld(IWorldController* worldController)
-{
-	worldController->ClearObjectList();
-	worldController->SetUpObjectList(mObjectList);
-}
+//void CreativeMode::ReloadWorld(IWorldController* worldController)
+//{
+//	worldController->ClearObjectList();
+//	worldController->SetUpObjectList(mObjectList);
+//}
 
 void CreativeMode::MappingObjectToObjectUI(const _int objectIndex)
 {

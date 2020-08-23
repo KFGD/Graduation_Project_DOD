@@ -37,22 +37,30 @@ private:
 	void	UpdateSelectTargetMode();
 	void	UpdateFileUI();
 
+private:
 	//	Object
+
+	//	UI
 	void	UpdateDisplayObjectListUI(IWorldController* worldController);
 	void	UpdateCreateUI();
-	void	ReloadWorld(IWorldController* worldController);
 
-	//	Edit
+	//	Mapping
 	void	MappingObjectToObjectUI(const _int objectIndex);
 	void	MappingEditUIToEditObject(const _int objectIndex);
 	
-	//	Create
+	//	Logic
+
+	//	Function
 	void	CreateObject();
 	void	ClearObjectList();
 
+private:
 	//	Navi
+
+	//	UI
 	void	UpdateNaviMeshDataUI();
 
+	//	Mapping
 	void	MappingNaviMeshDataToNaviMeshUI();
 	void	MappingNaviMeshUIToNaviMeshData();
 	
@@ -99,6 +107,8 @@ private:
 	_bool				mIsNaviMeshCreate;
 	_int				mSelectedNaviPointIndex = 0;
 	_vec3				mSelectedNaviPointPosition;
+	_int				mSelectedNaviCellIndex = 0;
+	_bool				mIsSelectedNaviCell;
 
 private:
 	Shader*				mInstancingShader = nullptr;
@@ -119,4 +129,5 @@ public:
 	static CreativeMode*	Create(LPDIRECT3DDEVICE9 graphicDevice);
 	virtual void	Free() override;
 };
+
 
