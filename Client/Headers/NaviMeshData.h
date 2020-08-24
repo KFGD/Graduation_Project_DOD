@@ -58,6 +58,9 @@ public:
 	void	SetSelectedNavi(const _bool isCell, const _int index);
 
 public:
+	void	DeleteCell(const _int cellIndex);
+
+public:
 	_bool	CheckHitPoint(const _vec3& worldRayPos, const _vec3& worldRayDir, _int& hitIndex);
 	_bool	CheckHitCell(const _vec3& worldRayPos, const _vec3& worldRayDir, _int& hitIndex);
 	void	Render(LPDIRECT3DDEVICE9 graphicDevice);

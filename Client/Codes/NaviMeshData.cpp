@@ -99,6 +99,9 @@ _bool NaviMeshData::PushNaviPoint(const PointStack& point, const _bool isIndex)
 
 void NaviMeshData::PopNaviPoint()
 {
+	if (0 == mPointStack.size())
+		return;
+
 	mPointStack.pop_back();
 }
 
@@ -115,6 +118,11 @@ void NaviMeshData::SetSelectedNavi(const _bool isCell, const _int index)
 		mSelectedNaviCellIndex = -1;
 		mSelectedNaviPointIndex = index;
 	}
+}
+
+void NaviMeshData::DeleteCell(const _int cellIndex)
+{
+
 }
 
 _bool NaviMeshData::CheckHitPoint(const _vec3 & worldRayPos, const _vec3 & worldRayDir, _int & hitIndex)

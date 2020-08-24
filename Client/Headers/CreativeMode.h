@@ -34,6 +34,7 @@ private:
 	_bool	PickingObject(_int& selectedIndex, _vec3& hitWorldPos);
 
 private:
+	//	Common
 	void	UpdateSelectTargetMode();
 	void	UpdateFileUI();
 
@@ -49,6 +50,7 @@ private:
 	void	MappingEditUIToEditObject(const _int objectIndex);
 	
 	//	Logic
+	void	LogicObject();
 
 	//	Function
 	void	CreateObject();
@@ -63,7 +65,11 @@ private:
 	//	Mapping
 	void	MappingNaviMeshDataToNaviMeshUI();
 	void	MappingNaviMeshUIToNaviMeshData();
-	
+
+	//	Logic
+	void	LogicNaviMeshCreateMode();
+	void	LogicNaviMeshEditMode();
+
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
 	void	InitSampleData();
