@@ -114,7 +114,6 @@ private:
 	_int				mSelectedNaviPointIndex = 0;
 	_vec3				mSelectedNaviPointPosition;
 	_int				mSelectedNaviCellIndex = 0;
-	_bool				mIsSelectedNaviCell;
 
 private:
 	Shader*				mInstancingShader = nullptr;

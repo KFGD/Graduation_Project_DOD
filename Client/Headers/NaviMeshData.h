@@ -19,7 +19,11 @@ public:
 
 	struct CellInfo
 	{
-		_int PointIdx[3];
+		array<_int, 3> PointIdx;
+		CellInfo(const _int idx0, const _int idx1, const _int idx2)
+			: PointIdx{ idx0, idx1, idx2 }
+		{
+		}
 	};
 
 	struct Info
@@ -54,8 +58,12 @@ public:
 	void	PopNaviPoint();
 
 public:
-	_bool	IsSelectedNaviCell() const { return mIsSelectedNaviCell; }
-	void	SetSelectedNavi(const _bool isCell, const _int index);
+	_int			GetSelectedNaviPointIndex() const { return mSelectedNaviPointIndex; }
+	_int			GetSelectedNaviCellIndex() const { return mSelectedNaviCellIndex; }
+	const _vec3&	GetSelectedNaviPointPosition() const;
+	void			SetSelectedNaviPointIndex(const _int index);
+	void			SetSelectedNaviCellIndex(const _int index);
+	void			SetSelectedNaviPointPosition(const _vec3& position);
 
 public:
 	void	DeleteCell(const _int cellIndex);
@@ -86,7 +94,6 @@ private:
 	vector<pair<PointStack, _bool>>	mPointStack;
 
 	//	Edit
-	_bool	mIsSelectedNaviCell;
 	_int	mSelectedNaviPointIndex;
 	_int	mSelectedNaviCellIndex;
 

@@ -665,12 +665,17 @@ void CreativeMode::UpdateNaviMeshDataUI()
 void CreativeMode::MappingNaviMeshDataToNaviMeshUI()
 {
 	mIsNaviMeshCreate = mNaviMeshData->IsCreateMode();
-
+	mSelectedNaviPointIndex = mNaviMeshData->GetSelectedNaviPointIndex();
+	mSelectedNaviPointPosition = mNaviMeshData->GetSelectedNaviPointPosition();
+	mSelectedNaviCellIndex = mNaviMeshData->GetSelectedNaviCellIndex();
 }
 
 void CreativeMode::MappingNaviMeshUIToNaviMeshData()
 {
 	mNaviMeshData->SetCreateMode(mIsNaviMeshCreate);
+	mNaviMeshData->SetSelectedNaviPointIndex(mSelectedNaviPointIndex);
+	//mNaviMeshData->SetSelectedNaviPointPosition(mSelectedNaviPointPosition);
+	mNaviMeshData->SetSelectedNaviCellIndex(mSelectedNaviCellIndex);
 }
 void CreativeMode::LogicNaviMeshCreateMode()
 {
@@ -740,6 +745,9 @@ void CreativeMode::LogicNaviMeshEditMode()
 			if (isObjectPicking)
 			{
 				mSelectedNaviPointPosition = hitWorldPos;
+
+				mNaviMeshData->SetSelectedNaviPointPosition(mSelectedNaviPointPosition);
+				return;
 			}
 		}
 	}
@@ -747,47 +755,36 @@ void CreativeMode::LogicNaviMeshEditMode()
 	{
 		if (keyManager->KeyDown(KeyManager::KEY_LSHIFT))
 		{
-
+			mNaviMeshData->DeleteCell(mSelectedNaviCellIndex);
 			mSelectedNaviCellIndex = -1;
+			return;
 		}
 	}
 
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+	{
+		_int	hitIndex = -1;
+		_bool	isPicking = mNaviMeshData->CheckHitPoint(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
 
+		mSelectedNaviPointIndex = -1;
+		mSelectedNaviCellIndex = -1;
 
-	//else
-	//{
-	//	_int hitIndex = -1;
-	//	_bool	isPicking = mNaviMeshData->CheckHitPoint(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
+		if (isPicking)
+		{
+			mSelectedNaviPointIndex = hitIndex;
 
-	//	if (isPicking)
-	//	{
-	//		//	점이 피킹되었을 경우
-	//		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-	//		{
+			return;
+		}
 
-	//			if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered())
-	//			{
-	//				mSelectedNaviPointIndex = hitIndex;
-	//				mSelectedNaviCellIndex = -1;
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		isPicking = mNaviMeshData->CheckHitCell(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
-	//		if (isPicking)
-	//		{
-	//			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-	//			{
-	//				if (!ImGui::IsAnyWindowHovered() && !ImGui::IsAnyItemHovered())
-	//				{
-	//					mSelectedNaviPointIndex = -1;
-	//					mSelectedNaviCellIndex = hitIndex;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+		isPicking = mNaviMeshData->CheckHitCell(worldRayCast.RayPos, worldRayCast.RayDir, hitIndex);
+		
+		if (isPicking)
+		{
+			mSelectedNaviCellIndex = hitIndex;
+			return;
+		}
+
+	}
 }
 
 _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)

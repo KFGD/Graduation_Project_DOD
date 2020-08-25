@@ -105,24 +105,89 @@ void NaviMeshData::PopNaviPoint()
 	mPointStack.pop_back();
 }
 
-void NaviMeshData::SetSelectedNavi(const _bool isCell, const _int index)
+const _vec3 & NaviMeshData::GetSelectedNaviPointPosition() const
 {
-	mIsSelectedNaviCell = isCell;
-	if (isCell)
-	{
-		mSelectedNaviCellIndex = index;
-		mSelectedNaviPointIndex = -1;
-	}
-	else
-	{
-		mSelectedNaviCellIndex = -1;
-		mSelectedNaviPointIndex = index;
-	}
+	static _vec3 originVec;
+	
+	if (-1 == mSelectedNaviPointIndex)
+		return originVec;
+	
+	return mInfo.PointList[mSelectedNaviPointIndex].Position;
+}
+
+void NaviMeshData::SetSelectedNaviPointIndex(const _int index)
+{
+	mSelectedNaviPointIndex = index;
+	//mSelectedNaviCellIndex = -1;
+}
+
+void NaviMeshData::SetSelectedNaviCellIndex(const _int index)
+{
+	mSelectedNaviCellIndex = index;
+}
+
+void NaviMeshData::SetSelectedNaviPointPosition(const _vec3 & position)
+{
+	if (-1 == mSelectedNaviPointIndex)
+		return;
+
+	if (0.f == position.y)
+		int a = 0;
+	
+	Point& selectedPoint = mInfo.PointList[mSelectedNaviPointIndex];
+	selectedPoint.Position = position;
+
+	D3DXMatrixTranslation(&selectedPoint.WorldMatrix, selectedPoint.Position.x, selectedPoint.Position.y, selectedPoint.Position.z);
+	D3DXMatrixInverse(&selectedPoint.WorldInverseMatrix, nullptr, &selectedPoint.WorldMatrix);
 }
 
 void NaviMeshData::DeleteCell(const _int cellIndex)
 {
+	if (cellIndex >= mInfo.CellInfoList.size())
+		return;
 
+	const _int refIndex[3] = { mInfo.CellInfoList[cellIndex].PointIdx[0], mInfo.CellInfoList[cellIndex].PointIdx[1], mInfo.CellInfoList[cellIndex].PointIdx[2] };
+
+	//	Cell 삭제
+	auto cellIter = mInfo.CellInfoList.begin();
+	for (_int i = 0; i < cellIndex; ++i)
+		++cellIter;
+	mInfo.CellInfoList.erase(cellIter);
+
+	//	Cell과 관련된 Point의 레퍼런스 카운트 감소
+	for (_int i = 0; i < 3; ++i)
+		--mInfo.PointList[refIndex[i]].RefCnt;
+
+	//	레퍼런스 카운트가 0이어서 삭제 예정인 Point의 index조사
+	list<_int> listDeleteIndex;
+	for (_int i = 0; i < mInfo.PointList.size(); ++i)
+	{
+		if (0 == mInfo.PointList[i].RefCnt)
+			listDeleteIndex.emplace_front(i);
+		
+	}
+
+	//	Cell들의 pointIndex 값들과 삭제 예정인 Point의 index들을 비교하여 값 조정
+	for (_int i = 0; i < mInfo.CellInfoList.size(); ++i)
+	{
+		for (_int& pointIdx : mInfo.CellInfoList[i].PointIdx)
+		{
+			for (auto& deleteIndex : listDeleteIndex)
+			{
+				if (pointIdx > deleteIndex)
+					--pointIdx;
+			}
+		}
+	}
+
+	//	레퍼런스 카운트가 0인 Point들 제거
+	for (auto pointIter = mInfo.PointList.begin(); pointIter < mInfo.PointList.end(); )
+	{
+		if (0 == pointIter->RefCnt)
+			pointIter = mInfo.PointList.erase(pointIter);
+		else
+			++pointIter;
+	}
 }
 
 _bool NaviMeshData::CheckHitPoint(const _vec3 & worldRayPos, const _vec3 & worldRayDir, _int & hitIndex)
@@ -166,10 +231,9 @@ _bool NaviMeshData::CheckHitCell(const _vec3 & worldRayPos, const _vec3 & worldR
 		const CellInfo& cell = mInfo.CellInfoList[i];
 		const _int index[3] = { cell.PointIdx[0], cell.PointIdx[1], cell.PointIdx[2] };
 
-		BOOL isHit = FALSE;
 		_float dis = 0.f;
 		
-		D3DXIntersectTri(&mInfo.PointList[index[0]].Position, &mInfo.PointList[index[1]].Position, &mInfo.PointList[index[2]].Position, &worldRayPos, &worldRayDir, nullptr, nullptr, &dis);
+		const BOOL isHit = D3DXIntersectTri(&mInfo.PointList[index[0]].Position, &mInfo.PointList[index[1]].Position, &mInfo.PointList[index[2]].Position, &worldRayPos, &worldRayDir, nullptr, nullptr, &dis);
 		
 		if (isHit)
 		{
@@ -214,7 +278,10 @@ void NaviMeshData::Render(LPDIRECT3DDEVICE9 graphicDevice)
 			D3DXVec3TransformCoord(&point[i], &point[i], &pipeLine->GetTransform(D3DTS_PROJECTION));
 		}
 
-		mLine->DrawTransform(point, 4, &IDENTITY_MATRIX, D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+		if(i == mSelectedNaviCellIndex)
+			mLine->DrawTransform(point, 4, &IDENTITY_MATRIX, D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
+		else
+			mLine->DrawTransform(point, 4, &IDENTITY_MATRIX, D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
 	}
 
 	mLine->End();
@@ -250,6 +317,13 @@ void NaviMeshData::Render(LPDIRECT3DDEVICE9 graphicDevice)
 		mMesh->DrawSubset(0);
 	}
 
+	if (-1 != mSelectedNaviPointIndex)
+	{
+		mShader->SetValue("gMatWorld", &mInfo.PointList[mSelectedNaviPointIndex].WorldMatrix, sizeof(_matrix));
+		mShader->CommitChanges();
+		mMesh->DrawSubset(0);
+	}
+
 	mShader->EndPass();
 	mShader->EndShader();
 
@@ -274,6 +348,9 @@ _bool NaviMeshData::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 
 	mPointStack.reserve(3);
 
+	mSelectedNaviPointIndex = -1;
+	mSelectedNaviCellIndex = -1;
+
 	return true;
 }
 
@@ -284,7 +361,6 @@ void NaviMeshData::ResetCreateMode()
 
 void NaviMeshData::ResetEditMode()
 {
-	mIsSelectedNaviCell = false;
 	mSelectedNaviPointIndex = -1;
 	mSelectedNaviCellIndex = -1;
 }
