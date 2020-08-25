@@ -341,6 +341,30 @@ void CreativeMode::UpdateFileUI()
 			for (_int i = 0; i < size; ++i)
 				ReadFile(hFile, &infoList[i], sizeof(KObject::Info), &dwBytes, nullptr);
 
+			_size_t pointListSize = 0;
+			_size_t cellListSize = 0;
+
+			ReadFile(hFile, &pointListSize, sizeof(_size_t), &dwBytes, nullptr);
+			ReadFile(hFile, &cellListSize, sizeof(_size_t), &dwBytes, nullptr);
+
+			NaviMeshData::Info info;
+			info.PointList.reserve(pointListSize);
+			info.CellInfoList.reserve(cellListSize);
+
+			NaviMeshData::Point point;
+			for (_size_t i = 0; i < pointListSize; ++i)
+			{
+				ReadFile(hFile, &point, sizeof(NaviMeshData::Point), &dwBytes, nullptr);
+				info.PointList.emplace_back(point);
+			}
+
+			NaviMeshData::CellInfo cell;
+			for (size_t i = 0; i < cellListSize; ++i)
+			{
+				ReadFile(hFile, &cell, sizeof(NaviMeshData::CellInfo), &dwBytes, nullptr);
+				info.CellInfoList.emplace_back(cell);
+			}
+
 			CloseHandle(hFile);
 
 			mObjectList.reserve(size);
@@ -348,6 +372,8 @@ void CreativeMode::UpdateFileUI()
 				mObjectList.emplace_back(KObject::Create(infoList[i]));
 
 			WideCharToMultiByte(CP_ACP, 0, selectFilePath, -1, mFilePath, MAX_PATH, 0, 0);
+
+			mNaviMeshData->SetInfo(info);
 
 		}
 	}
@@ -384,6 +410,18 @@ void CreativeMode::UpdateFileUI()
 			{
 				WriteFile(hFile, &mObjectList[i]->GetInfo(), sizeof(KObject::Info), &dwBytes, nullptr);
 			}
+
+			const _size_t pointListSize = mNaviMeshData->GetInfo().PointList.size();
+			const _size_t cellListSize = mNaviMeshData->GetInfo().CellInfoList.size();
+
+			WriteFile(hFile, &pointListSize, sizeof(_size_t), &dwBytes, nullptr);
+			WriteFile(hFile, &cellListSize, sizeof(_size_t), &dwBytes, nullptr);
+
+			for (const NaviMeshData::Point& point : mNaviMeshData->GetInfo().PointList)
+				WriteFile(hFile, &point, sizeof(NaviMeshData::Point), &dwBytes, nullptr);
+
+			for (const NaviMeshData::CellInfo cell : mNaviMeshData->GetInfo().CellInfoList)
+				WriteFile(hFile, &cell.PointIdx, sizeof(NaviMeshData::CellInfo), &dwBytes, nullptr);
 
 			CloseHandle(hFile);
 

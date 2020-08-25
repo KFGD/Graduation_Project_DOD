@@ -11,6 +11,8 @@ NaviMeshData::NaviMeshData()
 void NaviMeshData::SetInfo(const Info & info)
 {
 	mInfo = info;
+	mSelectedNaviPointIndex = -1;
+	mSelectedNaviCellIndex = -1;
 }
 
 void NaviMeshData::Clear()

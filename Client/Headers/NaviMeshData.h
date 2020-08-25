@@ -20,7 +20,7 @@ public:
 	struct CellInfo
 	{
 		array<_int, 3> PointIdx;
-		CellInfo(const _int idx0, const _int idx1, const _int idx2)
+		CellInfo(const _int idx0 = -1 , const _int idx1 = -1, const _int idx2 = -1)
 			: PointIdx{ idx0, idx1, idx2 }
 		{
 		}
