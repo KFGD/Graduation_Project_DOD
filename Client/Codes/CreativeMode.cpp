@@ -26,7 +26,6 @@
 #include "KObject.h"
 #include "DynamicMesh_Object.h"
 #include "StaticMesh_Object.h"
-#include "WorldController.h"
 #include "PipeLine.h"
 #include "Shader.h"
 #include "NaviMeshData.h"
@@ -57,18 +56,17 @@ CreativeMode::CreativeMode()
 {
 }
 
-void CreativeMode::Active(IWorldController* worldController)
+void CreativeMode::Active()
 {
 	mSelectedObjectListIndex = -1;
-	//InitSampleData();
 }
 
-void CreativeMode::InActive(IWorldController* worldController)
+void CreativeMode::InActive()
 {
 	ClearObjectList();
 }
 
-void CreativeMode::Update(IWorldController* worldController)
+void CreativeMode::Update(const _double timeDelta)
 {
 	UpdateSelectTargetMode();
 	UpdateFileUI();
@@ -77,7 +75,7 @@ void CreativeMode::Update(IWorldController* worldController)
 	{
 		MappingObjectToObjectUI(mSelectedObjectListIndex);
 
-		UpdateDisplayObjectListUI(worldController);
+		UpdateDisplayObjectListUI();
 		UpdateCreateUI();
 
 		LogicObject();
@@ -434,7 +432,7 @@ void CreativeMode::UpdateFileUI()
 	ImGui::PopStyleVar();
 }
 
-void CreativeMode::UpdateDisplayObjectListUI(IWorldController* worldController)
+void CreativeMode::UpdateDisplayObjectListUI()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 	ImGui::BeginChild("ObjectList", ImVec2(0, 310), true, 0);
@@ -541,34 +539,52 @@ void CreativeMode::UpdateCreateUI()
 	if (ImGui::Button("Add"))
 		CreateObject();
 
-	ImGui::Text("Gap: ");
+	ImGui::Text("Gap:");
 
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(50.f);
-	ImGui::InputFloat("##MultiAddGap", &mMultiCreateGap);
+	ImGui::SetNextItemWidth(40.f);
+	ImGui::InputFloat("##MultiAddGap", &mMultiCreateGap, 0, 0, "%.2f");
 
 	ImGui::SameLine();
-	ImGui::Text("Count: ");
+	ImGui::Text("X:");
 
 	ImGui::SameLine();
-	ImGui::SetNextItemWidth(50.f);
-	ImGui::InputInt("##MultiAddCount", &mMultiCreateCount, 0, 0, 0);
+	ImGui::SetNextItemWidth(25.f);
+	ImGui::InputInt("##MultiAddX", &mMultiCreateCountX, 0, 0, 0);
+
+	ImGui::SameLine();
+	ImGui::Text("Y:");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(25.f);
+	ImGui::InputInt("##MultiAddY", &mMultiCreateCountY, 0, 0, 0);
+
+	ImGui::SameLine();
+	ImGui::Text("Z:");
+
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(25.f);
+	ImGui::InputInt("##MultiAddZ", &mMultiCreateCountZ, 0, 0, 0);
 
 	ImGui::SameLine(ImGui::GetWindowWidth() - 75);
-	if (ImGui::Button("MultiAdd"))
+	if (ImGui::Button("MultiAdd##MultiAdd"))
 	{
-		const _int begin = mMultiCreateCount * -1;
-		const _int end = mMultiCreateCount;
-		for (_int i = begin; i < end; ++i)
+		
+		for (_int x = 0; x < mMultiCreateCountX; ++x)
 		{
-			for (_int j = begin; j < end; ++j)
+			for (_int y = 0; y < mMultiCreateCountY; ++y)
 			{
-				KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, _vec3(mCreatePos.x + i * mMultiCreateGap, mCreatePos.y, mCreatePos.z + j * mMultiCreateGap)));
-				KObject* newObject = KObject::Create(info);
-				mObjectList.emplace_back(newObject);
+				for (_int z = 0; z < mMultiCreateCountZ; ++z)
+				{
+					KObject::Info info(mCreateObjectType, KEngine::Transform(mCreateScale, mCreateRotation, _vec3(mCreatePos.x + x * mMultiCreateGap, mCreatePos.y + y * mMultiCreateGap, mCreatePos.z + z * mMultiCreateGap)));
+					KObject* newObject = KObject::Create(info);
+					mObjectList.emplace_back(newObject);
+				}
 			}
 		}
 	}
+
+
 
 	ImGui::EndChild();
 	ImGui::PopStyleVar();

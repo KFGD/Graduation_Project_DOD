@@ -25,10 +25,13 @@ private:
 	virtual ~CreativeMode() = default;
 	
 public:
-	virtual void	Active(IWorldController* worldController)	override;
-	virtual void	InActive(IWorldController* worldController)	override;
-	virtual void	Update(IWorldController* worldController)	override;
+	virtual void	Active()	override;
+	virtual void	InActive()	override;
+	virtual void	Update(const _double timeDelta)	override;
 	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
+
+public:
+	const vector<KObject*>&	GetObjectList() const { return mObjectList; }
 
 private:
 	_bool	PickingObject(_int& selectedIndex, _vec3& hitWorldPos);
@@ -42,7 +45,7 @@ private:
 	//	Object
 
 	//	UI
-	void	UpdateDisplayObjectListUI(IWorldController* worldController);
+	void	UpdateDisplayObjectListUI();
 	void	UpdateCreateUI();
 
 	//	Mapping
@@ -105,7 +108,9 @@ private:
 	Game::ObjectType	mCreateObjectType = Game::Player;
 
 	_float				mMultiCreateGap = 0.f;
-	_int				mMultiCreateCount = 0;
+	_int				mMultiCreateCountX = 0;
+	_int				mMultiCreateCountY = 0;
+	_int				mMultiCreateCountZ = 0;
 	
 private:
 	//	NaviMeshData

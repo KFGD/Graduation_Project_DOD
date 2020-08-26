@@ -1,18 +1,19 @@
 #pragma once
 #include "Base.h"
-#include "WorldController.h"
+
+#include "Defines.h"
+#include "Client_Defines.h"
 
 //	System
 class GraphicDevice;
 class InputDevice;
-class World;
 
 class ModeController;
 class CameraController;
 class KeyManager;
 
 class MainApp final : 
-	public Base, public IWorldController
+	public Base
 {
 private:
 	explicit MainApp();
@@ -22,17 +23,11 @@ private:
 	bool Initialize();
 
 public:
-	virtual _bool	ChangeWorld(const Game::WorldType worldType)		override;
-	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList)	override;
-	virtual _bool	ClearObjectList()									override;
-
-public:
-	int		Update(const double tiemDelta);
+	int		Update(const double timeDelta);
 	bool	Render();
 	
 private:
 	bool	ReadySystem(const HWND hWnd, const bool bWinMode, const UINT sizeX, const UINT sizeY);
-	bool	ReadyWorld();
 	
 private:
 	GraphicDevice*	mGraphicDeviceSys = nullptr;
@@ -46,11 +41,6 @@ private:
 private:
 	LPDIRECT3DDEVICE9	mGraphicDevice = nullptr;
 
-private:
-	//	World
-	Game::WorldType	mCurMode;
-	array<World*, Game::WorldEnd>	mWorlds;
-	
 public:
 	static MainApp*	Create();
 	virtual	void	Free()	override;

@@ -17,6 +17,7 @@ public:
 	virtual void LateUpdate(const _double deltaTime) override;
 
 public:
+	void	ResetRotation();
 	_bool	GetLocking() const { return mIsLocking; }
 	void	SetLocking(const _bool value) { mIsLocking = value; }
 	_float	GetMoveSpeed() const { return mMoveSpeed; }

@@ -96,6 +96,13 @@ void FreeCamera::LateUpdate(const _double deltaTime)
 {
 }
 
+void FreeCamera::ResetRotation()
+{
+	SetRightVector(_vec3(1.f, 0.f, 0.f));
+	SetUpVector(_vec3(0.f, 1.f, 0.f));
+	SetForwardVector(_vec3(0.f, 0.f,1.f));
+}
+
 _bool FreeCamera::Initialize()
 {
 	mMoveSpeed = 3.f;

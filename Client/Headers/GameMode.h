@@ -6,6 +6,7 @@
 #include "Client_Defines.h"
 
 class KObject;
+class World;
 
 class GameMode :
 	public Mode
@@ -17,10 +18,13 @@ private:
 	virtual ~GameMode() = default;
 
 public:
-	virtual void	Active(IWorldController* worldController)	override;
-	virtual void	InActive(IWorldController* worldController)	override;
-	virtual void	Update(IWorldController* worldController)	override;
+	virtual void	Active()	override;
+	virtual void	InActive()	override;
+	virtual void	Update(const _double timeDelta)	override;
 	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
+
+public:
+	void	SetObjectList(const vector<KObject*>& objectList);
 
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
@@ -28,6 +32,10 @@ private:
 
 private:
 	vector<KObject*>	mObjectList;
+	array<World*, Game::WorldEnd>	mWorlds;
+
+private:
+	Game::WorldType		mCurWorldType;
 
 
 public:

@@ -46,7 +46,7 @@ _bool ModeController::Ready(LPDIRECT3DDEVICE9 graphicDevice)
 	return true;
 }
 
-void ModeController::Update(IWorldController* worldController, CameraController* cameraController)
+void ModeController::Update(const _double deltaTime, CameraController* cameraController)
 {
 	MappingCameraControllerToData(cameraController);
 	// Start the Dear ImGui frame
@@ -57,16 +57,15 @@ void ModeController::Update(IWorldController* worldController, CameraController*
 
 	//	Mode Controller
 	ImGui::SetNextWindowPos(ImVec2(10.f, 10.f), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(350.f, (_float)WINCY - 20.f));
-	UpdateModeControllerUI(worldController);
+	ImGui::SetNextWindowSize(ImVec2(360.f, (_float)WINCY - 20.f));
+	UpdateModeControllerUI(deltaTime);
 
 	ImGui::SetNextWindowPos(ImVec2(400.f, 10.f), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(300.f, 200.f));
 	UpdateCameraControllerUI(cameraController);
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (mIsWindowMode)
-		ImGui::ShowDemoWindow(&mIsWindowMode);
+	//ImGui::ShowDemoWindow(&mIsWindowMode);
 
 	ImGui::EndFrame();
 
@@ -92,11 +91,11 @@ void ModeController::Render(LPDIRECT3DDEVICE9 graphicDevice)
 	graphicDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, TRUE);
 }
 
-void ModeController::UpdateModeControllerUI(IWorldController* worldController)
+void ModeController::UpdateModeControllerUI(const _double deltaTime)
 {
 	typedef Program::Mode Mode;
 
-	ImGui::Begin("Mode Controller", &mIsShowModeController);
+	ImGui::Begin("Mode Controller", &mIsShowModeController, ImGuiWindowFlags_NoResize);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
@@ -107,6 +106,8 @@ void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 	{
 		ImGui::Text("Select Mode: ");
 
+		const Program::Mode preMode = mCurMode;
+		
 		ImGui::RadioButton("Game", (int*)&mCurMode, Mode::GAME);
 		ImGui::SameLine();
 		ImGui::RadioButton("CREATIVE", (int*)&mCurMode, Mode::CREATIVE);
@@ -114,8 +115,9 @@ void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 
 	if (preMode != mCurMode)
 	{
-		mMode[preMode]->InActive(worldController);
-		mMode[mCurMode]->Active(worldController);
+		ChangeMode(mCurMode);
+		mMode[preMode]->InActive();
+		mMode[mCurMode]->Active();
 	}
 
 	//	Explain mode
@@ -128,7 +130,6 @@ void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 
 		case Mode::CREATIVE:
 			ImGui::Text("This mode can edit the game scene.");
-
 			break;
 		}
 
@@ -137,7 +138,7 @@ void ModeController::UpdateModeControllerUI(IWorldController* worldController)
 	}
 
 	//	Mode
-	mMode[mCurMode]->Update(worldController);
+	mMode[mCurMode]->Update(deltaTime);
 	ImGui::End();
 }
 
@@ -159,6 +160,12 @@ void ModeController::UpdateCameraControllerUI(CameraController* cameraController
 		ImGui::BeginChild("FreeCameraType", ImVec2(0, 100), true, 0);
 		
 		ImGui::Text("[Free Camera]");
+
+		if (ImGui::Button("ResetRotation"))
+		{
+			FreeCamera*	freeCamera = static_cast<FreeCamera*>(cameraController->GetCamera(CameraType::FREE_CAMERA));
+			freeCamera->ResetRotation();
+		}
 
 		ImGui::Text("MoveSpeed: ");
 		
@@ -215,6 +222,22 @@ void ModeController::MappingCameraControllerToData(CameraController * cameraCont
 		break;
 	}
 
+}
+
+void ModeController::ChangeMode(const Program::Mode mode)
+{
+	GameMode*	gameMode = static_cast<GameMode*>(mMode[Program::Mode::GAME]);
+	CreativeMode*	creativeMode = static_cast<CreativeMode*>(mMode[Program::Mode::CREATIVE]);
+
+	if (Program::Mode::CREATIVE == mode)
+	{
+		
+	}
+	else
+	{
+		const vector<KObject*>&	objectList = creativeMode->GetObjectList();
+		gameMode->SetObjectList(objectList);
+	}
 }
 
 void ModeController::Free()

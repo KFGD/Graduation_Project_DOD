@@ -22,11 +22,11 @@ public:
 	Program::Mode	GetCurProgramMode() const { return mCurMode; }
 
 public:
-	void	Update(IWorldController* worldController, CameraController* cameraController);
+	void	Update(const _double deltaTime, CameraController* cameraController);
 	void	Render(LPDIRECT3DDEVICE9 graphicDevice);
 
 private:
-	void	UpdateModeControllerUI(IWorldController* worldController);
+	void	UpdateModeControllerUI(const _double deltaTime);
 	void	UpdateCameraControllerUI(CameraController* cameraController);
 
 private:
@@ -34,7 +34,7 @@ private:
 	void	MappingCameraControllerToData(CameraController* cameraController);
 	
 private:
-	_bool	mIsWindowMode = true;
+	void	ChangeMode(const Program::Mode mode);
 
 private:
 	Program::Mode	mCurMode = Program::Mode::GAME;

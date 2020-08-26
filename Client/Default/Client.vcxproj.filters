@@ -496,9 +496,6 @@
     <ClInclude Include="..\Headers\Mode.h">
       <Filter>30.ModeController\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\WorldController.h">
-      <Filter>21.World</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Shader.h">
       <Filter>24.Component\00.OOD\04.Shader</Filter>
     </ClInclude>
