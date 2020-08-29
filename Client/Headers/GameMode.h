@@ -7,6 +7,7 @@
 
 class KObject;
 class World;
+class NaviMeshData;
 
 class GameMode :
 	public Mode
@@ -25,6 +26,7 @@ public:
 
 public:
 	void	SetObjectList(const vector<KObject*>& objectList);
+	void	SetNaviMeshData(const NaviMeshData* naviMeshData);
 
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);

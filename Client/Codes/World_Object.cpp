@@ -11,6 +11,7 @@
 #include "Transform_Object.h"
 #include "StaticMesh_Object.h"
 #include "DynamicMesh_Object.h"
+#include "NaviMesh_Object.h"
 #include "Shader.h"
 
 #include "KObject.h"
@@ -105,6 +106,12 @@ _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
 	return true;
 }
 
+_bool World_Object::SetUpNaviMesh(const NaviMeshData * naviMeshData)
+{
+	mNaviMesh->SetNaviMeshData(*naviMeshData);
+	return true;
+}
+
 _bool World_Object::Clear()
 {
 	for (GameObject* gameObject : mPlayerList)
@@ -148,6 +155,11 @@ _bool World_Object::Initialize()
 
 	hr = GetGraphicDevice()->CreateVertexDeclaration(vertexElem, &mVertexDeclaration);
 	if (FAILED(hr))
+		return false;
+
+	//	For. NaviMesh
+	mNaviMesh = NaviMesh_Object::Create(GetGraphicDevice());
+	if (nullptr == mNaviMesh)
 		return false;
 
 	return true;
@@ -249,6 +261,8 @@ void World_Object::RenderHardwareInstancing(StaticMesh_Object* staticMesh, _int 
 
 void World_Object::Free()
 {
+	SafeRelease(mNaviMesh);
+
 	SafeRelease(mVertexBuffer);
 	SafeRelease(mVertexDeclaration);
 

@@ -27,6 +27,7 @@ public:
 	void	SetRotationY(const _float radian) { mSRT.Rotation.y = radian; }
 	void	SetRotationZ(const _float radian) { mSRT.Rotation.z = radian; }
 	void	SetPosition(const _vec3& position) { memcpy(&mSRT.Position, &position, sizeof(_vec3)); }
+	const _vec3&	GetPosition() const { return mSRT.Position; }
 	const _matrix&	GetWorldMatrix() const { return mWorldMatrix; }
 
 public:

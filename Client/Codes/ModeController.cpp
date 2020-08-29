@@ -235,6 +235,9 @@ void ModeController::ChangeMode(const Program::Mode mode)
 	}
 	else
 	{
+		const NaviMeshData*	naviMeshData = creativeMode->GetNaviMeshData();
+		gameMode->SetNaviMeshData(naviMeshData);
+
 		const vector<KObject*>&	objectList = creativeMode->GetObjectList();
 		gameMode->SetObjectList(objectList);
 	}

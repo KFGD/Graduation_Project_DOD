@@ -2,6 +2,7 @@
 #include "Base.h"
 
 #include "Defines.h"
+#include "Client_Defines.h"
 
 class Shader;
 
@@ -19,7 +20,7 @@ public:
 
 	struct CellInfo
 	{
-		array<_int, 3> PointIdx;
+		array<_int, NaviMesh::POINT_END> PointIdx;
 		CellInfo(const _int idx0 = -1 , const _int idx1 = -1, const _int idx2 = -1)
 			: PointIdx{ idx0, idx1, idx2 }
 		{

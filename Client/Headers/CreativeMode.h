@@ -32,6 +32,7 @@ public:
 
 public:
 	const vector<KObject*>&	GetObjectList() const { return mObjectList; }
+	NaviMeshData*	GetNaviMeshData() const { return mNaviMeshData; }
 
 private:
 	_bool	PickingObject(_int& selectedIndex, _vec3& hitWorldPos);

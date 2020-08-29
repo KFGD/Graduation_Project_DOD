@@ -4,7 +4,7 @@
 #include "Defines.h"
 
 class Component_Object;
-class World;
+class World_Object;
 
 class GameObject :
 	public Base
@@ -15,18 +15,18 @@ protected:
 
 
 public:
-	virtual void	SetUp(World* world);
+	virtual void	SetUp(World_Object* world);
 	virtual void	Update(const _double timeDelta) = 0;
 	virtual void	LateUpdate(const _double timeDelta) = 0;
 	virtual void	Render() = 0;
 
 protected:
-	World*	GetWorld() { return mWorld; }
+	World_Object*	GetWorld() { return mWorld; }
 	_bool	AddComponent(const char* prototypeTag, const char* componentTag, Component_Object** component, void* arg = nullptr);
 	_bool	DeleteComponent(const char* componentTag);
 
 private:
-	World*	mWorld = nullptr;
+	World_Object*	mWorld = nullptr;
 
 private:
 	map<string, Component_Object*>	mComponentMap;

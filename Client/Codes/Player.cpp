@@ -4,12 +4,21 @@
 #include "Transform_Object.h"
 #include "DynamicMesh_Object.h"
 
-#include "World.h"
+#include "World_Object.h"
 #include "PipeLine.h"
 #include "Shader.h"
+#include "NaviMesh_Object.h"
 
 Player::Player()
 {
+}
+
+void Player::SetUp(World_Object * world)
+{
+	GameObject::SetUp(world);
+
+	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
+	mCellIndex = naviMesh->FindCellIndex(mTransform->GetPosition());
 }
 
 void Player::Update(const _double timeDelta)
@@ -20,6 +29,17 @@ void Player::Update(const _double timeDelta)
 void Player::LateUpdate(const _double timeDelta)
 {
 	mTimeDelta = timeDelta;
+
+	World_Object* world = GetWorld();
+	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
+
+	_int nextCellIndex = 0;
+	_vec3 fixPosition;
+	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), nextCellIndex, fixPosition))
+	{
+		mCellIndex = nextCellIndex;
+		mTransform->SetPosition(fixPosition);
+	}
 }
 
 void Player::Render()

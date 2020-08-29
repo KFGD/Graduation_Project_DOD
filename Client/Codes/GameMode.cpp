@@ -41,6 +41,11 @@ void GameMode::SetObjectList(const vector<KObject*>& objectList)
 	mWorlds[mCurWorldType]->SetUpObjectList(mObjectList);
 }
 
+void GameMode::SetNaviMeshData(const NaviMeshData * naviMeshData)
+{
+	mWorlds[mCurWorldType]->SetUpNaviMesh(naviMeshData);
+}
+
 _bool GameMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	mWorlds[Game::Object_Oriented] = World_Object::Create(graphicDevice);

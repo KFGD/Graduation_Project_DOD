@@ -4,6 +4,7 @@
 #include "Defines.h"
 
 class KObject;
+class NaviMeshData;
 
 class World :
 	public Base
@@ -20,6 +21,7 @@ public:
 	virtual void	Update(const _double timeDelta) = 0;
 	virtual void	Render() = 0;
 	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList) = 0;
+	virtual _bool	SetUpNaviMesh(const NaviMeshData* naviMeshData) = 0;
 	virtual _bool	Clear() = 0;
 public:
 	void	SetState(const STATE sceneState);

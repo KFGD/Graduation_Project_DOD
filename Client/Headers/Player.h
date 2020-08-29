@@ -26,9 +26,10 @@ public:
 	virtual ~Player() = default;
 
 public:
-	virtual void Update(const _double timeDelta) override;
-	virtual void LateUpdate(const _double timeDelta) override;
-	virtual void Render() override;
+	virtual void	SetUp(World_Object* world)	override;
+	virtual void	Update(const _double timeDelta) override;
+	virtual void	LateUpdate(const _double timeDelta) override;
+	virtual void	Render() override;
 
 private:
 	_bool	Initialize(const Player::Data& data);
@@ -39,6 +40,7 @@ private:
 	Shader*				mShader = nullptr;
 
 private:
+	_int	mCellIndex = 0;
 	_double	mTimeDelta = 0.0;
 
 public:

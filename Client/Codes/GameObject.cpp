@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameObject.h"
 
-#include "World.h"
+#include "World_Object.h"
 
 #include "ComponentManager_Object.h"
 #include "Component_Object.h"
@@ -10,7 +10,7 @@ GameObject::GameObject()
 {
 }
 
-void GameObject::SetUp(World * world)
+void GameObject::SetUp(World_Object * world)
 {
 	mWorld = world;
 	SafeAddRef(mWorld);

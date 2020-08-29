@@ -11,6 +11,7 @@ class Bot;
 class BlockObj;
 
 class StaticMesh_Object;
+class NaviMesh_Object;
 class Shader;
 
 
@@ -23,11 +24,15 @@ private:
 	virtual ~World_Object() = default;
 
 public:
-	virtual void	Update(const _double timeDelta) override;
-	virtual void	Render() override;
+	virtual void	Update(const _double timeDelta)						override;
+	virtual void	Render()											override;
 	virtual _bool	SetUpObjectList(const vector<KObject*>& objectList) override;
-	virtual _bool	Clear() override;
+	virtual _bool	SetUpNaviMesh(const NaviMeshData* naviMeshData)		override;
+	virtual _bool	Clear()												override;
 	
+public:
+	NaviMesh_Object*	GetNaviMeshObject() { return mNaviMesh; }
+
 private:
 	_bool	Initialize();
 	_bool	ReadyComponent();
@@ -47,6 +52,9 @@ private:
 	vector<Player*>		mPlayerList;
 	vector<Bot*>		mBotList;
 	vector<BlockObj*>	mBlockList;
+
+private:
+	NaviMesh_Object*	mNaviMesh = nullptr;
 
 public:
 	virtual void	Free() override;

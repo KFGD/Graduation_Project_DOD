@@ -26,6 +26,42 @@ namespace CameraType
 	};
 };
 
+namespace NaviMesh
+{
+	enum Point
+	{
+		POINT_A,
+		POINT_B,
+		POINT_C,
+		POINT_END
+	};
+
+	enum CellNeighbor
+	{
+		CELL_NEIGHBOR_AB,
+		CELL_NEIGHBOR_BC,
+		CELL_NEIGHBOR_CA,
+		CELL_NEIGHBOR_END
+	};
+
+	//struct NaviLine
+	//{
+	//	_int	Idx0;
+	//	_int	Idx1;
+
+	//	NaviLine(const _int idx0, const _int idx1)
+	//		: Idx0(idx0), Idx1(idx1)
+	//	{
+	//	}
+
+	//	_bool	operator==(const NaviLine& rhs)
+	//	{
+	//		return (this->Idx0 == rhs.Idx0 && this->Idx1 == rhs.Idx1)
+	//			|| (this->Idx1 == rhs.Idx0 && this->Idx0 == rhs.Idx1);
+	//	}
+	//};
+}
+
 namespace Game
 {
 	enum WorldType

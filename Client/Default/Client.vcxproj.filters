@@ -155,10 +155,10 @@
     <Filter Include="25.NaviMesh">
       <UniqueIdentifier>{987fbab4-84b4-4ff9-b465-e90aa4edf500}</UniqueIdentifier>
     </Filter>
-    <Filter Include="25.NaviMesh\00.NaviLine">
-      <UniqueIdentifier>{5fca077e-4867-4561-a7ce-63ccfa63a772}</UniqueIdentifier>
+    <Filter Include="25.NaviMesh\00.OOD">
+      <UniqueIdentifier>{278c57ec-480e-492f-9169-d1e927b786f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="25.NaviMesh\01.NaviCell">
+    <Filter Include="25.NaviMesh\00.OOD\00.NaviCell">
       <UniqueIdentifier>{bde7cc8f-f544-4bfc-afe4-58bce6e68e13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -304,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Mode.cpp">
       <Filter>30.ModeController\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviMesh_Object.cpp">
+      <Filter>25.NaviMesh\00.OOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NaviCell_Object.cpp">
+      <Filter>25.NaviMesh\00.OOD\00.NaviCell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -516,6 +522,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\NaviMeshData.h">
       <Filter>25.NaviMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviMesh_Object.h">
+      <Filter>25.NaviMesh\00.OOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\NaviCell_Object.h">
+      <Filter>25.NaviMesh\00.OOD\00.NaviCell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
