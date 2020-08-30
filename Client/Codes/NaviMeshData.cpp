@@ -58,6 +58,7 @@ _bool NaviMeshData::PushNaviPoint(const PointStack& point, const _bool isIndex)
 		}
 	}
 
+	//	¿Þ¼Õ °¨±â
 	const _vec3 right = v[1] - v[0];
 	const _vec3 forward = v[2] - v[0];
 	_vec3 up = *D3DXVec3Cross(&up, &right, &forward);

@@ -3,9 +3,59 @@
 
 #include "NaviMeshData.h"
 #include "NaviCell_Object.h"
+#include "PipeLine.h"
+#include "Shader.h"
 
 NaviMesh_Object::NaviMesh_Object()
 {
+}
+
+void NaviMesh_Object::Render(LPDIRECT3DDEVICE9 graphicDevice)
+{
+	const PipeLine* pipeLine = PipeLine::GetInstance();
+
+	graphicDevice->EndScene();
+	graphicDevice->BeginScene();
+
+	mLine->Begin();
+
+	for (_int i = 0; i < mNaviCellList.size(); ++i)
+	{
+
+		_vec3	point[4] = { mNaviCellList[i]->GetPointPosition(NaviMesh::POINT_A), mNaviCellList[i]->GetPointPosition(NaviMesh::POINT_B), mNaviCellList[i]->GetPointPosition(NaviMesh::POINT_C), mNaviCellList[i]->GetPointPosition(NaviMesh::POINT_A) };
+
+		for (_int i = 0; i < 4; ++i)
+		{
+			D3DXVec3TransformCoord(&point[i], &point[i], &pipeLine->GetTransform(D3DTS_VIEW));
+
+			if (point[i].z <= 0.1f)
+				point[i].z = 0.1f;
+
+			D3DXVec3TransformCoord(&point[i], &point[i], &pipeLine->GetTransform(D3DTS_PROJECTION));
+		}
+		
+		mLine->DrawTransform(point, 4, &IDENTITY_MATRIX, D3DXCOLOR(1.f, 1.f, 0.f, 1.f));
+	}
+
+	mLine->End();
+
+	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
+	mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+
+	mShader->BeginShader(nullptr);
+	mShader->BeginPass(0);
+
+	mShader->SetValue("gColor", &D3DXCOLOR(0.f, 1.f, 1.f, 1.f), sizeof(D3DXCOLOR));
+	for (_int i = 0; i < mNaviCellList.size(); ++i)
+	{
+		_matrix worldMatirx = *D3DXMatrixTranslation(&worldMatirx, mNaviCellList[i]->GetInscribedCenter().x, mNaviCellList[i]->GetInscribedCenter().y, mNaviCellList[i]->GetInscribedCenter().z);
+		mShader->SetValue("gMatWorld", worldMatirx, sizeof(_matrix));
+		mShader->CommitChanges();
+		mMesh->DrawSubset(0);
+	}
+
+	mShader->EndPass();
+	mShader->EndShader();
 }
 
 _bool NaviMesh_Object::Move(const _int curCellIndex, const _vec3 & nextPosition, _int & nextCellIndex, _vec3 & fixPosition)
@@ -19,6 +69,7 @@ _bool NaviMesh_Object::Move(const _int curCellIndex, const _vec3 & nextPosition,
 	NaviMesh::CellNeighbor neighborIndex;
 	NaviCell_Object* curCell = mNaviCellList[curCellIndex];
 	
+	nextCellIndex = curCellIndex;
 	if (false == curCell->Search(nextPosition, fixPosition, neighborIndex))
 	{
 		// nextPosition이 현재 Cell이 아닌 경우
@@ -26,7 +77,10 @@ _bool NaviMesh_Object::Move(const _int curCellIndex, const _vec3 & nextPosition,
 		if (nullptr == nextCell)
 			return false;
 
-		nextCell->Search(nextPosition, fixPosition, neighborIndex);
+		if (false == nextCell->Search(nextPosition, fixPosition, neighborIndex))
+			return false;
+
+		nextCellIndex = nextCell->GetCellIndex();
 	}
 
 	return true;
@@ -108,8 +162,22 @@ void NaviMesh_Object::SetNaviMeshData(const NaviMeshData & naviMeshData)
 	}
 }
 
-_bool NaviMesh_Object::Initialize()
+_bool NaviMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
+	HRESULT hr = D3DXCreateSphere(graphicDevice, 0.05f, 100, 100, &mMesh, nullptr);
+	if (FAILED(hr))
+		return false;
+
+	hr = D3DXCreateLine(graphicDevice, &mLine);
+	if (FAILED(hr))
+		return false;
+
+	mLine->SetWidth(3.f);
+
+	mShader = Shader::Create(graphicDevice, L"..\\Shader\\NaviMesh.fx");
+	if (nullptr == mShader)
+		return false;
+
 	return true;
 }
 
@@ -117,7 +185,7 @@ NaviMesh_Object * NaviMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	NaviMesh_Object*	pInstance = new NaviMesh_Object();
 
-	if (false == pInstance->Initialize())
+	if (false == pInstance->Initialize(graphicDevice))
 	{
 		MSG_BOX("NaviMesh_Object Created Failed!");
 		SafeRelease(pInstance);
@@ -132,5 +200,9 @@ void NaviMesh_Object::Free()
 		SafeRelease(cell);
 	mNaviCellList.clear();
 	
+	SafeRelease(mMesh);
+	SafeRelease(mLine);
+	SafeRelease(mShader);
+
 }
 

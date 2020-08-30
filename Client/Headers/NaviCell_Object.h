@@ -17,15 +17,17 @@ public:
 	_bool	IsInCell(const _vec3& position) const;
 
 public:
-	_bool	LinkNeighborCell(const NaviMesh::CellNeighbor myIndex, NaviCell_Object* neightborCell, const NaviMesh::CellNeighbor neighborIndex);
-	void	GetPointPositionOfLine(const NaviMesh::CellNeighbor lineIndex, _vec3& point0, _vec3& point1);
+	_bool				LinkNeighborCell(const NaviMesh::CellNeighbor myIndex, NaviCell_Object* neightborCell, const NaviMesh::CellNeighbor neighborIndex);
+	_int				GetCellIndex() const { return mIndex; }
+	const _vec3&		GetPointPosition(const NaviMesh::Point pointIndex) const { return mPoints[pointIndex]; }
+	void				GetPointPositionOfLine(const NaviMesh::CellNeighbor lineIndex, _vec3& point0, _vec3& point1);
 	NaviCell_Object*	GetNeighborCell(const NaviMesh::CellNeighbor neighborIndex) { return mNaviCellNeighbors[neighborIndex]; }
+	const _vec3&		GetInscribedCenter() const { return mInscribedCenter; }
 
 private:
 	_bool	Initialize();
 	void	CalculateTriangleInfo();
-	void	CalculateCircumCenter();
-	void	CalculateCircumNormal();
+	void	CalculateInscribedCenter();
 
 private:
 	_int	mIndex = 0;
@@ -35,11 +37,11 @@ private:
 private:
 	//	Triangle
 	_vec3	mNormalVector;
+	array<_vec2, NaviMesh::CELL_NEIGHBOR_END>	mLineNormalXZ;
 	array<_vec3, NaviMesh::CELL_NEIGHBOR_END>	mMidPoints;
-	
+		
 	//	Circumscribed
-	_vec3		mCircumCenter;
-	array<_vec2, NaviMesh::CELL_NEIGHBOR_END>	mCircumNormalXZ;
+	_vec3		mInscribedCenter;
 
 public:
 	static NaviCell_Object*	Create(const _int index, const _vec3& pointA, const _vec3& pointB, const _vec3& pointC);

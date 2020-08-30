@@ -59,6 +59,8 @@ void World_Object::Render()
 		gameObject->Render();
 
 	RenderBlock();
+
+	mNaviMesh->Render(GetGraphicDevice());
 }
 
 _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
