@@ -70,20 +70,55 @@ _bool NaviMesh_Object::Move(const _int curCellIndex, const _vec3 & nextPosition,
 	NaviCell_Object* curCell = mNaviCellList[curCellIndex];
 	
 	nextCellIndex = curCellIndex;
-	if (false == curCell->Search(nextPosition, fixPosition, neighborIndex))
+	if (false == curCell->Move(nextPosition, fixPosition, neighborIndex))
 	{
 		// nextPosition이 현재 Cell이 아닌 경우
 		NaviCell_Object* nextCell = curCell->GetNeighborCell(neighborIndex);
 		if (nullptr == nextCell)
 			return false;
 
-		if (false == nextCell->Search(nextPosition, fixPosition, neighborIndex))
+		if (false == nextCell->Move(nextPosition, fixPosition, neighborIndex))
 			return false;
 
 		nextCellIndex = nextCell->GetCellIndex();
 	}
 
 	return true;
+}
+
+_bool NaviMesh_Object::Move(const _int curCellIndex, const _vec3 & curPosition, const _vec3 & moveVector, _int & nextCellIndex, _vec3 & nextPosition)
+{
+	if (0 > curCellIndex)
+		return false;
+
+	if (mNaviCellList.size() <= curCellIndex)
+		return false;
+
+	NaviMesh::CellNeighbor neighborIndex;
+	NaviCell_Object* curCell = mNaviCellList[curCellIndex];
+
+	nextCellIndex = curCellIndex;
+	nextPosition = curPosition;
+
+	const _vec3 movePosition = curPosition + moveVector;
+
+	_bool	isMove = curCell->Move(movePosition, nextPosition, neighborIndex);
+
+	if (false == isMove)
+	{
+		NaviCell_Object* nextCell = curCell->GetNeighborCell(neighborIndex);
+		if (nullptr != nextCell)
+		{
+			isMove = nextCell->Move(movePosition, nextPosition, neighborIndex);
+			if (isMove)
+				nextCellIndex = nextCell->GetCellIndex();
+		}
+	}
+
+	if (false == isMove)
+		isMove = curCell->Slide(curPosition, moveVector, nextPosition);
+
+	return isMove;
 }
 
 _int NaviMesh_Object::FindCellIndex(const _vec3& position) const

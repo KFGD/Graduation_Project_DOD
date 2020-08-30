@@ -19,6 +19,7 @@ public:
 
 public:
 	_bool	Move(const _int curCellIndex, const _vec3 & nextPosition, _int& nextCellIndex, _vec3& fixPosition);
+	_bool	Move(const _int curCellIndex, const _vec3 & curPosition, const _vec3 & moveVector, _int & nextCellIndex, _vec3 & nextPosition);
 	_int	FindCellIndex(const _vec3& position) const;
 
 public:

@@ -38,18 +38,18 @@ void Player::Update(const _double timeDelta)
 	
 	D3DXVec3Normalize(&dir, &dir);
 
-	constexpr _float speed = 10.f;
-	_vec3 newPosition = mTransform->GetPosition() + dir * speed * timeDelta;
+	constexpr _float speed = 3.f;
+	_vec3 moveVector = dir * speed * timeDelta;
 
 	World_Object* world = GetWorld();
 	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
 
 	_int nextCellIndex = 0;
-	_vec3 fixPosition;
-	if (naviMesh->Move(mCellIndex, newPosition, nextCellIndex, fixPosition))
+	_vec3 nextPosition;
+	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), moveVector, nextCellIndex, nextPosition))
 	{
 		mCellIndex = nextCellIndex;
-		mTransform->SetPosition(fixPosition);
+		mTransform->SetPosition(nextPosition);
 	}
 
 	mTransform->CalculateWorldMatrix();
@@ -71,20 +71,6 @@ void Player::Render()
 
 	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
 		mDynamicMesh->Render(mShader, i);
-
-	//LPDIRECT3DDEVICE9 graphicDevice = GetWorld()->GetGraphicDevice();
-
-	//graphicDevice->SetTransform(D3DTS_VIEW, &PipeLine::GetInstance()->GetTransform(D3DTS_VIEW));
-	//graphicDevice->SetTransform(D3DTS_PROJECTION, &PipeLine::GetInstance()->GetTransform(D3DTS_PROJECTION));
-	//graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
-	//for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
-	//	mDynamicMesh->GetMeshContainer(i)->pSoftwareMesh->DrawSubset(0);
-
-
-	//graphicDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-	//graphicDevice->SetTransform(D3DTS_VIEW, &IDENTITY_MATRIX);
-	//graphicDevice->SetTransform(D3DTS_PROJECTION, &IDENTITY_MATRIX);
 }
 
 _bool Player::Initialize(const Player::Data& data)

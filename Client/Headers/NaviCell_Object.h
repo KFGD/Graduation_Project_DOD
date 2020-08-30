@@ -13,7 +13,8 @@ private:
 	virtual ~NaviCell_Object() = default;
 
 public:
-	_bool	Search(const _vec3& nextPosition, _vec3& fixPosition, NaviMesh::CellNeighbor& neighborIndex) const;
+	_bool	Move(const _vec3& movePosition, _vec3& nextPosition, NaviMesh::CellNeighbor& neighborIndex) const;
+	_bool	Slide(const _vec3 & curPosition, const _vec3 & moveVector, _vec3 & nextPosition) const;
 	_bool	IsInCell(const _vec3& position) const;
 
 public:

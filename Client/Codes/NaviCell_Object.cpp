@@ -8,9 +8,9 @@ NaviCell_Object::NaviCell_Object(const _int index, const _vec3 & pointA, const _
 {
 }
 
-_bool NaviCell_Object::Search(const _vec3 & nextPosition, _vec3& fixPosition, NaviMesh::CellNeighbor & neighborIndex) const
+_bool NaviCell_Object::Move(const _vec3 & movePosition, _vec3& nextPosition, NaviMesh::CellNeighbor & neighborIndex) const
 {
-	const _vec2 positionXZ(nextPosition.x, nextPosition.z);
+	const _vec2 positionXZ(movePosition.x, movePosition.z);
 	for (_int i = 0; i < NaviMesh::CELL_NEIGHBOR_END; ++i)
 	{
 		const _vec2 midPointXZ(mMidPoints[i].x, mMidPoints[i].z);
@@ -24,11 +24,49 @@ _bool NaviCell_Object::Search(const _vec3 & nextPosition, _vec3& fixPosition, Na
 
 	}
 
-	fixPosition = nextPosition;
+	nextPosition = movePosition;
 	//	평면의 방정식: aX + bY +cZ + D = 0
 	//	Y = (aX + cZ + D) / b * -1.f
 	const _float distance = -1.f * (mNormalVector.x * mInscribedCenter.x + mNormalVector.y * mInscribedCenter.y + mNormalVector.z * mInscribedCenter.z);
-	fixPosition.y = (mNormalVector.x * fixPosition.x + mNormalVector.z * fixPosition.z + distance) / mNormalVector.y * -1.f;
+	nextPosition.y = (mNormalVector.x * nextPosition.x + mNormalVector.z * nextPosition.z + distance) / mNormalVector.y * -1.f;
+
+	return true;
+}
+
+_bool NaviCell_Object::Slide(const _vec3 & curPosition, const _vec3 & moveVector, _vec3 & nextPosition) const
+{
+	const _vec3 movePosition = curPosition + moveVector;
+
+	//	2D
+	const _vec2 positionXZ(movePosition.x, movePosition.z);
+
+	_int slideLineIndex = 0;
+	for (slideLineIndex = 0; slideLineIndex < NaviMesh::CELL_NEIGHBOR_END; ++slideLineIndex)
+	{
+		const _vec2 midPointXZ(mMidPoints[slideLineIndex].x, mMidPoints[slideLineIndex].z);
+		_vec2 dirXZ(positionXZ - midPointXZ);
+		D3DXVec2Normalize(&dirXZ, &dirXZ);
+		if (0 > D3DXVec2Dot(&dirXZ, &mLineNormalXZ[slideLineIndex]))
+			break;
+	}
+
+	if (NaviMesh::CELL_NEIGHBOR_END == slideLineIndex)
+		return false;
+
+	const _vec2 moveVectorXZ(moveVector.x, moveVector.z);
+	const _vec2 & normalVectorXZ(mLineNormalXZ[slideLineIndex]);
+	const _vec2 projVectorXZ = D3DXVec2Dot(&moveVectorXZ, &normalVectorXZ) * normalVectorXZ;
+	const _vec2 slideVectorXZ = moveVectorXZ - projVectorXZ;
+
+	//	3D
+	_vec3 tempPosition = curPosition + _vec3(slideVectorXZ.x, 0.f, slideVectorXZ.y);
+	const _float distance = -1.f * (mNormalVector.x * mInscribedCenter.x + mNormalVector.y * mInscribedCenter.y + mNormalVector.z * mInscribedCenter.z);
+	tempPosition.y = (mNormalVector.x * nextPosition.x + mNormalVector.z * nextPosition.z + distance) / mNormalVector.y * -1.f;
+
+	_bool canMove = IsInCell(tempPosition);
+		
+
+	nextPosition = tempPosition;
 
 	return true;
 }
@@ -125,10 +163,8 @@ void NaviCell_Object::CalculateTriangleInfo()
 
 void NaviCell_Object::CalculateInscribedCenter()
 {	
-	//	Cartesian coordinates from cross- and dot-products
-	//	Wiki: https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_2
-	_vec3 crossVector = *D3DXVec3Cross(&crossVector, &_vec3(mPoints[NaviMesh::POINT_A] - mPoints[NaviMesh::POINT_B]), &_vec3(mPoints[NaviMesh::POINT_B] - mPoints[NaviMesh::POINT_C]));
-
+	//	삼각형 내심의 좌표 공식
+	//	naver blog: https://m.blog.naver.com/PostView.nhn?blogId=vollollov&logNo=221028571638&proxyReferer=https:%2F%2Fwww.google.com%2F
 	const _float lengthAB = D3DXVec3Length(&_vec3(mPoints[NaviMesh::POINT_A] - mPoints[NaviMesh::POINT_B]));
 	const _float lengthBC = D3DXVec3Length(&_vec3(mPoints[NaviMesh::POINT_B] - mPoints[NaviMesh::POINT_C]));
 	const _float lengthCA = D3DXVec3Length(&_vec3(mPoints[NaviMesh::POINT_C] - mPoints[NaviMesh::POINT_A]));
