@@ -64,7 +64,8 @@ _bool NaviCell_Object::Slide(const _vec3 & curPosition, const _vec3 & moveVector
 	tempPosition.y = (mNormalVector.x * nextPosition.x + mNormalVector.z * nextPosition.z + distance) / mNormalVector.y * -1.f;
 
 	_bool canMove = IsInCell(tempPosition);
-		
+	if (false == canMove)
+		return false;
 
 	nextPosition = tempPosition;
 
