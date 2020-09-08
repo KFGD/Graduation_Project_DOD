@@ -149,6 +149,8 @@ void ModeController::UpdateCameraControllerUI(CameraController* cameraController
 	ImGui::Text("Camera Type: ");
 
 	ImGui::RadioButton("Free", (int*)&mCurCameraType, CameraType::FREE_CAMERA);
+	
+	ImGui::SameLine();
 	ImGui::RadioButton("Player", (int*)&mCurCameraType, CameraType::PLAYER_CAMERA);
 	
 	ImGui::Text("Locking: ");

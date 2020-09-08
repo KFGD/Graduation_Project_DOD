@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Player.h"
 
+#include "PlayerIdle.h"
+#include "PlayerRun.h"
+
 #include "Transform_Object.h"
 #include "DynamicMesh_Object.h"
-
 #include "World_Object.h"
 #include "PipeLine.h"
 #include "Shader.h"
@@ -24,40 +26,22 @@ void Player::SetUp(World_Object * world)
 
 void Player::Update(const _double timeDelta)
 {
-	KeyManager* keyManager = KeyManager::GetInstance();
-	_vec3 dir;
-	::ZeroMemory(&dir, sizeof(_vec3));
-	if (keyManager->KeyPresseing(KeyManager::KEY_W))
-		dir.z += 1.f;
-	if (keyManager->KeyPresseing(KeyManager::KEY_S))
-		dir.z -= 1.f;
-	if (keyManager->KeyPresseing(KeyManager::KEY_A))
-		dir.x -= 1.f;
-	if (keyManager->KeyPresseing(KeyManager::KEY_D))
-		dir.x += 1.f;
-	
-	D3DXVec3Normalize(&dir, &dir);
-
-	constexpr _float speed = 3.f;
-	_vec3 moveVector = dir * speed * timeDelta;
-
-	World_Object* world = GetWorld();
-	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
-
-	_int nextCellIndex = 0;
-	_vec3 nextPosition;
-	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), moveVector, nextCellIndex, nextPosition))
+	if (mCurState != mNextState)
 	{
-		mCellIndex = nextCellIndex;
-		mTransform->SetPosition(nextPosition);
+		if (mArrPlayerState[mCurState]->CanStop())
+		{
+			mArrPlayerState[mNextState]->Start();
+			mCurState = mNextState;
+		}
 	}
 
-	mTransform->CalculateWorldMatrix();
+	mArrPlayerState[mCurState]->Update(timeDelta);
 }
 
 void Player::LateUpdate(const _double timeDelta)
 {
 	mTimeDelta = timeDelta;
+	mArrPlayerState[mCurState]->LateUpdate(timeDelta);
 }
 
 void Player::Render()
@@ -78,18 +62,54 @@ const _vec3 & Player::GetPosition() const
 	return mTransform->GetPosition();
 }
 
+void Player::SetNextState(const PlayerState nextState)
+{
+	mNextState = nextState;
+}
+
+void Player::Move(const _vec3 & moveDir)
+{
+	World_Object* world = GetWorld();
+	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
+
+	_int nextCellIndex = 0;
+	_vec3 nextPosition;
+	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), moveDir, nextCellIndex, nextPosition))
+	{
+		mCellIndex = nextCellIndex;
+		mTransform->SetPosition(nextPosition);
+	}
+
+	mTransform->CalculateWorldMatrix();
+}
+
+void Player::SetUpAnimation(const _uint index)
+{
+	mDynamicMesh->SetUpAnimation(index);
+}
+
 _bool Player::Initialize(const Player::Data& data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
 	GameObject::AddComponent("DynamicMesh_Player", "DynamicMesh_Player", (Component_Object**)&mDynamicMesh);	
 	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
-	mDynamicMesh->SetUpAnimation(1);
+
+	mArrPlayerState.fill(nullptr);
+	mCurState = PlayerState::IDLE;
+	mNextState = PlayerState::IDLE;
+
+	mArrPlayerState[PlayerState::IDLE] = PlayerIdle::Create(this);
+	mArrPlayerState[PlayerState::RUN] = PlayerRun::Create(this);
 
 	return true;
 }
 
 void Player::Free()
 {
+	for (State<Player>*& state : mArrPlayerState)
+		SafeRelease(state);
+	mArrPlayerState.fill(nullptr);
+
 	GameObject::Free();
 }
 

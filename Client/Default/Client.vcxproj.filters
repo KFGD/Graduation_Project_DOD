@@ -164,6 +164,12 @@
     <Filter Include="31.CameraController\Camera\01.PlayerCamera">
       <UniqueIdentifier>{ad406efc-b0af-419d-b89f-c2971f2c42ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\00.PlayerIdle">
+      <UniqueIdentifier>{d14ea01c-dc2e-4f7e-a4d3-fe8187959c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun">
+      <UniqueIdentifier>{b6fafaa5-418d-460b-9e4c-512b86e9b850}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -316,6 +322,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PlayerCamera.cpp">
       <Filter>31.CameraController\Camera\01.PlayerCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerIdle.cpp">
+      <Filter>23.Object\00.OOD\00.GameObject\00.Player\00.PlayerIdle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerRun.cpp">
+      <Filter>23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -540,6 +552,15 @@
     </ClInclude>
     <ClInclude Include="..\Headers\CameraTarget.h">
       <Filter>31.CameraController\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\State.h">
+      <Filter>23.Object\00.OOD\00.GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PlayerIdle.h">
+      <Filter>23.Object\00.OOD\00.GameObject\00.Player\00.PlayerIdle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PlayerRun.h">
+      <Filter>23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

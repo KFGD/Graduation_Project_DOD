@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
-
 #include "CameraTarget.h"
+
+#include "State.h"
 
 class Transform_Object;
 class DynamicMesh_Object;
@@ -24,6 +25,14 @@ public:
 	};
 
 public:
+	enum PlayerState
+	{
+		IDLE,
+		RUN,
+		STATE_END
+	};
+
+public:
 	explicit Player();
 	virtual ~Player() = default;
 
@@ -36,17 +45,31 @@ public:
 public:
 	virtual const _vec3&	GetPosition() const				override;
 
+public:
+	void	SetNextState(const PlayerState nextState);
+	void	Move(const _vec3& moveDir);
+	void	SetUpAnimation(const _uint index);
+
 private:
 	_bool	Initialize(const Player::Data& data);
-
+	
 private:
 	Transform_Object*	mTransform = nullptr;
 	DynamicMesh_Object*	mDynamicMesh = nullptr;
 	Shader*				mShader = nullptr;
 
 private:
-	_int	mCellIndex = 0;
+	array<State<Player>*, STATE_END>	mArrPlayerState;
+	PlayerState	mCurState;
+	PlayerState	mNextState;
+
+private:
+	//	Animation
 	_double	mTimeDelta = 0.0;
+
+private:
+	//	Navi Mesh
+	_int	mCellIndex = 0;
 
 public:
 	virtual void	Free() override;

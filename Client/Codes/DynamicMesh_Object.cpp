@@ -131,41 +131,6 @@ _bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tch
 	for (_int i = 0; i < mMeshContainerList.size(); ++i)
 		UpdateSoftwareSkinnedMesh(i);
 
-	//for (_int i = 0; i < mMeshContainerList.size(); ++i)
-	//{
-	//	LPD3DXMESH mesh = mMeshContainerList[i]->pOriginalMesh;
-	//	
-	//	const _ulong numVertices = mesh->GetNumVertices();
-	//	const _ulong stride = D3DXGetFVFVertexSize(mesh->GetFVF());
-
-	//	D3DVERTEXELEMENT9 decl[MAX_FVF_DECL_SIZE];
-	//	mesh->GetDeclaration(decl);
-
-	//	_ushort normalOffset = 0;
-	//	for (_size_t i = 0; i < MAX_FVF_DECL_SIZE; ++i)
-	//	{
-	//		if (D3DDECLUSAGE_NORMAL == decl[i].Usage)
-	//		{
-	//			normalOffset = decl[i].Offset;
-	//			break;
-	//		}
-	//	}
-
-	//	_byte*	vertices = nullptr;
-	//	mesh->LockVertexBuffer(0, (void**)&vertices);
-
-	//	for (_ulong i = 0; i < numVertices; ++i)
-	//	{
-	//		_vec3* pos = (_vec3*)(vertices + (i * stride));
-	//		_vec3* normal = (_vec3*)(vertices + (i * stride) + normalOffset);
-	//		D3DXVec3TransformCoord(pos, pos, &mPivotMatrix);
-	//		D3DXVec3TransformNormal(normal, normal, &mPivotMatrix);
-	//	}
-
-	//	mesh->UnlockVertexBuffer();
-
-	//}
-
 	return true;
 }
 

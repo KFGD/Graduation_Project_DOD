@@ -204,6 +204,8 @@
     <ClCompile Include="..\Codes\Bot.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\PlayerCamera.cpp" />
+    <ClCompile Include="..\Codes\PlayerIdle.cpp" />
+    <ClCompile Include="..\Codes\PlayerRun.cpp" />
     <ClCompile Include="..\Codes\Renderer_Object.cpp" />
     <ClCompile Include="..\Codes\Shader.cpp" />
     <ClCompile Include="..\Codes\StaticMesh_Object.cpp" />
@@ -280,6 +282,8 @@
     <ClInclude Include="..\Headers\NaviCell_Object.h" />
     <ClInclude Include="..\Headers\NaviMeshData.h" />
     <ClInclude Include="..\Headers\PlayerCamera.h" />
+    <ClInclude Include="..\Headers\PlayerIdle.h" />
+    <ClInclude Include="..\Headers\PlayerRun.h" />
     <ClInclude Include="..\Headers\Shader.h" />
     <ClInclude Include="..\Headers\KObject.h" />
     <ClInclude Include="..\Headers\Macro.h" />
@@ -289,6 +293,7 @@
     <ClInclude Include="..\Headers\Bot.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Renderer_Object.h" />
+    <ClInclude Include="..\Headers\State.h" />
     <ClInclude Include="..\Headers\StaticMesh_Object.h" />
     <ClInclude Include="..\Headers\Struct.h" />
     <ClInclude Include="..\Headers\SystemManager.h" />
