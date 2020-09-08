@@ -83,6 +83,11 @@ void Player::Move(const _vec3 & moveDir)
 	mTransform->CalculateWorldMatrix();
 }
 
+void Player::SetRotateY(const _float degree)
+{
+	mTransform->SetRotationY(degree);
+}
+
 void Player::SetUpAnimation(const _uint index)
 {
 	mDynamicMesh->SetUpAnimation(index);

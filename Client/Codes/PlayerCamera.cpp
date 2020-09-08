@@ -42,15 +42,14 @@ void PlayerCamera::Update(const _double deltaTime)
 		mRadian = mRadian * -1.f - (absRadian - D3DX_PI) * 2.f * sign;
 	}
 
-	_matrix matRotate;
-	D3DXMatrixRotationY(&matRotate, mRadian);
+	D3DXMatrixRotationY(&mMatRotateY, mRadian);
 
 	_vec3 pos = -1.f * mLook * mDist;
-	D3DXVec3TransformCoord(&pos, &pos, &matRotate);
+	D3DXVec3TransformCoord(&pos, &pos, &mMatRotateY);
 	pos += mTarget->GetPosition() + _vec3(0.f, 1.f, 0.f);
 
 	_vec3 look = mLook;
-	D3DXVec3TransformNormal(&look, &look, &matRotate);
+	D3DXVec3TransformNormal(&look, &look, &mMatRotateY);
 	
 	_vec3 right;
 	//D3DXVec3Cross(&right, &look, &Camera::AXIS_Y);

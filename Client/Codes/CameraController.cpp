@@ -35,7 +35,7 @@ void CameraController::ChangeCamera(const CameraType::Type type)
 
 Camera * CameraController::GetCamera(const CameraType::Type type)
 {
-	return mCameraList[mCurType];
+	return mCameraList[type];
 }
 
 void CameraController::Update(const _double deltaTime)

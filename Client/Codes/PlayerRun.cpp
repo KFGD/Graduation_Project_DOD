@@ -3,6 +3,8 @@
 
 #include "Player.h"
 #include "KeyManager.h"
+#include "CameraController.h"
+#include "PlayerCamera.h"
 
 PlayerRun::PlayerRun(Player * executer)
 	: State<Player>(executer)
@@ -27,6 +29,7 @@ void PlayerRun::Update(const _double timeDelta)
 		player->SetNextState(Player::PlayerState::IDLE);
 	else
 	{
+		Rotate();
 		constexpr _float speed = 3.f;
 		_vec3 moveVector = mDir * speed * (_float)timeDelta;
 		player->Move(moveVector);
@@ -62,8 +65,20 @@ _bool PlayerRun::InputMove()
 	return true;
 }
 
+void PlayerRun::Rotate()
+{
+	Player* player = GetExecuter();
+	D3DXVec3TransformNormal(&mDir, &mDir, &mPlayerCamera->GetRotateMatrix());
+
+	const _float radain = mPlayerCamera->GetRadian();
+	const _float degree = D3DXToDegree(radain);
+	player->SetRotateY(degree);
+}
+
 _bool PlayerRun::Initialize()
 {
+	CameraController* cameraController = CameraController::GetInstance();
+	mPlayerCamera = dynamic_cast<PlayerCamera*>(cameraController->GetCamera(CameraType::PLAYER_CAMERA));
 	return true;
 }
 

@@ -48,6 +48,7 @@ public:
 public:
 	void	SetNextState(const PlayerState nextState);
 	void	Move(const _vec3& moveDir);
+	void	SetRotateY(const _float degree);
 	void	SetUpAnimation(const _uint index);
 
 private:

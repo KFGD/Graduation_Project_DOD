@@ -4,6 +4,7 @@
 
 class Player;
 class KeyManager;
+class PlayerCamera;
 
 class PlayerRun :
 	public State<Player>
@@ -20,13 +21,15 @@ public:
 
 private:
 	_bool	InputMove();
+	void	Rotate();
 
 private:
 	_bool	Initialize();
 
 private:
-	KeyManager*	mKeyManager = nullptr;
-	_vec3		mDir;
+	KeyManager*		mKeyManager = nullptr;
+	PlayerCamera*	mPlayerCamera = nullptr;
+	_vec3			mDir;
 
 public:
 	static PlayerRun*	Create(Player* executer);
