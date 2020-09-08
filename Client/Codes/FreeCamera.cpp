@@ -61,22 +61,12 @@ void FreeCamera::Update(const _double deltaTime)
 		_matrix	rotationMatrix;
 		D3DXMatrixRotationAxis(&rotationMatrix, &axis[i], moveValue);
 
-		_vec3	right = GetRightVector();
-		_vec3	up = GetUpVector();
-		_vec3	forward = GetForwardVector();
-
-		D3DXVec3TransformNormal(&right, &right, &rotationMatrix);
-		D3DXVec3TransformNormal(&up, &up, &rotationMatrix);
-		D3DXVec3TransformNormal(&forward, &forward, &rotationMatrix);
-
-		SetRightVector(right);
-		SetUpVector(up);
-		SetForwardVector(forward);
+		Rotate(rotationMatrix);
 	}
 
 
 	_matrix matView;
-	D3DXMatrixInverse(&matView, nullptr, &mWorldMatrix);
+	D3DXMatrixInverse(&matView, nullptr, &GetWorldMatrix());
 
 	PipeLine::GetInstance()->SetTransform(D3DTS_VIEW, matView);
 }
@@ -98,7 +88,11 @@ _bool FreeCamera::Initialize()
 
 	_matrix viewMatrix;
 	D3DXMatrixLookAtLH(&viewMatrix, &_vec3(0.f, 3.f, -3.f), &_vec3(0.f, 0.f, 0.f), &Camera::AXIS_Y);
-	D3DXMatrixInverse(&mWorldMatrix, nullptr, &viewMatrix);
+
+	_matrix	worldMatrix;
+	D3DXMatrixInverse(&worldMatrix, nullptr, &viewMatrix);
+
+	SetWorldMatrix(worldMatrix);
 
 	return true;
 }
