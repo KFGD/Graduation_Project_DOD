@@ -70,7 +70,7 @@ void ModeController::Update(const _double deltaTime, CameraController* cameraCon
 	ImGui::EndFrame();
 
 	if (ImGui::IsKeyReleased(VK_CONTROL))
-		mIsFreeCameraLocking = !mIsFreeCameraLocking;
+		mIsCameraLocking = !mIsCameraLocking;
 
 	MappingDataToCameraController(cameraController);
 }
@@ -150,6 +150,11 @@ void ModeController::UpdateCameraControllerUI(CameraController* cameraController
 
 	ImGui::RadioButton("Free", (int*)&mCurCameraType, CameraType::FREE_CAMERA);
 	
+	ImGui::Text("Locking: ");
+
+	ImGui::SameLine();
+	ImGui::Checkbox("##CameraLocking", &mIsCameraLocking);
+
 	ImGui::NewLine();
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 
@@ -173,12 +178,6 @@ void ModeController::UpdateCameraControllerUI(CameraController* cameraController
 		ImGui::SetNextItemWidth(50.f);
 		ImGui::InputFloat("##FreeCameraMoveSpeed", &mFreeCameraMoveSpeed);
 
-		ImGui::SameLine();
-		ImGui::Text("Locking: ");
-		
-		ImGui::SameLine();
-		ImGui::Checkbox("##FreeCameraLocking", &mIsFreeCameraLocking);
-
 		ImGui::EndChild();
 		
 	}
@@ -192,6 +191,7 @@ void ModeController::UpdateCameraControllerUI(CameraController* cameraController
 
 void ModeController::MappingDataToCameraController(CameraController * cameraController)
 {
+	cameraController->SetLocking(mIsCameraLocking);
 	cameraController->ChangeCamera(mCurCameraType);
 
 	switch (mCurCameraType)
@@ -200,7 +200,6 @@ void ModeController::MappingDataToCameraController(CameraController * cameraCont
 	{
 		FreeCamera*	freeCamera = static_cast<FreeCamera*>(cameraController->GetCamera(CameraType::FREE_CAMERA));
 		freeCamera->SetMoveSpeed(mFreeCameraMoveSpeed);
-		freeCamera->SetLocking(mIsFreeCameraLocking);
 	}
 		break;
 	}
@@ -209,6 +208,7 @@ void ModeController::MappingDataToCameraController(CameraController * cameraCont
 
 void ModeController::MappingCameraControllerToData(CameraController * cameraController)
 {
+	mIsCameraLocking = cameraController->GetLocking();
 	mCurCameraType = cameraController->GetCurCameraType();
 
 	switch (mCurCameraType)
@@ -217,7 +217,6 @@ void ModeController::MappingCameraControllerToData(CameraController * cameraCont
 	{
 		FreeCamera*	freeCamera = static_cast<FreeCamera*>(cameraController->GetCamera(CameraType::FREE_CAMERA));
 		mFreeCameraMoveSpeed = freeCamera->GetMoveSpeed();
-		mIsFreeCameraLocking = freeCamera->GetLocking();
 	}
 		break;
 	}

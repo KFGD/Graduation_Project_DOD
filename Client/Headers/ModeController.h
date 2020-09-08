@@ -48,7 +48,7 @@ private:
 private:
 	//	Free Camera
 	_float	mFreeCameraMoveSpeed = 0.f;
-	_bool	mIsFreeCameraLocking = false;
+	_bool	mIsCameraLocking = false;
 	
 public:
 	virtual	void	Free() override;

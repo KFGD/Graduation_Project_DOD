@@ -18,8 +18,8 @@ public:
 
 public:
 	void	ResetRotation();
-	_bool	GetLocking() const { return mIsLocking; }
-	void	SetLocking(const _bool value) { mIsLocking = value; }
+	//_bool	GetLocking() const { return mIsLocking; }
+	//void	SetLocking(const _bool value) { mIsLocking = value; }
 	_float	GetMoveSpeed() const { return mMoveSpeed; }
 	void	SetMoveSpeed(const _float moveSpeed) { mMoveSpeed = moveSpeed; }
 
@@ -36,7 +36,7 @@ private:
 	void	SetPosition(const _vec3& position) { *((_vec3*)mWorldMatrix.m[3]) = position; }
 
 private:
-	_bool	mIsLocking = false;
+	//_bool	mIsLocking = false;
 	_float	mMoveSpeed = 0.f;
 private:
 	_matrix	mWorldMatrix;

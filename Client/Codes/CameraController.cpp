@@ -41,6 +41,9 @@ void CameraController::Update(const _double deltaTime)
 	if (CameraType::TYPE_END == mCurType)
 		return;
 
+	if (mIsLocking)
+		return;
+
 	mCameraList[mCurType]->Update(deltaTime);
 
 }
