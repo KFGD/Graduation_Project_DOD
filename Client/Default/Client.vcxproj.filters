@@ -161,6 +161,9 @@
     <Filter Include="25.NaviMesh\00.OOD\00.NaviCell">
       <UniqueIdentifier>{bde7cc8f-f544-4bfc-afe4-58bce6e68e13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="31.CameraController\Camera\01.PlayerCamera">
+      <UniqueIdentifier>{ad406efc-b0af-419d-b89f-c2971f2c42ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\NaviCell_Object.cpp">
       <Filter>25.NaviMesh\00.OOD\00.NaviCell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerCamera.cpp">
+      <Filter>31.CameraController\Camera\01.PlayerCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,9 +517,6 @@
     <ClInclude Include="..\Headers\CameraController.h">
       <Filter>31.CameraController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\FreeCamera.h">
-      <Filter>31.CameraController\Camera\00.FreeCamera</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\InputDevice.h">
       <Filter>90.Engine\00.System\01.InputDevice</Filter>
     </ClInclude>
@@ -528,6 +531,15 @@
     </ClInclude>
     <ClInclude Include="..\Headers\NaviCell_Object.h">
       <Filter>25.NaviMesh\00.OOD\00.NaviCell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PlayerCamera.h">
+      <Filter>31.CameraController\Camera\01.PlayerCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FreeCamera.h">
+      <Filter>31.CameraController\Camera\00.FreeCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CameraTarget.h">
+      <Filter>31.CameraController\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

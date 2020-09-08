@@ -61,7 +61,17 @@ void FreeCamera::Update(const _double deltaTime)
 		_matrix	rotationMatrix;
 		D3DXMatrixRotationAxis(&rotationMatrix, &axis[i], moveValue);
 
-		Rotate(rotationMatrix);
+		_vec3	right = GetRightVector();
+		_vec3	up = GetUpVector();
+		_vec3	forward = GetForwardVector();
+
+		D3DXVec3TransformNormal(&right, &right, &rotationMatrix);
+		D3DXVec3TransformNormal(&up, &up, &rotationMatrix);
+		D3DXVec3TransformNormal(&forward, &forward, &rotationMatrix);
+
+		SetRightVector(right);
+		SetUpVector(up);
+		SetForwardVector(forward);
 	}
 
 

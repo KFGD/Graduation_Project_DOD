@@ -15,6 +15,7 @@
 #include "Shader.h"
 
 #include "KObject.h"
+#include "CameraController.h"
 
 //	GameObject
 #include "GameObject.h"
@@ -104,6 +105,8 @@ _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
 
 	for (GameObject* object : mBlockList)
 		object->SetUp(this);
+
+	CameraController::GetInstance()->SetCameraTarget(mPlayerList.front());
 
 	return true;
 }

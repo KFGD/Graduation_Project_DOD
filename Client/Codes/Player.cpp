@@ -73,6 +73,11 @@ void Player::Render()
 		mDynamicMesh->Render(mShader, i);
 }
 
+const _vec3 & Player::GetPosition() const
+{
+	return mTransform->GetPosition();
+}
+
 _bool Player::Initialize(const Player::Data& data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));

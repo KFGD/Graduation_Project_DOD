@@ -7,6 +7,11 @@ KObject::KObject(const Info& info)
 {
 }
 
+const _vec3 & KObject::GetPosition() const
+{
+	return *(_vec3*)mWorldMatrix.m[3];
+}
+
 const char * KObject::GetObjectTypeName() const
 {
 	switch (mInfo.Objecttype) 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+#include "CameraTarget.h"
 
 #include "Defines.h"
 #include "Client_Defines.h"
@@ -20,7 +21,7 @@ namespace KEngine
 }
 
 class KObject :
-	public Base
+	public Base, public CameraTarget
 {
 	typedef	Game::ObjectType	Type;
 public:
@@ -39,6 +40,9 @@ private:
 	explicit KObject(const Info& info);
 	virtual ~KObject() = default;
 	
+public:
+	virtual const _vec3&	GetPosition() const override;
+
 public:
 	const Info&		GetInfo() const { return mInfo; }
 	const char*		GetObjectTypeName() const;

@@ -29,6 +29,7 @@
 #include "PipeLine.h"
 #include "Shader.h"
 #include "NaviMeshData.h"
+#include "CameraController.h"
 
 //	Function
 //	For: DearImgui
@@ -94,6 +95,15 @@ void CreativeMode::Update(const _double timeDelta)
 			LogicNaviMeshEditMode();
 
 		MappingNaviMeshUIToNaviMeshData();
+	}
+
+	for (KObject*& object : mObjectList)
+	{
+		if (Game::Player == object->GetInfo().Objecttype)
+		{
+			CameraController::GetInstance()->SetCameraTarget(object);
+			break;
+		}
 	}
 }
 

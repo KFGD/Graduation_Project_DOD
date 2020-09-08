@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "FreeCamera.h"
+#include "PlayerCamera.h"
 
 IMPLEMENT_SINGLETON(CameraController)
 
@@ -14,6 +15,7 @@ CameraController::CameraController()
 _bool CameraController::Ready()
 {
 	mCameraList[CameraType::FREE_CAMERA] = FreeCamera::Create();
+	mCameraList[CameraType::PLAYER_CAMERA] = PlayerCamera::Create();
 	mCurType = CameraType::FREE_CAMERA;
 
 	return true;

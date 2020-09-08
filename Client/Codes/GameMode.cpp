@@ -11,7 +11,7 @@ GameMode::GameMode()
 
 void GameMode::Active()
 {
-
+	
 }
 
 void GameMode::InActive()

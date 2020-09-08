@@ -22,6 +22,7 @@ namespace CameraType
 	enum Type : int 
 	{
 		FREE_CAMERA,
+		PLAYER_CAMERA,
 		TYPE_END
 	};
 };

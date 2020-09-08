@@ -30,10 +30,7 @@ protected:
 	void	SetForwardVector(const _vec3& forwardVector) { (*(_vec3*)mWorldMatrix.m[2]) = forwardVector; }
 	void	SetPosition(const _vec3& position) { *((_vec3*)mWorldMatrix.m[3]) = position; }
 	void	SetWorldMatrix(const _matrix& worldMatrix) { mWorldMatrix = worldMatrix; }
-
-protected:
-	void	Rotate(const _matrix& rotationMatrix);
-
+	
 protected:
 	static const _vec3 AXIS_Y;
 

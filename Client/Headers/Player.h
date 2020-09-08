@@ -1,12 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
+#include "CameraTarget.h"
+
 class Transform_Object;
 class DynamicMesh_Object;
 class Shader;
 
 class Player :
-	public GameObject
+	public GameObject, public CameraTarget
 {
 public:
 	struct Data
@@ -26,10 +28,13 @@ public:
 	virtual ~Player() = default;
 
 public:
-	virtual void	SetUp(World_Object* world)	override;
-	virtual void	Update(const _double timeDelta) override;
-	virtual void	LateUpdate(const _double timeDelta) override;
-	virtual void	Render() override;
+	virtual void	SetUp(World_Object* world)				override;
+	virtual void	Update(const _double timeDelta)			override;
+	virtual void	LateUpdate(const _double timeDelta)		override;
+	virtual void	Render()								override;
+
+public:
+	virtual const _vec3&	GetPosition() const				override;
 
 private:
 	_bool	Initialize(const Player::Data& data);

@@ -18,8 +18,6 @@ public:
 
 public:
 	void	ResetRotation();
-	//_bool	GetLocking() const { return mIsLocking; }
-	//void	SetLocking(const _bool value) { mIsLocking = value; }
 	_float	GetMoveSpeed() const { return mMoveSpeed; }
 	void	SetMoveSpeed(const _float moveSpeed) { mMoveSpeed = moveSpeed; }
 
