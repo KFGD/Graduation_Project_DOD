@@ -31,6 +31,7 @@ public:
 
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
+	void	ChangeWorldType(Game::WorldType nextWorldType);
 	void	ClearObjectList();
 
 private:

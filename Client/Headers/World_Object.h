@@ -37,7 +37,7 @@ private:
 	_bool	Initialize();
 	_bool	ReadyComponent();
 	void	RenderBlock();
-	void	RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock, Shader* shader);
+	void	RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock);
 
 private:
 	PipeLine*	mPipeLine = nullptr;

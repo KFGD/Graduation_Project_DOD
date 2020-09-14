@@ -5,6 +5,17 @@
 #include "World_Object.h"
 #include "World_Data.h"
 
+////////////////////////////
+//
+//
+//	Imgui
+//
+//
+////////////////////////////
+#include <imgui.h>
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx9.h>
+
 GameMode::GameMode()
 {
 	mWorlds.fill(nullptr);
@@ -22,6 +33,23 @@ void GameMode::InActive()
 
 void GameMode::Update_UI(const _double timeDelta)
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	ImGui::BeginChild("WorldType", ImVec2(0, 40), true, 0);
+
+	ImGui::Text("[World Type]");
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Object##World_Object", mCurWorldType == Game::Object_Oriented))
+		ChangeWorldType(Game::Object_Oriented);
+	
+
+	ImGui::SameLine();
+	if (ImGui::RadioButton("Data##World_Data", mCurWorldType == Game::Data_Oriented))
+		ChangeWorldType(Game::Data_Oriented);
+
+
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
 }
 
 void GameMode::Update_Object(const _double timeDelta)
@@ -56,9 +84,20 @@ _bool GameMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 	mWorlds[Game::Object_Oriented] = World_Object::Create(graphicDevice);
 	mWorlds[Game::Data_Oriented] = World_Data::Create(graphicDevice);
 
-	mCurWorldType = Game::Data_Oriented;
+	mCurWorldType = Game::Object_Oriented;
 
 	return true;
+}
+
+void GameMode::ChangeWorldType(Game::WorldType nextWorldType)
+{
+	if (mCurWorldType == nextWorldType)
+		return;
+	
+	mWorlds[mCurWorldType]->Clear();
+
+	mCurWorldType = nextWorldType;
+	mWorlds[mCurWorldType]->SetUpObjectList(mObjectList);
 }
 
 void GameMode::ClearObjectList()

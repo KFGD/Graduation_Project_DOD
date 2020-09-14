@@ -8,27 +8,29 @@ StaticMesh::StaticMesh()
 
 _bool StaticMesh::GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9 & vertexBuffer)
 {
-	return _bool();
+	const HRESULT hr = mMesh->GetVertexBuffer(&vertexBuffer);
+	return FAILED(hr);
 }
 
 _bool StaticMesh::GetIndexBuffer(LPDIRECT3DINDEXBUFFER9 & indexBuffer)
 {
-	return _bool();
+	const HRESULT hr = mMesh->GetIndexBuffer(&indexBuffer);
+	return FAILED(hr);
 }
 
 _ulong StaticMesh::GetVertexSize() const
 {
-	return _ulong();
+	return mMesh->GetNumBytesPerVertex();
 }
 
 _ulong StaticMesh::GetVertexNum() const
 {
-	return _ulong();
+	return mMesh->GetNumVertices();
 }
 
 _ulong StaticMesh::GetFacesNum() const
 {
-	return _ulong();
+	return mMesh->GetNumFaces();
 }
 
 LPDIRECT3DTEXTURE9 StaticMesh::GetTexutre(const _ulong index)

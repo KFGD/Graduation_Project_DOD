@@ -41,7 +41,7 @@ void TransformSystem::Update(const _double timeDelta)
 		_matrix rotation_z = *D3DXMatrixRotationZ(&rotation_z, D3DXToRadian(component.Rotation.z));
 		_matrix position = *D3DXMatrixTranslation(&position, component.Position.x, component.Position.y, component.Position.z);
 
-		component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z;
+		component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z * position;
 	}
 
 	StaticRendererSystem* staticRendererSystem = StaticRendererSystem::GetInstance();

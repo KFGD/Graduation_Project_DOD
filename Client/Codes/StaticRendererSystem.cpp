@@ -38,7 +38,7 @@ _bool StaticRendererSystem::ReadyResources(LPDIRECT3DDEVICE9 graphicDevice)
 	if (FAILED(hr))
 		return false;
 
-	mShader = Shader::Create(graphicDevice, L"..\\Shader\\HardwareSkinning.fx");
+	mShader = Shader::Create(graphicDevice, L"..\\Shader\\HardwareInstancing.fx");
 	if (nullptr == mShader)
 		return false;
 
@@ -104,17 +104,18 @@ void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
 
-	mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
-
-	mShader->BeginShader(nullptr);
-	mShader->BeginPass(0);
-
 	for (auto RenderingInfo : mRenderingInfoMap)
 	{
+
 		StaticMesh* mesh = mStaticMeshMap.find(RenderingInfo.first)->second;
 
+		mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
 		mShader->SetTexture("gDiffuseTexture", mesh->GetTexutre(0));
-		mShader->CommitChanges();
+
+		mShader->BeginShader(nullptr);
+		mShader->BeginPass(0);
+
+		//mShader->CommitChanges();
 
 		_int objectCount = 0;
 
@@ -142,14 +143,15 @@ void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 		}
 
 		mVertexBuffer->Unlock();
-		vmMatrix = nullptr;
 
 		if (0 < objectCount)
 			RenderHardwareInstancing(graphicDevice, mesh, objectCount);
-	}
 
-	mShader->EndPass();
-	mShader->EndShader();
+		vmMatrix = nullptr;
+
+		mShader->EndPass();
+		mShader->EndShader();
+	}
 }
 
 _bool StaticRendererSystem::AttachComponent(const _uniqueId entityId, const char* meshName)

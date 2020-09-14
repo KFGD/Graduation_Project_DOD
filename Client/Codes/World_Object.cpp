@@ -35,6 +35,7 @@ World_Object::World_Object(const LPDIRECT3DDEVICE9 graphicDev)
 
 void World_Object::Update(const _double timeDelta)
 {
+	EASY_FUNCTION(profiler::colors::Red);
 	//	Update
 	for (GameObject* gameObject : mPlayerList)
 		gameObject->Update(timeDelta);
@@ -61,7 +62,7 @@ void World_Object::Render()
 
 	RenderBlock();
 
-	mNaviMesh->Render(GetGraphicDevice());
+	//mNaviMesh->Render(GetGraphicDevice());
 }
 
 _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
@@ -106,7 +107,8 @@ _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
 	for (GameObject* object : mBlockList)
 		object->SetUp(this);
 
-	CameraController::GetInstance()->SetCameraTarget(mPlayerList.front());
+	if(!mPlayerList.empty())
+		CameraController::GetInstance()->SetCameraTarget(mPlayerList.front());
 
 	return true;
 }
@@ -195,6 +197,8 @@ void World_Object::RenderBlock()
 	if (0 == mBlockList.size())
 		return;
 
+
+
 	Shader*	shader = mBlockList[0]->GetSahder();
 	StaticMeshRenderer_Object*	staticMesh = mBlockList[0]->GetStaticMesh();
 
@@ -221,7 +225,7 @@ void World_Object::RenderBlock()
 		if (mBlockRenderBatchSize == numBlock)
 		{
 			mVertexBuffer->Unlock();
-			RenderHardwareInstancing(staticMesh, numBlock, shader);
+			RenderHardwareInstancing(staticMesh, numBlock);
 			numBlock = 0;
 			mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
 		}
@@ -229,7 +233,7 @@ void World_Object::RenderBlock()
 	mVertexBuffer->Unlock();
 
 	if (0 < numBlock)
-		RenderHardwareInstancing(staticMesh, numBlock, shader);
+		RenderHardwareInstancing(staticMesh, numBlock);
 
 	worldMatrixList = nullptr;
 
@@ -237,7 +241,7 @@ void World_Object::RenderBlock()
 	shader->EndShader();
 }
 
-void World_Object::RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock, Shader* shader)
+void World_Object::RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock)
 {
 	LPDIRECT3DVERTEXBUFFER9 blockVB = nullptr;
 	staticMesh->GetVertexBuffer(blockVB);
