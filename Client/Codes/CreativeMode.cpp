@@ -67,7 +67,7 @@ void CreativeMode::InActive()
 	ClearObjectList();
 }
 
-void CreativeMode::Update(const _double timeDelta)
+void CreativeMode::Update_UI(const _double timeDelta)
 {
 	UpdateSelectTargetMode();
 	UpdateFileUI();
@@ -105,6 +105,10 @@ void CreativeMode::Update(const _double timeDelta)
 			break;
 		}
 	}
+}
+
+void CreativeMode::Update_Object(const _double timeDelta)
+{
 }
 
 void CreativeMode::Render(LPDIRECT3DDEVICE9 graphicDevice)

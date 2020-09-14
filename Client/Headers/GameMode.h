@@ -19,9 +19,10 @@ private:
 	virtual ~GameMode() = default;
 
 public:
-	virtual void	Active()	override;
-	virtual void	InActive()	override;
-	virtual void	Update(const _double timeDelta)	override;
+	virtual void	Active()									override;
+	virtual void	InActive()									override;
+	virtual void	Update_UI(const _double timeDelta)			override;
+	virtual void	Update_Object(const _double timeDelta)		override;
 	virtual void	Render(LPDIRECT3DDEVICE9 graphicDevice)		override;
 
 public:

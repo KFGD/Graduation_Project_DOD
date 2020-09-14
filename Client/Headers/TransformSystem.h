@@ -33,6 +33,7 @@ public:
 	virtual void	LateUpdate(const _double timeDelta)	override;
 
 public:
+	_bool			AttachComponent(const _uniqueId entityId, const _vec3& scale, const _vec3& rotation, const _vec3& position);
 	void			SetScale(const _uniqueId entityId, const _vec3& scale);
 	void			SetRotationX(const _uniqueId entityId, const _float radian);
 	void			SetRotationY(const _uniqueId entityId, const _float radian);

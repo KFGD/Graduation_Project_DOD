@@ -3,6 +3,7 @@
 
 #include "KObject.h"
 #include "World_Object.h"
+#include "World_Data.h"
 
 GameMode::GameMode()
 {
@@ -19,7 +20,11 @@ void GameMode::InActive()
 	ClearObjectList();
 }
 
-void GameMode::Update(const _double timeDelta)
+void GameMode::Update_UI(const _double timeDelta)
+{
+}
+
+void GameMode::Update_Object(const _double timeDelta)
 {
 	mWorlds[mCurWorldType]->Update(timeDelta);
 }
@@ -49,8 +54,9 @@ void GameMode::SetNaviMeshData(const NaviMeshData * naviMeshData)
 _bool GameMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	mWorlds[Game::Object_Oriented] = World_Object::Create(graphicDevice);
+	mWorlds[Game::Data_Oriented] = World_Data::Create(graphicDevice);
 
-	mCurWorldType = Game::Object_Oriented;
+	mCurWorldType = Game::Data_Oriented;
 
 	return true;
 }

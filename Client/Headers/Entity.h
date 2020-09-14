@@ -14,6 +14,9 @@ public:
 	_uniqueId	GetUniqueId() const { return mId; }
 
 private:
+	_bool		Initialize();
+
+private:
 	_uniqueId mId;
 
 public:

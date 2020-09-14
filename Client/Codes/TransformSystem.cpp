@@ -53,6 +53,14 @@ void TransformSystem::LateUpdate(const _double timeDelta)
 {
 }
 
+_bool TransformSystem::AttachComponent(const _uniqueId entityId, const _vec3& scale, const _vec3& rotation, const _vec3& position)
+{
+	mComponentList[entityId].Scale = scale;
+	mComponentList[entityId].Rotation = rotation;
+	mComponentList[entityId].Position = position;
+	return true;
+}
+
 void TransformSystem::SetScale(const _uniqueId entityId, const _vec3 & scale)
 {
 	mComponentList[entityId].Scale = scale;

@@ -176,6 +176,8 @@ _bool StaticRendererSystem::AttachComponent(const _uniqueId entityId, const char
 	{
 		vector<_uniqueId>	infoList;
 		infoList.emplace_back(entityId);
+
+		mRenderingInfoMap.emplace(hashCode, infoList);
 	}
 	else
 		renderIter->second.emplace_back(entityId);

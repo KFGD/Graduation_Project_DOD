@@ -18,6 +18,15 @@
 #include "World_Object.h"
 #include "ComponentManager_Object.h"
 
+///////////////////////////
+//
+//	OOD
+//
+//////////////////////////
+#include "EntityManager.h"
+#include "TransformSystem.h"
+#include "StaticRendererSystem.h"
+
 #include "ModeController.h"
 #include "CameraController.h"
 #include "KeyManager.h"
@@ -137,6 +146,16 @@ void MainApp::Free()
 	//	Destroy: UI
 	if (0 != ModeController::DestroyInstance())
 		MSG_BOX("ModeController Release Failed!");
+
+	//	Destory: DOD
+	if (0 != EntityManager::DestroyInstance())
+		MSG_BOX("EntityManager Release Failed!");
+
+	if (0 != TransformSystem::DestroyInstance())
+		MSG_BOX("TransformSystem Release Failed!");
+
+	if (0 != StaticRendererSystem::DestroyInstance())
+		MSG_BOX("StaticRendererSystem Release Failed!");
 
 	//	Destroy: OOD
 	if (0 != ComponentManager_Object::DestroyInstance())

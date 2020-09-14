@@ -223,6 +223,7 @@
     <ClCompile Include="..\Codes\Transform_Object.cpp" />
     <ClCompile Include="..\Codes\ModeController.cpp" />
     <ClCompile Include="..\Codes\World.cpp" />
+    <ClCompile Include="..\Codes\World_Data.cpp" />
     <ClCompile Include="..\Codes\World_Object.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui.cpp" />
     <ClCompile Include="..\External\DearImgui\imgui_demo.cpp" />
@@ -319,6 +320,7 @@
     <ClInclude Include="..\Headers\Typedef.h" />
     <ClInclude Include="..\Headers\ModeController.h" />
     <ClInclude Include="..\Headers\World.h" />
+    <ClInclude Include="..\Headers\World_Data.h" />
     <ClInclude Include="..\Headers\World_Object.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="NaviMesh_Object.h" />

@@ -20,6 +20,8 @@ Entity * EntityManager::CreateEntity()
 	if (nullptr == entity)
 		return nullptr;
 
+	mEntityList[id] = entity;
+
 	mEntityIdQueue.pop();
 	return entity;
 }
@@ -34,7 +36,7 @@ _bool EntityManager::ReadySystem(const _size_t entitySize)
 	for (_uniqueId i = 0; i < mEntitySize; ++i)
 		mEntityIdQueue.emplace(i);
 
-	mEntityList.reserve(mEntitySize);
+	mEntityList.resize(mEntitySize, nullptr);
 
 	return true;
 }

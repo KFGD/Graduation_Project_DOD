@@ -138,8 +138,10 @@ void ModeController::UpdateModeControllerUI(const _double deltaTime)
 	}
 
 	//	Mode
-	mMode[mCurMode]->Update(deltaTime);
+	mMode[mCurMode]->Update_UI(deltaTime);
 	ImGui::End();
+
+	mMode[mCurMode]->Update_Object(deltaTime);
 }
 
 void ModeController::UpdateCameraControllerUI(CameraController* cameraController)

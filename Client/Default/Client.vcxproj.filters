@@ -386,6 +386,9 @@
     <ClCompile Include="..\Codes\StaticMesh.cpp">
       <Filter>22.Resources\00.StaticMesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\World_Data.cpp">
+      <Filter>21.World\01.DOD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -642,6 +645,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\StaticMesh.h">
       <Filter>22.Resources\00.StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\World_Data.h">
+      <Filter>21.World\01.DOD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
