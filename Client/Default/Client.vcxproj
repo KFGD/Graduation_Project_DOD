@@ -211,6 +211,7 @@
     <ClCompile Include="..\Codes\PlayerCamera.cpp" />
     <ClCompile Include="..\Codes\PlayerIdle.cpp" />
     <ClCompile Include="..\Codes\PlayerRun.cpp" />
+    <ClCompile Include="..\Codes\StaticMesh.cpp" />
     <ClCompile Include="..\Codes\StaticRendererSystem.cpp" />
     <ClCompile Include="..\Codes\Renderer_Object.cpp" />
     <ClCompile Include="..\Codes\Shader.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="..\Headers\PlayerCamera.h" />
     <ClInclude Include="..\Headers\PlayerIdle.h" />
     <ClInclude Include="..\Headers\PlayerRun.h" />
+    <ClInclude Include="..\Headers\StaticMesh.h" />
     <ClInclude Include="..\Headers\StaticRendererSystem.h" />
     <ClInclude Include="..\Headers\Shader.h" />
     <ClInclude Include="..\Headers\KObject.h" />

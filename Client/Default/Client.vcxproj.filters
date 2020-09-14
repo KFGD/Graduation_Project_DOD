@@ -49,15 +49,6 @@
     <Filter Include="External\01.easy_profiler">
       <UniqueIdentifier>{734e477c-bd59-4a02-af13-bc5d8aa134de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="23.Object">
-      <UniqueIdentifier>{e2cfb538-f589-41cf-a957-866b504b6b11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="23.Object\00.OOD">
-      <UniqueIdentifier>{f305b899-2507-44dc-a1da-82457d47f4c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject">
-      <UniqueIdentifier>{6bcb25c2-982f-4959-900b-bc36347a0b5c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="24.Component">
       <UniqueIdentifier>{e13fd6a3-d7d4-4cb9-84e6-5a24e09e24b7}</UniqueIdentifier>
     </Filter>
@@ -72,12 +63,6 @@
     </Filter>
     <Filter Include="External\01.easy_profiler\details">
       <UniqueIdentifier>{083a4173-24ea-43df-a85c-948fb17f44f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot">
-      <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player">
-      <UniqueIdentifier>{27eecf0d-2792-4f8a-8c15-de920c307995}</UniqueIdentifier>
     </Filter>
     <Filter Include="30.ModeController">
       <UniqueIdentifier>{64e20785-115a-41c3-8327-93ada3dff4bf}</UniqueIdentifier>
@@ -109,12 +94,6 @@
     </Filter>
     <Filter Include="24.Component\00.OOD\04.Shader">
       <UniqueIdentifier>{83f1750b-f00b-4c52-b122-70b72bbd0f38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="24.Component\00.OOD\01.StaticMesh">
-      <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject\02.BlockObj">
-      <UniqueIdentifier>{f9b9ff29-5319-4833-9322-77e81f89b581}</UniqueIdentifier>
     </Filter>
     <Filter Include="30.ModeController\Mode">
       <UniqueIdentifier>{dc79c9f1-b549-4a42-8c04-62651ca98df4}</UniqueIdentifier>
@@ -164,17 +143,44 @@
     <Filter Include="31.CameraController\Camera\01.PlayerCamera">
       <UniqueIdentifier>{ad406efc-b0af-419d-b89f-c2971f2c42ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\00.PlayerIdle">
-      <UniqueIdentifier>{d14ea01c-dc2e-4f7e-a4d3-fe8187959c81}</UniqueIdentifier>
+    <Filter Include="24.Component\01.DOD">
+      <UniqueIdentifier>{78271259-1ef7-4979-865b-4a3628286fe2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun">
-      <UniqueIdentifier>{b6fafaa5-418d-460b-9e4c-512b86e9b850}</UniqueIdentifier>
+    <Filter Include="24.Component\01.DOD\00.Transform">
+      <UniqueIdentifier>{9b42cf3d-981d-4efe-888b-dc7eb421cdb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\01.DOD\01.StaticRendererSystem">
+      <UniqueIdentifier>{8a1402b3-879d-452a-9111-0488ffd1e7de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object">
+      <UniqueIdentifier>{e2cfb538-f589-41cf-a957-866b504b6b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD">
+      <UniqueIdentifier>{f305b899-2507-44dc-a1da-82457d47f4c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject">
+      <UniqueIdentifier>{6bcb25c2-982f-4959-900b-bc36347a0b5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot">
+      <UniqueIdentifier>{9ca4b913-aa96-4393-a03c-b330d7959bb1}</UniqueIdentifier>
     </Filter>
     <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot\00.BotIdle">
       <UniqueIdentifier>{c265fe95-f19c-47fa-bdef-4f056f7f4960}</UniqueIdentifier>
     </Filter>
     <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot\01.BotRun">
       <UniqueIdentifier>{04dc8575-cf69-4748-833b-9f563827a1ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player">
+      <UniqueIdentifier>{27eecf0d-2792-4f8a-8c15-de920c307995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\00.PlayerIdle">
+      <UniqueIdentifier>{d14ea01c-dc2e-4f7e-a4d3-fe8187959c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun">
+      <UniqueIdentifier>{b6fafaa5-418d-460b-9e4c-512b86e9b850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\02.BlockObj">
+      <UniqueIdentifier>{f9b9ff29-5319-4833-9322-77e81f89b581}</UniqueIdentifier>
     </Filter>
     <Filter Include="23.Object\01.DOD">
       <UniqueIdentifier>{227e32c6-55df-40b5-b29d-7c6c1094befe}</UniqueIdentifier>
@@ -188,14 +194,14 @@
     <Filter Include="23.Object\01.DOD\01.ArcheType">
       <UniqueIdentifier>{d2bb37ed-41d4-4136-b51c-89e91780d4ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="24.Component\01.DOD">
-      <UniqueIdentifier>{78271259-1ef7-4979-865b-4a3628286fe2}</UniqueIdentifier>
+    <Filter Include="22.Resources">
+      <UniqueIdentifier>{bcef9031-0b1f-4ebf-bd0d-6a4e1640b86f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="24.Component\01.DOD\00.Transform">
-      <UniqueIdentifier>{9b42cf3d-981d-4efe-888b-dc7eb421cdb8}</UniqueIdentifier>
+    <Filter Include="22.Resources\00.StaticMesh">
+      <UniqueIdentifier>{9f4a0b0b-4511-4af7-8768-69681c91de6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="24.Component\01.DOD\01.StaticRendererSystem">
-      <UniqueIdentifier>{8a1402b3-879d-452a-9111-0488ffd1e7de}</UniqueIdentifier>
+    <Filter Include="24.Component\00.OOD\01.StaticMesh">
+      <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DynamicMeshRenderer_Object.cpp">
       <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\StaticMesh.cpp">
+      <Filter>22.Resources\00.StaticMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -630,6 +639,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\DynamicMeshRenderer_Object.h">
       <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\StaticMesh.h">
+      <Filter>22.Resources\00.StaticMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
