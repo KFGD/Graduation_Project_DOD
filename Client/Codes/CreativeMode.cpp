@@ -24,8 +24,8 @@
 
 #include "KeyManager.h"
 #include "KObject.h"
-#include "DynamicMesh_Object.h"
-#include "StaticMesh_Object.h"
+#include "DynamicMeshRenderer_Object.h"
+#include "StaticMeshRenderer_Object.h"
 #include "PipeLine.h"
 #include "Shader.h"
 #include "NaviMeshData.h"
@@ -855,15 +855,15 @@ _bool CreativeMode::Initialize(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	_matrix scaleMatrix = *D3DXMatrixScaling(&scaleMatrix, 0.01f, 0.01f, 0.01f);
 
-	mPlayerMesh = DynamicMesh_Object::Create(graphicDevice, L"..\\Resources\\Player\\", L"Player.X", scaleMatrix);
+	mPlayerMesh = DynamicMeshRenderer_Object::Create(graphicDevice, L"..\\Resources\\Player\\", L"Player.X", scaleMatrix);
 	if (nullptr == mPlayerMesh)
 		return false;
 
-	mBotMesh = DynamicMesh_Object::Create(graphicDevice, L"..\\Resources\\Y_Bot\\", L"Y_Bot.X", scaleMatrix);
+	mBotMesh = DynamicMeshRenderer_Object::Create(graphicDevice, L"..\\Resources\\Y_Bot\\", L"Y_Bot.X", scaleMatrix);
 	if (nullptr == mBotMesh)
 		return false;
 
-	mBlockMesh = StaticMesh_Object::Create(graphicDevice, L"..\\Resources\\Block\\", L"Block.X", scaleMatrix);
+	mBlockMesh = StaticMeshRenderer_Object::Create(graphicDevice, L"..\\Resources\\Block\\", L"Block.X", scaleMatrix);
 	if (nullptr == mBlockMesh)
 		return false;
 
@@ -929,7 +929,7 @@ void CreativeMode::InitSampleData()
 				KEngine::Transform(_vec3(1.f, 1.f, 1.f), _vec3(0.f, 0.f, 0.f), _vec3(i * gap, 0.f, j * gap)))));
 }
 
-void CreativeMode::RenderSkinnedMesh(Shader* shader, KObject *& object, DynamicMesh_Object * dynamicMesh)
+void CreativeMode::RenderSkinnedMesh(Shader* shader, KObject *& object, DynamicMeshRenderer_Object * dynamicMesh)
 {
 	shader->SetValue("gMatWorld", &object->GetWorldMatrix(), sizeof(_matrix));
 	for (_int i = 0; i < dynamicMesh->GetMeshContinerSize(); ++i)
@@ -944,7 +944,7 @@ void CreativeMode::RenderSkinnedMesh(Shader* shader, KObject *& object, DynamicM
 	}
 }
 
-void CreativeMode::RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KObject*>& objectList, StaticMesh_Object * staticMesh)
+void CreativeMode::RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KObject*>& objectList, StaticMeshRenderer_Object * staticMesh)
 {
 	PipeLine* pipeLine = PipeLine::GetInstance();
 	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
@@ -990,7 +990,7 @@ void CreativeMode::RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KO
 	//mInstancingShader->EndShader();
 }
 
-void CreativeMode::RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, StaticMesh_Object * staticMesh, _int numBlock, Shader * shader)
+void CreativeMode::RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, StaticMeshRenderer_Object * staticMesh, _int numBlock, Shader * shader)
 {
 	graphicDevice->SetVertexDeclaration(mVertexDeclaration);
 	graphicDevice->SetStreamSource(0, staticMesh->GetVertexBuffer(), 0, staticMesh->GetVertexSize());

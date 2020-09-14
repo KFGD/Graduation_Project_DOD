@@ -194,6 +194,9 @@
     <Filter Include="24.Component\01.DOD\00.Transform">
       <UniqueIdentifier>{9b42cf3d-981d-4efe-888b-dc7eb421cdb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="24.Component\01.DOD\01.StaticRendererSystem">
+      <UniqueIdentifier>{8a1402b3-879d-452a-9111-0488ffd1e7de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -248,9 +251,6 @@
     <ClCompile Include="..\Codes\Transform_Object.cpp">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\DynamicMesh_Object.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\HierarchyLoader.cpp">
       <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
     </ClCompile>
@@ -301,9 +301,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ModeController.cpp">
       <Filter>30.ModeController</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\StaticMesh_Object.cpp">
-      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BlockObj.cpp">
       <Filter>23.Object\00.OOD\00.GameObject\02.BlockObj</Filter>
@@ -368,6 +365,18 @@
     <ClCompile Include="..\Codes\TransformSystem.cpp">
       <Filter>24.Component\01.DOD\00.Transform</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\StaticRendererSystem.cpp">
+      <Filter>24.Component\01.DOD\01.StaticRendererSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ComponentSystem.cpp">
+      <Filter>24.Component\01.DOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\StaticMeshRenderer_Object.cpp">
+      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DynamicMeshRenderer_Object.cpp">
+      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -429,9 +438,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Transform_Object.h">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\DynamicMesh_Object.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\HierarchyLoader.h">
       <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
@@ -544,9 +550,6 @@
     <ClInclude Include="..\Headers\ModeController.h">
       <Filter>30.ModeController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\StaticMesh_Object.h">
-      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\BlockObj.h">
       <Filter>23.Object\00.OOD\00.GameObject\02.BlockObj</Filter>
     </ClInclude>
@@ -615,6 +618,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\TransformSystem.h">
       <Filter>24.Component\01.DOD\00.Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\StaticRendererSystem.h">
+      <Filter>24.Component\01.DOD\01.StaticRendererSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ComponentSystem.h">
+      <Filter>24.Component\01.DOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\StaticMeshRenderer_Object.h">
+      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DynamicMeshRenderer_Object.h">
+      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

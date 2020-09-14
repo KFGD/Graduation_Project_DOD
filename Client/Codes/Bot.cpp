@@ -5,7 +5,7 @@
 #include "BotRun.h"
 
 #include "Transform_Object.h"
-#include "DynamicMesh_Object.h"
+#include "DynamicMeshRenderer_Object.h"
 #include "World_Object.h"
 #include "PipeLine.h"
 #include "Shader.h"

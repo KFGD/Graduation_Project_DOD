@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "StaticMesh_Object.h"
+#include "StaticMeshRenderer_Object.h"
 
 #include "Shader.h"
 
-StaticMesh_Object::StaticMesh_Object()
+StaticMeshRenderer_Object::StaticMeshRenderer_Object()
 {
 }
 
-StaticMesh_Object::StaticMesh_Object(const StaticMesh_Object & rhs)
+StaticMeshRenderer_Object::StaticMeshRenderer_Object(const StaticMeshRenderer_Object & rhs)
 	: Component_Object(rhs)
 	, mMesh(rhs.mMesh)
 	, mAdjacencyBuff(rhs.mAdjacencyBuff)
@@ -31,7 +31,7 @@ StaticMesh_Object::StaticMesh_Object(const StaticMesh_Object & rhs)
 	SafeAddRef(mIndexBuffer);
 }
 
-void StaticMesh_Object::Render(Shader * shader)
+void StaticMeshRenderer_Object::Render(Shader * shader)
 {
 	shader->BeginShader(nullptr);
 	shader->BeginPass(0);
@@ -40,39 +40,39 @@ void StaticMesh_Object::Render(Shader * shader)
 	shader->EndShader();
 }
 
-_bool StaticMesh_Object::GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9 & vertexBuffer)
+_bool StaticMeshRenderer_Object::GetVertexBuffer(LPDIRECT3DVERTEXBUFFER9 & vertexBuffer)
 {
 	const HRESULT hr = mMesh->GetVertexBuffer(&vertexBuffer);
 	return FAILED(hr);
 }
 
-_bool StaticMesh_Object::GetIndexBuffer(LPDIRECT3DINDEXBUFFER9 & indexBuffer)
+_bool StaticMeshRenderer_Object::GetIndexBuffer(LPDIRECT3DINDEXBUFFER9 & indexBuffer)
 {
 	const HRESULT hr = mMesh->GetIndexBuffer(&indexBuffer);
 	return FAILED(hr);
 }
 
-_ulong StaticMesh_Object::GetVertexSize() const
+_ulong StaticMeshRenderer_Object::GetVertexSize() const
 {
 	return mMesh->GetNumBytesPerVertex();
 }
 
-_ulong StaticMesh_Object::GetVertexNum() const
+_ulong StaticMeshRenderer_Object::GetVertexNum() const
 {
 	return mMesh->GetNumVertices();
 }
 
-_ulong StaticMesh_Object::GetFacesNum() const
+_ulong StaticMeshRenderer_Object::GetFacesNum() const
 {
 	return mMesh->GetNumFaces();
 }
 
-LPDIRECT3DTEXTURE9 StaticMesh_Object::GetTexutre(const _ulong index)
+LPDIRECT3DTEXTURE9 StaticMeshRenderer_Object::GetTexutre(const _ulong index)
 {
 	return mTextures[index];
 }
 
-_bool StaticMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
+_bool StaticMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
 	lstrcpy(fullPath, filePath);
@@ -157,9 +157,9 @@ _bool StaticMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tcha
 	return true;
 }
 
-StaticMesh_Object * StaticMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
+StaticMeshRenderer_Object * StaticMeshRenderer_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
-	StaticMesh_Object*	pInstance = new StaticMesh_Object();
+	StaticMeshRenderer_Object*	pInstance = new StaticMeshRenderer_Object();
 	if (false == pInstance->Initialize(graphicDevice, filePath, fileName, pivotMatrix))
 	{
 		MSG_BOX("Failed To Create StaticMesh_Object Instance");
@@ -169,12 +169,12 @@ StaticMesh_Object * StaticMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, c
 	return pInstance;
 }
 
-Component_Object * StaticMesh_Object::Clone(void * arg)
+Component_Object * StaticMeshRenderer_Object::Clone(void * arg)
 {
-	return new StaticMesh_Object(*this);
+	return new StaticMeshRenderer_Object(*this);
 }
 
-void StaticMesh_Object::Free()
+void StaticMeshRenderer_Object::Free()
 {
 	for (_size_t i = 0; i < mNumMaterials; ++i)
 		SafeRelease(mTextures[i]);

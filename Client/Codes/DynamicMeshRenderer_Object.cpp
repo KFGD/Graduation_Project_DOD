@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "DynamicMesh_Object.h"
+#include "DynamicMeshRenderer_Object.h"
 
 #include "HierarchyLoader.h"
 #include "AnimationCtrl.h"
@@ -9,11 +9,11 @@
 
 #include <iostream>
 
-DynamicMesh_Object::DynamicMesh_Object()
+DynamicMeshRenderer_Object::DynamicMeshRenderer_Object()
 {
 }
 
-DynamicMesh_Object::DynamicMesh_Object(const DynamicMesh_Object & rhs)
+DynamicMeshRenderer_Object::DynamicMeshRenderer_Object(const DynamicMeshRenderer_Object & rhs)
 	: Component_Object(rhs)
 	, mMeshContainerList(rhs.mMeshContainerList)
 	, mRootFrame(rhs.mRootFrame)
@@ -25,7 +25,7 @@ DynamicMesh_Object::DynamicMesh_Object(const DynamicMesh_Object & rhs)
 	SafeAddRef(mHierarchyLoader);
 }
 
-_bool DynamicMesh_Object::UpdateHardwareSkinnedMesh(const _int meshContainerIndex)
+_bool DynamicMeshRenderer_Object::UpdateHardwareSkinnedMesh(const _int meshContainerIndex)
 {
 	D3DXMESHCONTAINER_DERIVED* meshContainer = mMeshContainerList[meshContainerIndex];
 	LPD3DXBONECOMBINATION boneComb = (LPD3DXBONECOMBINATION)(meshContainer->pBoneCombinationBuf->GetBufferPointer());
@@ -46,7 +46,7 @@ _bool DynamicMesh_Object::UpdateHardwareSkinnedMesh(const _int meshContainerInde
 	return true;
 }
 
-_bool DynamicMesh_Object::SetUpAnimation(const _uint index)
+_bool DynamicMeshRenderer_Object::SetUpAnimation(const _uint index)
 {
 	if (nullptr == mAnimationCtrl)
 		return false;
@@ -55,7 +55,7 @@ _bool DynamicMesh_Object::SetUpAnimation(const _uint index)
 	return true;
 }
 
-_bool DynamicMesh_Object::PlayAnimation(const _double timeDelta)
+_bool DynamicMeshRenderer_Object::PlayAnimation(const _double timeDelta)
 {
 	if (nullptr == mAnimationCtrl)
 		return false;
@@ -67,7 +67,7 @@ _bool DynamicMesh_Object::PlayAnimation(const _double timeDelta)
 	return true;
 }
 
-void DynamicMesh_Object::Render(Shader * shader, const _int meshContainerIndex)
+void DynamicMeshRenderer_Object::Render(Shader * shader, const _int meshContainerIndex)
 {
 	D3DXMESHCONTAINER_DERIVED* meshContainer = mMeshContainerList[meshContainerIndex];
 	LPD3DXBONECOMBINATION boneComb = reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
@@ -99,7 +99,7 @@ void DynamicMesh_Object::Render(Shader * shader, const _int meshContainerIndex)
 	shader->EndShader();
 }
 
-_bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
+_bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
 
@@ -134,7 +134,7 @@ _bool DynamicMesh_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tch
 	return true;
 }
 
-_bool DynamicMesh_Object::UpdateCombinedTransformationMatrices(D3DXFRAME* frame, const _matrix& parentMatrix)
+_bool DynamicMeshRenderer_Object::UpdateCombinedTransformationMatrices(D3DXFRAME* frame, const _matrix& parentMatrix)
 {
 	D3DXFRAME_DERIVED*	pFrame_Derived = (D3DXFRAME_DERIVED*)frame;
 
@@ -150,7 +150,7 @@ _bool DynamicMesh_Object::UpdateCombinedTransformationMatrices(D3DXFRAME* frame,
 	return true;
 }
 
-_bool DynamicMesh_Object::SetUpCombinedTransformationMatricesPointer(D3DXFRAME * frame)
+_bool DynamicMeshRenderer_Object::SetUpCombinedTransformationMatricesPointer(D3DXFRAME * frame)
 {
 	if (nullptr != frame->pMeshContainer)
 	{
@@ -181,7 +181,7 @@ _bool DynamicMesh_Object::SetUpCombinedTransformationMatricesPointer(D3DXFRAME *
 }
 
 
-_bool DynamicMesh_Object::UpdateSoftwareSkinnedMesh(const _int meshContainerIndex)
+_bool DynamicMeshRenderer_Object::UpdateSoftwareSkinnedMesh(const _int meshContainerIndex)
 {
 	for (_ulong i = 0; i < mMeshContainerList[meshContainerIndex]->dwNumBones; ++i)
 		mMeshContainerList[meshContainerIndex]->pRenderMatrices[i] = mMeshContainerList[meshContainerIndex]->pOffsetMatrices[i] * *mMeshContainerList[meshContainerIndex]->ppCombinedTransformationMatrices[i];
@@ -199,7 +199,7 @@ _bool DynamicMesh_Object::UpdateSoftwareSkinnedMesh(const _int meshContainerInde
 	return true;
 }
 
-void DynamicMesh_Object::RenderHardwareSkinningRecursive(Shader * shader, const _matrix & worldMatrix, D3DXFRAME * bone)
+void DynamicMeshRenderer_Object::RenderHardwareSkinningRecursive(Shader * shader, const _matrix & worldMatrix, D3DXFRAME * bone)
 {
 	D3DXFRAME_DERIVED* bone_derived = (D3DXFRAME_DERIVED*)bone;
 	
@@ -253,9 +253,9 @@ void DynamicMesh_Object::RenderHardwareSkinningRecursive(Shader * shader, const 
 	
 }
 
-DynamicMesh_Object * DynamicMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
+DynamicMeshRenderer_Object * DynamicMeshRenderer_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
-	DynamicMesh_Object*	pInstance = new DynamicMesh_Object();
+	DynamicMeshRenderer_Object*	pInstance = new DynamicMeshRenderer_Object();
 	if (false == pInstance->Initialize(graphicDevice, filePath, fileName, pivotMatrix))
 	{
 		MSG_BOX("Failed To Create DynamicMesh_Object Instance");
@@ -265,9 +265,9 @@ DynamicMesh_Object * DynamicMesh_Object::Create(LPDIRECT3DDEVICE9 graphicDevice,
 	return pInstance;
 }
 
-Component_Object * DynamicMesh_Object::Clone(void * arg)
+Component_Object * DynamicMeshRenderer_Object::Clone(void * arg)
 {
-	DynamicMesh_Object*	pInstance = new DynamicMesh_Object(*this);
+	DynamicMeshRenderer_Object*	pInstance = new DynamicMeshRenderer_Object(*this);
 
 	pInstance->mAnimationCtrl = this->mAnimationCtrl->Clone();
 	if (nullptr == pInstance->mAnimationCtrl)
@@ -279,7 +279,7 @@ Component_Object * DynamicMesh_Object::Clone(void * arg)
 	return pInstance;
 }
 
-void DynamicMesh_Object::Free()
+void DynamicMeshRenderer_Object::Free()
 {
 	if (false == mIsClone)
 	{

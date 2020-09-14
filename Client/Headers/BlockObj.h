@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 class Transform_Object;
-class StaticMesh_Object;
+class StaticMeshRenderer_Object;
 class Shader;
 
 class BlockObj :
@@ -32,7 +32,7 @@ public:
 
 public:
 	Transform_Object*	GetTransform() { return mTransform; }
-	StaticMesh_Object*	GetStaticMesh() { return mStaticMesh; }
+	StaticMeshRenderer_Object*	GetStaticMesh() { return mStaticMesh; }
 	Shader*				GetSahder() { return mShader; }
 
 private:
@@ -40,7 +40,7 @@ private:
 
 private:
 	Transform_Object*	mTransform = nullptr;
-	StaticMesh_Object*	mStaticMesh = nullptr;
+	StaticMeshRenderer_Object*	mStaticMesh = nullptr;
 	Shader*				mShader = nullptr;
 
 public:

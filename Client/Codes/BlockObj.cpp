@@ -2,7 +2,7 @@
 #include "BlockObj.h"
 
 #include "Transform_Object.h"
-#include "DynamicMesh_Object.h"
+#include "DynamicMeshRenderer_Object.h"
 
 #include "World.h"
 #include "PipeLine.h"

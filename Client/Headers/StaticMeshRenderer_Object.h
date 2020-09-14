@@ -3,13 +3,13 @@
 
 class Shader;
 
-class StaticMesh_Object :
+class StaticMeshRenderer_Object :
 	public Component_Object
 {
 private:
-	explicit	StaticMesh_Object();
-	explicit	StaticMesh_Object(const StaticMesh_Object& rhs);
-	virtual		~StaticMesh_Object() = default;
+	explicit	StaticMeshRenderer_Object();
+	explicit	StaticMeshRenderer_Object(const StaticMeshRenderer_Object& rhs);
+	virtual		~StaticMeshRenderer_Object() = default;
 
 public:
 	void	Render(Shader* shader);
@@ -49,7 +49,7 @@ private:
 	_matrix			mPivotMatrix;
 
 public:
-	static StaticMesh_Object*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
+	static StaticMeshRenderer_Object*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
 	Component_Object*	Clone(void* arg) override;
 	virtual void	Free() override;
 

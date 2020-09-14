@@ -5,13 +5,13 @@ class HierarchyLoader;
 class AnimationCtrl;
 class Shader;
 
-class DynamicMesh_Object :
+class DynamicMeshRenderer_Object :
 	public Component_Object
 {
 private:
-	explicit DynamicMesh_Object();
-	explicit DynamicMesh_Object(const DynamicMesh_Object& rhs);
-	virtual ~DynamicMesh_Object() = default;	
+	explicit DynamicMeshRenderer_Object();
+	explicit DynamicMeshRenderer_Object(const DynamicMeshRenderer_Object& rhs);
+	virtual ~DynamicMeshRenderer_Object() = default;	
 
 public:
 	_bool	UpdateHardwareSkinnedMesh(const _int meshContainerIndex);
@@ -45,7 +45,7 @@ private:
 	typedef vector<D3DXMESHCONTAINER_DERIVED*>	MESHCONTAINERLIST;
 	
 public:
-	static DynamicMesh_Object*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
+	static DynamicMeshRenderer_Object*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
 	Component_Object*	Clone(void* arg) override;
 	virtual void	Free()	override;
 };

@@ -9,8 +9,8 @@
 //	Component
 #include "ComponentManager_Object.h"
 #include "Transform_Object.h"
-#include "StaticMesh_Object.h"
-#include "DynamicMesh_Object.h"
+#include "StaticMeshRenderer_Object.h"
+#include "DynamicMeshRenderer_Object.h"
 #include "NaviMesh_Object.h"
 #include "Shader.h"
 
@@ -180,11 +180,11 @@ _bool World_Object::ReadyComponent()
 	//	Ready: Component
 	mComponentManager->AddPrototype("Transform", Transform_Object::Create());
 	
-	mComponentManager->AddPrototype("DynamicMesh_Player", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Player\\", L"Player.X", scaleMatrix));
-	mComponentManager->AddPrototype("DynamicMesh_Bot", DynamicMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X", scaleMatrix));
+	mComponentManager->AddPrototype("DynamicMesh_Player", DynamicMeshRenderer_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Player\\", L"Player.X", scaleMatrix));
+	mComponentManager->AddPrototype("DynamicMesh_Bot", DynamicMeshRenderer_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Y_Bot\\", L"Y_Bot.X", scaleMatrix));
 	mComponentManager->AddPrototype("Shader_HardwareSkinning", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareSkinning.fx"));
 
-	mComponentManager->AddPrototype("StaticMesh_GrayBlock", StaticMesh_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Block\\", L"Block.X", scaleMatrix));
+	mComponentManager->AddPrototype("StaticMesh_GrayBlock", StaticMeshRenderer_Object::Create(World::GetGraphicDevice(), L"..\\Resources\\Block\\", L"Block.X", scaleMatrix));
 	mComponentManager->AddPrototype("Shader_HardwareInstancing", Shader::Create(World::GetGraphicDevice(), L"..\\Shader\\HardwareInstancing.fx"));
 
 	return true;
@@ -196,7 +196,7 @@ void World_Object::RenderBlock()
 		return;
 
 	Shader*	shader = mBlockList[0]->GetSahder();
-	StaticMesh_Object*	staticMesh = mBlockList[0]->GetStaticMesh();
+	StaticMeshRenderer_Object*	staticMesh = mBlockList[0]->GetStaticMesh();
 
 	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
 
@@ -237,7 +237,7 @@ void World_Object::RenderBlock()
 	shader->EndShader();
 }
 
-void World_Object::RenderHardwareInstancing(StaticMesh_Object* staticMesh, _int numBlock, Shader* shader)
+void World_Object::RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock, Shader* shader)
 {
 	LPDIRECT3DVERTEXBUFFER9 blockVB = nullptr;
 	staticMesh->GetVertexBuffer(blockVB);

@@ -7,8 +7,8 @@
 
 class KObject;
 
-class DynamicMesh_Object;
-class StaticMesh_Object;
+class DynamicMeshRenderer_Object;
+class StaticMeshRenderer_Object;
 class Shader;
 class NaviMeshData;
 
@@ -77,9 +77,9 @@ private:
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice);
 	void	InitSampleData();
-	void	RenderSkinnedMesh(Shader* shader, KObject*& object, DynamicMesh_Object* dynamicMesh);
-	void	RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KObject*>& objectList, StaticMesh_Object* staticMesh);
-	void	RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, StaticMesh_Object* staticMesh, _int numBlock, Shader* shader);
+	void	RenderSkinnedMesh(Shader* shader, KObject*& object, DynamicMeshRenderer_Object* dynamicMesh);
+	void	RenderInstanceMesh(LPDIRECT3DDEVICE9 graphicDevice, vector<KObject*>& objectList, StaticMeshRenderer_Object* staticMesh);
+	void	RenderHardwareInstancing(LPDIRECT3DDEVICE9 graphicDevice, StaticMeshRenderer_Object* staticMesh, _int numBlock, Shader* shader);
 	
 private:
 	vector<KObject*>	mObjectList;
@@ -126,9 +126,9 @@ private:
 	Shader*				mMeshShader = nullptr;
 	Shader*				mSelectedMeshShader = nullptr;
 
-	DynamicMesh_Object*	mPlayerMesh = nullptr;
-	DynamicMesh_Object*	mBotMesh = nullptr;
-	StaticMesh_Object*	mBlockMesh = nullptr;
+	DynamicMeshRenderer_Object*	mPlayerMesh = nullptr;
+	DynamicMeshRenderer_Object*	mBotMesh = nullptr;
+	StaticMeshRenderer_Object*	mBlockMesh = nullptr;
 
 private:
 	static constexpr _uint			mBlockRenderBatchSize = 500;

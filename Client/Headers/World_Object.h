@@ -10,7 +10,7 @@ class Player;
 class Bot;
 class BlockObj;
 
-class StaticMesh_Object;
+class StaticMeshRenderer_Object;
 class NaviMesh_Object;
 class Shader;
 
@@ -37,7 +37,7 @@ private:
 	_bool	Initialize();
 	_bool	ReadyComponent();
 	void	RenderBlock();
-	void	RenderHardwareInstancing(StaticMesh_Object* staticMesh, _int numBlock, Shader* shader);
+	void	RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock, Shader* shader);
 
 private:
 	PipeLine*	mPipeLine = nullptr;

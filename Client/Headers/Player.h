@@ -5,7 +5,7 @@
 #include "State.h"
 
 class Transform_Object;
-class DynamicMesh_Object;
+class DynamicMeshRenderer_Object;
 class Shader;
 
 class Player :
@@ -56,7 +56,7 @@ private:
 	
 private:
 	Transform_Object*	mTransform = nullptr;
-	DynamicMesh_Object*	mDynamicMesh = nullptr;
+	DynamicMeshRenderer_Object*	mDynamicMesh = nullptr;
 	Shader*				mShader = nullptr;
 
 private:
