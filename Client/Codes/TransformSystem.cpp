@@ -1,47 +1,37 @@
 #include "stdafx.h"
 #include "TransformSystem.h"
 
+#include "StaticRendererSystem.h"
+
 IMPLEMENT_SINGLETON(TransformSystem)
 
 TransformSystem::TransformSystem()
 {
 }
 
-_bool TransformSystem::Ready(const _size_t entitySize, const _size_t componentSize)
+_bool TransformSystem::ReadySystem(const _size_t entitySize)
 {
-	if (0 != mEntitySize || 0 != mComponentSize)
+	if (0 != mEntitySize)
 		return false;
 
 	mEntitySize = entitySize;
-	mComponentSize = componentSize;
 
-	mIndexTable.resize(entitySize, componentSize);
-
-	for (_uniqueId i = 0; i < componentSize; ++i)
-		mIndexQueue.emplace(i);
-
-	mComponentList.resize(componentSize + 1);	// 마지막은 별도의 용도
+	mComponentList.resize(mEntitySize);
 
 	return true;
 }
 
-void TransformSystem::Clear()
+void TransformSystem::ClearSystem()
 {
 	mComponentList.clear();
 	mComponentList.shrink_to_fit();
 
-	mIndexQueue.swap(queue<_uniqueId>());
-
-	mIndexTable.clear();
-	mIndexTable.shrink_to_fit();
-
 	mEntitySize = 0;
-	mComponentSize = 0;
 }
 
 void TransformSystem::Update(const _double timeDelta)
 {
-	for(_size_t i = 0; i < mComponentSize; ++i)
+	for(_uniqueId i = 0; i < mEntitySize; ++i)
 	{
 		Component& component = mComponentList[i];
 
@@ -53,68 +43,54 @@ void TransformSystem::Update(const _double timeDelta)
 
 		component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z;
 	}
+
+	StaticRendererSystem* staticRendererSystem = StaticRendererSystem::GetInstance();
+	for (_uniqueId i = 0; i < mEntitySize; ++i)
+		staticRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
 }
 
 void TransformSystem::LateUpdate(const _double timeDelta)
 {
 }
 
-_bool TransformSystem::AttachComponent(const _uniqueId entityId)
-{
-	if (0 == mIndexQueue.size())
-		return false;
-
-	const _uniqueId index = mIndexQueue.front();
-	mIndexQueue.pop();
-
-	mIndexTable[entityId] = index;
-
-	return true;
-}
-
 void TransformSystem::SetScale(const _uniqueId entityId, const _vec3 & scale)
 {
-	const _uniqueId index = mIndexTable[entityId];
-	mComponentList[index].Scale = scale;
+	mComponentList[entityId].Scale = scale;
 }
 
 void TransformSystem::SetRotationX(const _uniqueId entityId, const _float radian)
 {
-	const _uniqueId index = mIndexTable[entityId];
-	mComponentList[index].Rotation.x = radian;
+	mComponentList[entityId].Rotation.x = radian;
 }
 
 void TransformSystem::SetRotationY(const _uniqueId entityId, const _float radian)
 {
-	const _uniqueId index = mIndexTable[entityId];
-	mComponentList[index].Rotation.y = radian;
+	mComponentList[entityId].Rotation.y = radian;
 }
 
 void TransformSystem::SetRotationZ(const _uniqueId entityId, const _float radian)
 {
-	const _uniqueId index = mIndexTable[entityId];
-	mComponentList[index].Rotation.z = radian;
+	mComponentList[entityId].Rotation.z = radian;
 }
 
 void TransformSystem::SetPosition(const _uniqueId entityId, const _vec3 & position)
 {
-	const _uniqueId index = mIndexTable[entityId];
-	mComponentList[index].Position = position;
+	mComponentList[entityId].Position = position;
 }
 
 const _vec3 & TransformSystem::GetPosition(const _uniqueId entityId) const
 {
-	const _uniqueId index = mIndexTable[entityId];
-	return mComponentList[index].Position;
+	return mComponentList[entityId].Position;
 }
 
 const _matrix & TransformSystem::GetWorldMatrix(const _uniqueId entityId) const
 {
-	const _uniqueId index = mIndexTable[entityId];
-	return mComponentList[index].WorldMatrix;
+	return mComponentList[entityId].WorldMatrix;
 }
 
 void TransformSystem::Free()
 {
-	Clear();
+	ClearSystem();
+
+	ComponentSystem::Free();
 }

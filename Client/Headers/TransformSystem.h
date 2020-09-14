@@ -25,15 +25,14 @@ private:
 	virtual ~TransformSystem() = default;
 
 public:
-	_bool	Ready(const _size_t entitySize, const _size_t componentSize);
-	void	Clear();
+	_bool	ReadySystem(const _size_t entitySize);
+	void	ClearSystem();
 
 public:
 	virtual void	Update(const _double timeDelta)		override;
 	virtual void	LateUpdate(const _double timeDelta)	override;
 
 public:
-	_bool			AttachComponent(const _uniqueId entityId);
 	void			SetScale(const _uniqueId entityId, const _vec3& scale);
 	void			SetRotationX(const _uniqueId entityId, const _float radian);
 	void			SetRotationY(const _uniqueId entityId, const _float radian);
@@ -46,10 +45,7 @@ private:
 
 private:
 	_size_t	mEntitySize = 0;
-	_size_t	mComponentSize = 0;
 
-	vector<_uniqueId>	mIndexTable;
-	queue<_uniqueId>	mIndexQueue;
 	vector<Component>	mComponentList;
 
 public:
