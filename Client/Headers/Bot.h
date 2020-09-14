@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+#include "State.h"
+
 class Transform_Object;
 class DynamicMesh_Object;
 class Shader;
@@ -20,6 +22,15 @@ public:
 		{
 		}
 	};
+
+public:
+	enum BotState
+	{
+		IDLE,
+		RUN,
+		STATE_END
+	};
+
 private:
 	explicit Bot();
 	virtual ~Bot() = default;
@@ -30,6 +41,11 @@ public:
 	virtual void	LateUpdate(const _double timeDelta) override;
 	virtual void	Render() override;
 
+public:
+	void	SetNextState(const BotState nextState);
+	void	Move(const _vec3& moveDir);
+	void	SetUpAnimation(const _uint index);
+
 private:
 	_bool	Initialize(const Bot::Data& data);
 
@@ -39,8 +55,18 @@ private:
 	Shader*				mShader = nullptr;
 
 private:
-	_int	mCellIndex = 0;
+	array<State<Bot>*, STATE_END>	mArrBotState;
+	BotState	mCurState;
+	BotState	mNextState;
+
+private:
+	//	Animation
 	_double	mTimeDelta = 0.0;
+
+private:
+	//	Navi Mesh
+	_int	mCellIndex = 0;
+	
 
 public:
 	virtual void Free() override;

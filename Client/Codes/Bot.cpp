@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Bot.h"
 
+#include "BotIdle.h"
+#include "BotRun.h"
+
 #include "Transform_Object.h"
 #include "DynamicMesh_Object.h"
-
 #include "World_Object.h"
 #include "PipeLine.h"
 #include "Shader.h"
@@ -23,23 +25,22 @@ void Bot::SetUp(World_Object * world)
 
 void Bot::Update(const _double timeDelta)
 {
+	if (mCurState != mNextState)
+	{
+		if (mArrBotState[mCurState]->CanStop())
+		{
+			mArrBotState[mNextState]->Start();
+			mCurState = mNextState;
+		}
+	}
+
 	mTransform->CalculateWorldMatrix();
 }
 
 void Bot::LateUpdate(const _double timeDelta)
 {
 	mTimeDelta = timeDelta;
-
-	World_Object* world = GetWorld();
-	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
-
-	_int nextCellIndex = 0;
-	_vec3 fixPosition;
-	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), nextCellIndex, fixPosition))
-	{
-		mCellIndex = nextCellIndex;
-		mTransform->SetPosition(fixPosition);
-	}
+	mArrBotState[mCurState]->LateUpdate(timeDelta);
 }
 
 void Bot::Render()
@@ -55,19 +56,54 @@ void Bot::Render()
 		mDynamicMesh->Render(mShader, i);
 }
 
+void Bot::SetNextState(const BotState nextState)
+{
+	mNextState = nextState;
+}
+
+void Bot::Move(const _vec3 & moveDir)
+{
+	World_Object* world = GetWorld();
+	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
+
+	_int nextCellIndex = 0;
+	_vec3 nextPosition;
+	if (naviMesh->Move(mCellIndex, mTransform->GetPosition(), moveDir, nextCellIndex, nextPosition))
+	{
+		mCellIndex = nextCellIndex;
+		mTransform->SetPosition(nextPosition);
+	}
+
+	mTransform->CalculateWorldMatrix();
+}
+
+void Bot::SetUpAnimation(const _uint index)
+{
+	mDynamicMesh->SetUpAnimation(index);
+}
+
 _bool Bot::Initialize(const Bot::Data & data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
 	GameObject::AddComponent("DynamicMesh_Bot", "DynamicMesh_Bot", (Component_Object**)&mDynamicMesh);
 	GameObject::AddComponent("Shader_HardwareSkinning", "Shader_HardwareSkinning", (Component_Object**)&mShader);
-	
-	mDynamicMesh->SetUpAnimation(0);
+
+	mArrBotState.fill(nullptr);
+	mCurState = BotState::IDLE;
+	mNextState = BotState::IDLE;
+
+	mArrBotState[BotState::IDLE] = BotIdle::Create(this);
+	mArrBotState[BotState::RUN] = BotRun::Create(this);
 
 	return true;
 }
 
 void Bot::Free()
 {
+	for (State<Bot>*& state : mArrBotState)
+		SafeRelease(state);
+	mArrBotState.fill(nullptr);
+
 	GameObject::Free();
 }
 

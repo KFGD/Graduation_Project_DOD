@@ -170,6 +170,30 @@
     <Filter Include="23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun">
       <UniqueIdentifier>{b6fafaa5-418d-460b-9e4c-512b86e9b850}</UniqueIdentifier>
     </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot\00.BotIdle">
+      <UniqueIdentifier>{c265fe95-f19c-47fa-bdef-4f056f7f4960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\00.OOD\00.GameObject\01.Bot\01.BotRun">
+      <UniqueIdentifier>{04dc8575-cf69-4748-833b-9f563827a1ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\01.DOD">
+      <UniqueIdentifier>{227e32c6-55df-40b5-b29d-7c6c1094befe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\01.DOD\00.Entity">
+      <UniqueIdentifier>{d5128b32-7491-4ef9-89e7-d3b1e1b5061e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\01.DOD\00.Entity\Manager">
+      <UniqueIdentifier>{8248c77b-c8e2-42c6-bd61-1ab21c6e6774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="23.Object\01.DOD\01.ArcheType">
+      <UniqueIdentifier>{d2bb37ed-41d4-4136-b51c-89e91780d4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\01.DOD">
+      <UniqueIdentifier>{78271259-1ef7-4979-865b-4a3628286fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\01.DOD\00.Transform">
+      <UniqueIdentifier>{9b42cf3d-981d-4efe-888b-dc7eb421cdb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -278,9 +302,6 @@
     <ClCompile Include="..\Codes\ModeController.cpp">
       <Filter>30.ModeController</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\KObject.cpp">
-      <Filter>23.Object\00.OOD</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\StaticMesh_Object.cpp">
       <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
     </ClCompile>
@@ -328,6 +349,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PlayerRun.cpp">
       <Filter>23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BotIdle.cpp">
+      <Filter>23.Object\00.OOD\00.GameObject\01.Bot\00.BotIdle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BotRun.cpp">
+      <Filter>23.Object\00.OOD\00.GameObject\01.Bot\01.BotRun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\KObject.cpp">
+      <Filter>23.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EntityManager.cpp">
+      <Filter>23.Object\01.DOD\00.Entity\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Entity.cpp">
+      <Filter>23.Object\01.DOD\00.Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,9 +541,6 @@
     <ClInclude Include="..\Headers\ModeController.h">
       <Filter>30.ModeController</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\KObject.h">
-      <Filter>23.Object\00.OOD</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\StaticMesh_Object.h">
       <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
     </ClInclude>
@@ -561,6 +594,21 @@
     </ClInclude>
     <ClInclude Include="..\Headers\PlayerRun.h">
       <Filter>23.Object\00.OOD\00.GameObject\00.Player\01.PlayerRun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BotIdle.h">
+      <Filter>23.Object\00.OOD\00.GameObject\01.Bot\00.BotIdle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BotRun.h">
+      <Filter>23.Object\00.OOD\00.GameObject\01.Bot\01.BotRun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\KObject.h">
+      <Filter>23.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EntityManager.h">
+      <Filter>23.Object\01.DOD\00.Entity\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Entity.h">
+      <Filter>23.Object\01.DOD\00.Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

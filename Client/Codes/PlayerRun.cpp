@@ -12,10 +12,6 @@ PlayerRun::PlayerRun(Player * executer)
 {
 }
 
-PlayerRun::~PlayerRun()
-{
-}
-
 void PlayerRun::Start()
 {
 	Player* player = GetExecuter();

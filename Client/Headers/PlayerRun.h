@@ -9,9 +9,9 @@ class PlayerCamera;
 class PlayerRun :
 	public State<Player>
 {
-public:
+private:
 	explicit PlayerRun(Player* executer);
-	virtual ~PlayerRun();
+	virtual ~PlayerRun() = default;
 
 public:
 	virtual void Start() override;

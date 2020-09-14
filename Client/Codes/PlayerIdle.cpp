@@ -10,10 +10,6 @@ PlayerIdle::PlayerIdle(Player * executer)
 {
 }
 
-PlayerIdle::~PlayerIdle()
-{
-}
-
 void PlayerIdle::Start()
 {
 	Player* player = GetExecuter();

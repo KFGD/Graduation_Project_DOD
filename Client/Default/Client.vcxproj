@@ -180,12 +180,16 @@
     <ClCompile Include="..\Codes\AnimationCtrl.cpp" />
     <ClCompile Include="..\Codes\Base.cpp" />
     <ClCompile Include="..\Codes\BlockObj.cpp" />
+    <ClCompile Include="..\Codes\BotIdle.cpp" />
+    <ClCompile Include="..\Codes\BotRun.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
     <ClCompile Include="..\Codes\CameraController.cpp" />
     <ClCompile Include="..\Codes\ComponentManager_Object.cpp" />
     <ClCompile Include="..\Codes\Component_Object.cpp" />
     <ClCompile Include="..\Codes\CreativeMode.cpp" />
     <ClCompile Include="..\Codes\DynamicMesh_Object.cpp" />
+    <ClCompile Include="..\Codes\Entity.cpp" />
+    <ClCompile Include="..\Codes\EntityManager.cpp" />
     <ClCompile Include="..\Codes\Frame.cpp" />
     <ClCompile Include="..\Codes\FrameManager.cpp" />
     <ClCompile Include="..\Codes\FreeCamera.cpp" />
@@ -259,6 +263,8 @@
     <ClInclude Include="..\Headers\AnimationCtrl.h" />
     <ClInclude Include="..\Headers\Base.h" />
     <ClInclude Include="..\Headers\BlockObj.h" />
+    <ClInclude Include="..\Headers\BotIdle.h" />
+    <ClInclude Include="..\Headers\BotRun.h" />
     <ClInclude Include="..\Headers\Camera.h" />
     <ClInclude Include="..\Headers\CameraController.h" />
     <ClInclude Include="..\Headers\CameraTarget.h" />
@@ -268,6 +274,8 @@
     <ClInclude Include="..\Headers\CreativeMode.h" />
     <ClInclude Include="..\Headers\Defines.h" />
     <ClInclude Include="..\Headers\DynamicMesh_Object.h" />
+    <ClInclude Include="..\Headers\Entity.h" />
+    <ClInclude Include="..\Headers\EntityManager.h" />
     <ClInclude Include="..\Headers\Frame.h" />
     <ClInclude Include="..\Headers\FrameManager.h" />
     <ClInclude Include="..\Headers\FreeCamera.h" />

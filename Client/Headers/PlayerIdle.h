@@ -8,9 +8,9 @@ class KeyManager;
 class PlayerIdle :
 	public State<Player>
 {
-public:
+private:
 	explicit PlayerIdle(Player* executer);
-	virtual ~PlayerIdle();
+	virtual ~PlayerIdle() = default;
 
 public:
 	virtual void Start() override;

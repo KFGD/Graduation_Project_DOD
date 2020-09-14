@@ -26,7 +26,7 @@ typedef		unsigned __int64		_size_t;
 #else
 typedef		unsigned int			_size_t;
 #endif
-typedef		signed int				_uniqueId;
+typedef		unsigned int			_uniqueId;
 typedef		unsigned int			_comCode;
 
 #include <d3dx9math.h>
