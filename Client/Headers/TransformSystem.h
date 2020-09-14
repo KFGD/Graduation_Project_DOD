@@ -1,12 +1,10 @@
 #pragma once
-#include "Base.h"
-
-#include "Defines.h"
+#include "ComponentSystem.h"
 
 class TransformSystem :
-	public Base
+	public ComponentSystem
 {
-	DECLARE_SINGLETON(TransformSystem);
+	DECLARE_SINGLETON(TransformSystem)
 
 public:
 	struct Component
@@ -31,8 +29,8 @@ public:
 	void	Clear();
 
 public:
-	void	Update(const _double timeDelta);
-	void	LateUpdate(const _double timeDelta);
+	virtual void	Update(const _double timeDelta)		override;
+	virtual void	LateUpdate(const _double timeDelta)	override;
 
 public:
 	_bool			AttachComponent(const _uniqueId entityId);

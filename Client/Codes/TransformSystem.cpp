@@ -64,7 +64,7 @@ _bool TransformSystem::AttachComponent(const _uniqueId entityId)
 	if (0 == mIndexQueue.size())
 		return false;
 
-	const int index = mIndexQueue.front();
+	const _uniqueId index = mIndexQueue.front();
 	mIndexQueue.pop();
 
 	mIndexTable[entityId] = index;
@@ -74,43 +74,43 @@ _bool TransformSystem::AttachComponent(const _uniqueId entityId)
 
 void TransformSystem::SetScale(const _uniqueId entityId, const _vec3 & scale)
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	mComponentList[index].Scale = scale;
 }
 
 void TransformSystem::SetRotationX(const _uniqueId entityId, const _float radian)
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	mComponentList[index].Rotation.x = radian;
 }
 
 void TransformSystem::SetRotationY(const _uniqueId entityId, const _float radian)
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	mComponentList[index].Rotation.y = radian;
 }
 
 void TransformSystem::SetRotationZ(const _uniqueId entityId, const _float radian)
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	mComponentList[index].Rotation.z = radian;
 }
 
 void TransformSystem::SetPosition(const _uniqueId entityId, const _vec3 & position)
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	mComponentList[index].Position = position;
 }
 
 const _vec3 & TransformSystem::GetPosition(const _uniqueId entityId) const
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	return mComponentList[index].Position;
 }
 
 const _matrix & TransformSystem::GetWorldMatrix(const _uniqueId entityId) const
 {
-	const int index = mIndexTable[entityId];
+	const _uniqueId index = mIndexTable[entityId];
 	return mComponentList[index].WorldMatrix;
 }
 
