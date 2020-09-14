@@ -31,6 +31,11 @@ _ulong StaticMesh::GetFacesNum() const
 	return _ulong();
 }
 
+LPDIRECT3DTEXTURE9 StaticMesh::GetTexutre(const _ulong index)
+{
+	return mTextures[index];
+}
+
 _bool StaticMesh::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix & pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";

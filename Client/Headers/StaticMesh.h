@@ -20,6 +20,9 @@ public:
 	_ulong					GetVertexNum() const;
 	_ulong					GetFacesNum() const;
 
+public:
+	LPDIRECT3DTEXTURE9	GetTexutre(const _ulong index);
+
 private:
 	_bool	Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix);
 
