@@ -365,6 +365,9 @@
     <ClCompile Include="..\Codes\Entity.cpp">
       <Filter>23.Object\01.DOD\00.Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\TransformSystem.cpp">
+      <Filter>24.Component\01.DOD\00.Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -609,6 +612,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Entity.h">
       <Filter>23.Object\01.DOD\00.Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TransformSystem.h">
+      <Filter>24.Component\01.DOD\00.Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
