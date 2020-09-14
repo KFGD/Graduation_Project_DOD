@@ -15,9 +15,7 @@ void Transform_Object::CalculateWorldMatrix(const _matrix & pivotMatrix)
 	_matrix rotation_z = *D3DXMatrixRotationZ(&rotation_z, D3DXToRadian(mSRT.Rotation.z));
 	_matrix position = *D3DXMatrixTranslation(&position, mSRT.Position.x, mSRT.Position.y, mSRT.Position.z);
 
-	const _matrix modelMatrix = scale * rotation_x * rotation_y * rotation_z * position;
-	mWorldMatrix = pivotMatrix * modelMatrix;
-
+	mWorldMatrix = scale * rotation_x * rotation_y * rotation_z * position;
 }
 
 void Transform_Object::Free()

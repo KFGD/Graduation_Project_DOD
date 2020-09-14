@@ -14,15 +14,16 @@ private:
 	virtual ~EntityManager() = default;
 	
 public:
+	Entity*	CreateEntity();
+
+public:
 	_bool	Ready(const _size_t entitySize);
 	void	Clear();
-
-	Entity*	CreateEntity();
 	
 private:
-	_size_t				mEntitySize;
+	_size_t				mEntitySize = 0;
 	vector<Entity*>		mEntityList;
-	queue<_uniqueId>	mIdQueue;
+	queue<_uniqueId>	mEntityIdQueue;
 
 public:
 	virtual void	Free()	override;

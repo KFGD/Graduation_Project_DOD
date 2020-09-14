@@ -23,9 +23,9 @@ private:
 
 public:
 	void	SetScale(const _vec3& scale) { memcpy(&mSRT.Scale, &scale, sizeof(_vec3)); }
-	void	SetRotationX(const _float radian) { mSRT.Rotation.x = radian; }
-	void	SetRotationY(const _float radian) { mSRT.Rotation.y = radian; }
-	void	SetRotationZ(const _float radian) { mSRT.Rotation.z = radian; }
+	void	SetRotationX(const _float degree) { mSRT.Rotation.x = degree; }
+	void	SetRotationY(const _float degree) { mSRT.Rotation.y = degree; }
+	void	SetRotationZ(const _float degree) { mSRT.Rotation.z = degree; }
 	void	SetPosition(const _vec3& position) { memcpy(&mSRT.Position, &position, sizeof(_vec3)); }
 	const _vec3&	GetPosition() const { return mSRT.Position; }
 	const _matrix&	GetWorldMatrix() const { return mWorldMatrix; }

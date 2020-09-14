@@ -3,8 +3,25 @@
 
 #include "Entity.h"
 
+IMPLEMENT_SINGLETON(EntityManager)
+
 EntityManager::EntityManager()
 {
+}
+
+Entity * EntityManager::CreateEntity()
+{
+	if (0 == mEntityIdQueue.size())
+		return nullptr;
+
+	const _uniqueId id = mEntityIdQueue.front();
+
+	Entity* entity = Entity::Create(id);
+	if (nullptr == entity)
+		return nullptr;
+
+	mEntityIdQueue.pop();
+	return entity;
 }
 
 _bool EntityManager::Ready(const _size_t entitySize)
@@ -15,7 +32,7 @@ _bool EntityManager::Ready(const _size_t entitySize)
 	mEntitySize = entitySize;
 
 	for (_uniqueId i = 0; i < mEntitySize; ++i)
-		mIdQueue.emplace(i);
+		mEntityIdQueue.emplace(i);
 
 	mEntityList.reserve(mEntitySize);
 
@@ -27,26 +44,12 @@ void EntityManager::Clear()
 	for (_size_t i = 0; i < mEntitySize; ++i)
 		SafeRelease(mEntityList[i]);
 	mEntityList.clear();
+	mEntityList.shrink_to_fit();
 
-	mIdQueue.swap(queue<_uniqueId>());
+	mEntityIdQueue.swap(queue<_uniqueId>());
 	
 	mEntitySize = 0;
 
-}
-
-Entity * EntityManager::CreateEntity()
-{
-	if (0 == mIdQueue.size())
-		return nullptr;
-
-	const _uniqueId id = mIdQueue.front();
-	
-	Entity* entity = Entity::Create(id);
-	if (nullptr == entity)
-		return nullptr;
-
-	mIdQueue.pop();
-	return entity;
 }
 
 void EntityManager::Free()
