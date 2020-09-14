@@ -24,7 +24,7 @@ Entity * EntityManager::CreateEntity()
 	return entity;
 }
 
-_bool EntityManager::Ready(const _size_t entitySize)
+_bool EntityManager::ReadySystem(const _size_t entitySize)
 {
 	if (0 != mEntitySize)
 		return false;
@@ -39,7 +39,7 @@ _bool EntityManager::Ready(const _size_t entitySize)
 	return true;
 }
 
-void EntityManager::Clear()
+void EntityManager::ClearSystem()
 {
 	for (_size_t i = 0; i < mEntitySize; ++i)
 		SafeRelease(mEntityList[i]);
@@ -54,5 +54,5 @@ void EntityManager::Clear()
 
 void EntityManager::Free()
 {
-	Clear();
+	ClearSystem();
 }

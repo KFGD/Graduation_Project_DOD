@@ -17,8 +17,8 @@ public:
 	Entity*	CreateEntity();
 
 public:
-	_bool	Ready(const _size_t entitySize);
-	void	Clear();
+	_bool	ReadySystem(const _size_t entitySize);
+	void	ClearSystem();
 	
 private:
 	_size_t				mEntitySize = 0;
