@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "HierarchyLoader_Object.h"
 
-#include <fstream>
-
 
 HierarchyLoader_Object::HierarchyLoader_Object(LPDIRECT3DDEVICE9 graphicDevice)
 	: mGraphicDevice(graphicDevice)
@@ -219,7 +217,7 @@ HRESULT HierarchyLoader_Object::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshCo
 
 	SafeRelease(pMeshContainer->pSoftwareMesh);
 
-	SafeDeleteArray(pMeshContainer);
+	SafeDelete(pMeshContainer);
 	return S_OK;
 }
 
@@ -249,7 +247,7 @@ HierarchyLoader_Object * HierarchyLoader_Object::Create(LPDIRECT3DDEVICE9 graphi
 	HierarchyLoader_Object*	pInstance = new HierarchyLoader_Object(graphicDevice);
 	if (false == pInstance->Initialize(filePath))
 	{
-		MSG_BOX("Failed To Create HierarchyLoader Instance");
+		MSG_BOX("Failed To Create HierarchyLoader_Object Instance");
 		SafeRelease(pInstance);
 	}
 

@@ -6,8 +6,9 @@
 #include "EntityManager.h"
 #include "TransformSystem.h"
 #include "StaticRendererSystem.h"
-#include "StaticMesh.h"
 #include "Entity.h"
+#include "StaticMesh.h"
+#include "DynamicMesh.h"
 
 World_Data::World_Data(const LPDIRECT3DDEVICE9 graphicDevice)
 	: World(graphicDevice)
@@ -122,6 +123,11 @@ _bool World_Data::ReadyResources()
 		return false;
 
 	mStaticRendererSystem->AddStaticMesh("GrayBlock", blockMesh);
+
+	DynamicMesh* playerMesh = DynamicMesh::Create(graphicDevice, L"..\\Resources\\Player\\", L"Player.X", scaleMatrix);
+	if (nullptr == playerMesh)
+		return false;
+	SafeRelease(playerMesh);
 
 	return true;
 }

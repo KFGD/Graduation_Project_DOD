@@ -1,19 +1,18 @@
 #include "stdafx.h"
-#include "AnimationCtrl_Object.h"
+#include "AnimationCtrl.h"
 
-
-AnimationCtrl_Object::AnimationCtrl_Object(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
+AnimationCtrl::AnimationCtrl(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
 	: mDxAnimationCtrl(dxAnimationCtrl)
 {
 	SafeAddRef(mDxAnimationCtrl);
 }
 
-AnimationCtrl_Object::AnimationCtrl_Object(const AnimationCtrl_Object & rhs)
-	: mDxAnimationCtrl(nullptr )
+AnimationCtrl::AnimationCtrl(const AnimationCtrl & rhs)
+	: mDxAnimationCtrl(nullptr)
 {
 }
 
-_bool AnimationCtrl_Object::SetUpAnimation(const _uint index)
+_bool AnimationCtrl::SetUpAnimation(const _uint index)
 {
 	if (nullptr == mDxAnimationCtrl)
 		return false;
@@ -57,7 +56,7 @@ _bool AnimationCtrl_Object::SetUpAnimation(const _uint index)
 	return true;
 }
 
-_bool AnimationCtrl_Object::PlayAnimation(const _double timeDelta)
+_bool AnimationCtrl::PlayAnimation(const _double timeDelta)
 {
 	if (nullptr == mDxAnimationCtrl)
 		return false;
@@ -69,25 +68,25 @@ _bool AnimationCtrl_Object::PlayAnimation(const _double timeDelta)
 	return NOERROR;
 }
 
-AnimationCtrl_Object * AnimationCtrl_Object::Create(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
+AnimationCtrl * AnimationCtrl::Create(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
 {
-	return new AnimationCtrl_Object(dxAnimationCtrl);
+	return new AnimationCtrl(dxAnimationCtrl);
 }
 
-AnimationCtrl_Object * AnimationCtrl_Object::Clone()
+AnimationCtrl * AnimationCtrl::Clone()
 {
-	AnimationCtrl_Object* pInstance = new AnimationCtrl_Object(*this);
-	
+	AnimationCtrl* pInstance = new AnimationCtrl(*this);
+
 	if (FAILED(mDxAnimationCtrl->CloneAnimationController(mDxAnimationCtrl->GetMaxNumAnimationOutputs(), mDxAnimationCtrl->GetMaxNumAnimationSets(), mDxAnimationCtrl->GetMaxNumTracks(), mDxAnimationCtrl->GetMaxNumEvents(), &pInstance->mDxAnimationCtrl)))
 	{
-		MSG_BOX("AnimationCtrl_Object Clone Failed!");
+		MSG_BOX("AnimationCtrl Clone Failed!");
 		SafeRelease(pInstance);
 	}
 
 	return pInstance;
 }
 
-void AnimationCtrl_Object::Free()
+void AnimationCtrl::Free()
 {
 	SafeRelease(mDxAnimationCtrl);
 }

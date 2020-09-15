@@ -102,9 +102,7 @@ void DynamicMeshRenderer_Object::Render(Shader * shader, const _int meshContaine
 _bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
-
-	LPD3DXMESH	mesh = nullptr;
-
+	
 	lstrcpy(fullPath, filePath);
 	lstrcat(fullPath, fileName);
 

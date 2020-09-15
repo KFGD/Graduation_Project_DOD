@@ -80,15 +80,6 @@
     <Filter Include="98.Headers">
       <UniqueIdentifier>{3bdd3f4c-8edf-4ad0-8fc1-f9e9507ee4c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="24.Component\00.OOD\02.DynamicMesh">
-      <UniqueIdentifier>{f0948765-b713-408f-a41d-4f780fee116b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader">
-      <UniqueIdentifier>{5c0b7b00-4815-4aa9-8075-a4a64f58dd84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl">
-      <UniqueIdentifier>{847cec0a-8c7e-41c1-8bce-804a614f602b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="24.Component\00.OOD\03.Renderer">
       <UniqueIdentifier>{f6b149c6-198f-41bb-98cb-0787b11d20d2}</UniqueIdentifier>
     </Filter>
@@ -200,11 +191,29 @@
     <Filter Include="22.Resources\00.StaticMesh">
       <UniqueIdentifier>{9f4a0b0b-4511-4af7-8768-69681c91de6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="24.Component\00.OOD\01.StaticMesh">
-      <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="24.Component\01.DOD\02.DynamicRendererSystem">
       <UniqueIdentifier>{dd8c3551-702b-4941-b14b-5af4112d4102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="22.Resources\01.DynamicMesh">
+      <UniqueIdentifier>{69a1838c-aeab-4abf-8f6d-a4ee0c548801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\00.OOD\01.StaticMeshRenderer">
+      <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\00.OOD\02.DynamicMeshRenderer">
+      <UniqueIdentifier>{f0948765-b713-408f-a41d-4f780fee116b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\00.OOD\02.DynamicMeshRenderer\00.HierarchyLoader">
+      <UniqueIdentifier>{5c0b7b00-4815-4aa9-8075-a4a64f58dd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="24.Component\00.OOD\02.DynamicMeshRenderer\01.AnimationCtrl">
+      <UniqueIdentifier>{847cec0a-8c7e-41c1-8bce-804a614f602b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="22.Resources\01.DynamicMesh\00.HierarchyLoader">
+      <UniqueIdentifier>{a1e76d33-2428-4583-acce-c0fc282e014d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="22.Resources\01.DynamicMesh\01.AnimationCtrl">
+      <UniqueIdentifier>{3dc513c7-49b7-4e92-b5a9-95a747cac7e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -375,10 +384,10 @@
       <Filter>24.Component\01.DOD</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\StaticMeshRenderer_Object.cpp">
-      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
+      <Filter>24.Component\00.OOD\01.StaticMeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\DynamicMeshRenderer_Object.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\StaticMesh.cpp">
       <Filter>22.Resources\00.StaticMesh</Filter>
@@ -386,11 +395,23 @@
     <ClCompile Include="..\Codes\World_Data.cpp">
       <Filter>21.World\01.DOD</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\HierarchyLoader_Object.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\AnimationCtrl_Object.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer\01.AnimationCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DynamicRendererSystem.cpp">
+      <Filter>24.Component\01.DOD\02.DynamicRendererSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DynamicMesh.cpp">
+      <Filter>22.Resources\01.DynamicMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HierarchyLoader_Object.cpp">
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer\00.HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HierarchyLoader.cpp">
+      <Filter>22.Resources\01.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\AnimationCtrl.cpp">
+      <Filter>22.Resources\01.DynamicMesh\01.AnimationCtrl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -635,10 +656,10 @@
       <Filter>24.Component\01.DOD</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\StaticMeshRenderer_Object.h">
-      <Filter>24.Component\00.OOD\01.StaticMesh</Filter>
+      <Filter>24.Component\00.OOD\01.StaticMeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\DynamicMeshRenderer_Object.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh</Filter>
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\StaticMesh.h">
       <Filter>22.Resources\00.StaticMesh</Filter>
@@ -646,11 +667,23 @@
     <ClInclude Include="..\Headers\World_Data.h">
       <Filter>21.World\01.DOD</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\HierarchyLoader_Object.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\AnimationCtrl_Object.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer\01.AnimationCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DynamicRendererSystem.h">
+      <Filter>24.Component\01.DOD\02.DynamicRendererSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DynamicMesh.h">
+      <Filter>22.Resources\01.DynamicMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HierarchyLoader_Object.h">
+      <Filter>24.Component\00.OOD\02.DynamicMeshRenderer\00.HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HierarchyLoader.h">
+      <Filter>22.Resources\01.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\AnimationCtrl.h">
+      <Filter>22.Resources\01.DynamicMesh\01.AnimationCtrl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
