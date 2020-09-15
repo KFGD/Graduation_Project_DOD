@@ -1,8 +1,8 @@
 #pragma once
 #include "Component_Object.h"
 
-class HierarchyLoader;
-class AnimationCtrl;
+class HierarchyLoader_Object;
+class AnimationCtrl_Object;
 class Shader;
 
 class DynamicMeshRenderer_Object :
@@ -36,8 +36,8 @@ private:
 private:
 	D3DXFRAME*	mRootFrame = nullptr;
 	_matrix		mPivotMatrix;
-	HierarchyLoader*	mHierarchyLoader = nullptr;
-	AnimationCtrl*		mAnimationCtrl = nullptr;
+	HierarchyLoader_Object*	mHierarchyLoader = nullptr;
+	AnimationCtrl_Object*		mAnimationCtrl = nullptr;
 
 private:
 	_bool	mIsClone = false;

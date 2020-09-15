@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "DynamicMeshRenderer_Object.h"
 
-#include "HierarchyLoader.h"
-#include "AnimationCtrl.h"
+#include "HierarchyLoader_Object.h"
+#include "AnimationCtrl_Object.h"
 
 #include "Shader.h"
 #include "PipeLine.h"
@@ -108,7 +108,7 @@ _bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, co
 	lstrcpy(fullPath, filePath);
 	lstrcat(fullPath, fileName);
 
-	mHierarchyLoader = HierarchyLoader::Create(graphicDevice, filePath);
+	mHierarchyLoader = HierarchyLoader_Object::Create(graphicDevice, filePath);
 	if (nullptr == mHierarchyLoader)
 		return false;
 
@@ -117,7 +117,7 @@ _bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, co
 	if (FAILED(D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, nullptr, &mRootFrame, &dxAniCtrl)))
 		return false;
 
-	mAnimationCtrl = AnimationCtrl::Create(dxAniCtrl);
+	mAnimationCtrl = AnimationCtrl_Object::Create(dxAniCtrl);
 	if (nullptr == mAnimationCtrl)
 		return false;
 

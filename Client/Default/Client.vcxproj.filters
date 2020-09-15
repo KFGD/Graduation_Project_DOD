@@ -203,6 +203,9 @@
     <Filter Include="24.Component\00.OOD\01.StaticMesh">
       <UniqueIdentifier>{5f21c9b6-1e43-4c72-89e6-522c39c9e3d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="24.Component\01.DOD\02.DynamicRendererSystem">
+      <UniqueIdentifier>{dd8c3551-702b-4941-b14b-5af4112d4102}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -256,12 +259,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Transform_Object.cpp">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\HierarchyLoader.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\AnimationCtrl.cpp">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ComponentManager_Object.cpp">
       <Filter>24.Component\00.OOD\Manager</Filter>
@@ -389,6 +386,12 @@
     <ClCompile Include="..\Codes\World_Data.cpp">
       <Filter>21.World\01.DOD</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\HierarchyLoader_Object.cpp">
+      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\AnimationCtrl_Object.cpp">
+      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -451,14 +454,8 @@
     <ClInclude Include="..\Headers\Transform_Object.h">
       <Filter>24.Component\00.OOD\00.Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\HierarchyLoader.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Struct.h">
       <Filter>90.Engine\98.Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\AnimationCtrl.h">
-      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ComponentManager_Object.h">
       <Filter>24.Component\00.OOD\Manager</Filter>
@@ -648,6 +645,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\World_Data.h">
       <Filter>21.World\01.DOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HierarchyLoader_Object.h">
+      <Filter>24.Component\00.OOD\02.DynamicMesh\00.HierarchyLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\AnimationCtrl_Object.h">
+      <Filter>24.Component\00.OOD\02.DynamicMesh\01.AnimationCtrl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

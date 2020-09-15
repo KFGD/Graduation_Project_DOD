@@ -3,12 +3,12 @@
 
 #include "Defines.h"
 
-class HierarchyLoader final :
+class HierarchyLoader_Object final :
 	public Base, public ID3DXAllocateHierarchy
 {
 public:
-	HierarchyLoader(LPDIRECT3DDEVICE9 graphicDevice);
-	virtual ~HierarchyLoader() = default;
+	HierarchyLoader_Object(LPDIRECT3DDEVICE9 graphicDevice);
+	virtual ~HierarchyLoader_Object() = default;
 
 public:
 	virtual HRESULT CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame) override;
@@ -27,7 +27,7 @@ private:
 	const _tchar* mFilePath = nullptr;
 
 public:
-	static HierarchyLoader*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar* filePath);
+	static HierarchyLoader_Object*	Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar* filePath);
 	virtual void	Free() override;
 };
 

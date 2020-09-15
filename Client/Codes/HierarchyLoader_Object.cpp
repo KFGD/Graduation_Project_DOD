@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "HierarchyLoader.h"
+#include "HierarchyLoader_Object.h"
 
 #include <fstream>
 
 
-HierarchyLoader::HierarchyLoader(LPDIRECT3DDEVICE9 graphicDevice)
+HierarchyLoader_Object::HierarchyLoader_Object(LPDIRECT3DDEVICE9 graphicDevice)
 	: mGraphicDevice(graphicDevice)
 {
 	SafeAddRef(mGraphicDevice);
 }
 
-HRESULT HierarchyLoader::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
+HRESULT HierarchyLoader_Object::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 {
 	D3DXFRAME_DERIVED*		pFrame = new D3DXFRAME_DERIVED;
 	ZeroMemory(pFrame, sizeof(D3DXFRAME_DERIVED));
@@ -25,7 +25,7 @@ HRESULT HierarchyLoader::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 	return S_OK;
 }
 
-HRESULT HierarchyLoader::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * pMeshData, CONST D3DXMATERIAL * pMaterials, CONST D3DXEFFECTINSTANCE * pEffectInstances, DWORD NumMaterials, CONST DWORD * pAdjacency, LPD3DXSKININFO pSkinInfo, LPD3DXMESHCONTAINER * ppNewMeshContainer)
+HRESULT HierarchyLoader_Object::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * pMeshData, CONST D3DXMATERIAL * pMaterials, CONST D3DXEFFECTINSTANCE * pEffectInstances, DWORD NumMaterials, CONST DWORD * pAdjacency, LPD3DXSKININFO pSkinInfo, LPD3DXMESHCONTAINER * ppNewMeshContainer)
 {
 	D3DXMESHCONTAINER_DERIVED*	pMeshContainer = new D3DXMESHCONTAINER_DERIVED;
 	ZeroMemory(pMeshContainer, sizeof(D3DXMESHCONTAINER_DERIVED));
@@ -167,7 +167,7 @@ HRESULT HierarchyLoader::CreateMeshContainer(LPCSTR Name, CONST D3DXMESHDATA * p
 	return S_OK;
 }
 
-HRESULT HierarchyLoader::DestroyFrame(LPD3DXFRAME pFrameToFree)
+HRESULT HierarchyLoader_Object::DestroyFrame(LPD3DXFRAME pFrameToFree)
 {
 	SafeDeleteArray(pFrameToFree->Name);
 
@@ -185,7 +185,7 @@ HRESULT HierarchyLoader::DestroyFrame(LPD3DXFRAME pFrameToFree)
 	return S_OK;
 }
 
-HRESULT HierarchyLoader::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerToFree)
+HRESULT HierarchyLoader_Object::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerToFree)
 {
 	D3DXMESHCONTAINER_DERIVED*		pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerToFree;
 
@@ -223,14 +223,14 @@ HRESULT HierarchyLoader::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainer
 	return S_OK;
 }
 
-_bool HierarchyLoader::Initialize(const _tchar * filePath)
+_bool HierarchyLoader_Object::Initialize(const _tchar * filePath)
 {
 	//fopen_s(&pFile2, "adja", "w");
 	mFilePath = filePath;
 	return true;
 }
 
-_bool HierarchyLoader::SetUp_Name(char ** ppSourName, const char * pDestName)
+_bool HierarchyLoader_Object::SetUp_Name(char ** ppSourName, const char * pDestName)
 {
 	if (nullptr == pDestName)
 		return true;
@@ -244,9 +244,9 @@ _bool HierarchyLoader::SetUp_Name(char ** ppSourName, const char * pDestName)
 	return true;
 }
 
-HierarchyLoader * HierarchyLoader::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath)
+HierarchyLoader_Object * HierarchyLoader_Object::Create(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath)
 {
-	HierarchyLoader*	pInstance = new HierarchyLoader(graphicDevice);
+	HierarchyLoader_Object*	pInstance = new HierarchyLoader_Object(graphicDevice);
 	if (false == pInstance->Initialize(filePath))
 	{
 		MSG_BOX("Failed To Create HierarchyLoader Instance");
@@ -256,7 +256,7 @@ HierarchyLoader * HierarchyLoader::Create(LPDIRECT3DDEVICE9 graphicDevice, const
 	return pInstance;
 }
 
-void HierarchyLoader::Free()
+void HierarchyLoader_Object::Free()
 {
 	mFilePath = nullptr;
 	SafeRelease(mGraphicDevice);

@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "AnimationCtrl.h"
+#include "AnimationCtrl_Object.h"
 
 
-AnimationCtrl::AnimationCtrl(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
+AnimationCtrl_Object::AnimationCtrl_Object(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
 	: mDxAnimationCtrl(dxAnimationCtrl)
 {
 	SafeAddRef(mDxAnimationCtrl);
 }
 
-AnimationCtrl::AnimationCtrl(const AnimationCtrl & rhs)
+AnimationCtrl_Object::AnimationCtrl_Object(const AnimationCtrl_Object & rhs)
 	: mDxAnimationCtrl(nullptr )
 {
 }
 
-_bool AnimationCtrl::SetUpAnimation(const _uint index)
+_bool AnimationCtrl_Object::SetUpAnimation(const _uint index)
 {
 	if (nullptr == mDxAnimationCtrl)
 		return false;
@@ -57,7 +57,7 @@ _bool AnimationCtrl::SetUpAnimation(const _uint index)
 	return true;
 }
 
-_bool AnimationCtrl::PlayAnimation(const _double timeDelta)
+_bool AnimationCtrl_Object::PlayAnimation(const _double timeDelta)
 {
 	if (nullptr == mDxAnimationCtrl)
 		return false;
@@ -69,14 +69,14 @@ _bool AnimationCtrl::PlayAnimation(const _double timeDelta)
 	return NOERROR;
 }
 
-AnimationCtrl * AnimationCtrl::Create(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
+AnimationCtrl_Object * AnimationCtrl_Object::Create(LPD3DXANIMATIONCONTROLLER dxAnimationCtrl)
 {
-	return new AnimationCtrl(dxAnimationCtrl);
+	return new AnimationCtrl_Object(dxAnimationCtrl);
 }
 
-AnimationCtrl * AnimationCtrl::Clone()
+AnimationCtrl_Object * AnimationCtrl_Object::Clone()
 {
-	AnimationCtrl* pInstance = new AnimationCtrl(*this);
+	AnimationCtrl_Object* pInstance = new AnimationCtrl_Object(*this);
 	
 	if (FAILED(mDxAnimationCtrl->CloneAnimationController(mDxAnimationCtrl->GetMaxNumAnimationOutputs(), mDxAnimationCtrl->GetMaxNumAnimationSets(), mDxAnimationCtrl->GetMaxNumTracks(), mDxAnimationCtrl->GetMaxNumEvents(), &pInstance->mDxAnimationCtrl)))
 	{
@@ -87,7 +87,7 @@ AnimationCtrl * AnimationCtrl::Clone()
 	return pInstance;
 }
 
-void AnimationCtrl::Free()
+void AnimationCtrl_Object::Free()
 {
 	SafeRelease(mDxAnimationCtrl);
 }

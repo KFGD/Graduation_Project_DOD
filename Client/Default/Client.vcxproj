@@ -177,7 +177,7 @@
     <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Codes\AnimationCtrl.cpp" />
+    <ClCompile Include="..\Codes\AnimationCtrl_Object.cpp" />
     <ClCompile Include="..\Codes\Base.cpp" />
     <ClCompile Include="..\Codes\BlockObj.cpp" />
     <ClCompile Include="..\Codes\BotIdle.cpp" />
@@ -197,7 +197,7 @@
     <ClCompile Include="..\Codes\GameMode.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GraphicDevice.cpp" />
-    <ClCompile Include="..\Codes\HierarchyLoader.cpp" />
+    <ClCompile Include="..\Codes\HierarchyLoader_Object.cpp" />
     <ClCompile Include="..\Codes\InputDevice.cpp" />
     <ClCompile Include="..\Codes\KeyManager.cpp" />
     <ClCompile Include="..\Codes\KObject.cpp" />
@@ -265,7 +265,7 @@
     <ClInclude Include="..\External\easy_profiler\easy\serialized_block.h" />
     <ClInclude Include="..\External\easy_profiler\easy\utility.h" />
     <ClInclude Include="..\External\easy_profiler\easy\writer.h" />
-    <ClInclude Include="..\Headers\AnimationCtrl.h" />
+    <ClInclude Include="..\Headers\AnimationCtrl_Object.h" />
     <ClInclude Include="..\Headers\Base.h" />
     <ClInclude Include="..\Headers\BlockObj.h" />
     <ClInclude Include="..\Headers\BotIdle.h" />
@@ -290,7 +290,7 @@
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\Global.h" />
     <ClInclude Include="..\Headers\GraphicDevice.h" />
-    <ClInclude Include="..\Headers\HierarchyLoader.h" />
+    <ClInclude Include="..\Headers\HierarchyLoader_Object.h" />
     <ClInclude Include="..\Headers\InputDevice.h" />
     <ClInclude Include="..\Headers\KeyManager.h" />
     <ClInclude Include="..\Headers\NaviCell_Object.h" />
