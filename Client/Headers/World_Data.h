@@ -4,6 +4,7 @@
 class EntityManager;
 class TransformSystem;
 class StaticRendererSystem;
+class DynamicRendererSystem;
 
 class World_Data :
 	public World
@@ -28,6 +29,7 @@ private:
 	EntityManager*			mEntityManager = nullptr;
 	TransformSystem*		mTransformSystem = nullptr;
 	StaticRendererSystem*	mStaticRendererSystem = nullptr;
+	DynamicRendererSystem*	mDynamicRendererSystem = nullptr;
 
 public:
 	virtual void	Free()	override;

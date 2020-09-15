@@ -104,18 +104,17 @@ void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 {
 	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
 
+	mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+	mShader->BeginShader(nullptr);
+	mShader->BeginPass(0);
+
 	for (auto RenderingInfo : mRenderingInfoMap)
 	{
 
-		StaticMesh* mesh = mStaticMeshMap.find(RenderingInfo.first)->second;
+		StaticMesh* const mesh = mStaticMeshMap.find(RenderingInfo.first)->second;
 
-		mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
 		mShader->SetTexture("gDiffuseTexture", mesh->GetTexutre(0));
-
-		mShader->BeginShader(nullptr);
-		mShader->BeginPass(0);
-
-		//mShader->CommitChanges();
+		mShader->CommitChanges();
 
 		_int objectCount = 0;
 
@@ -148,10 +147,10 @@ void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 			RenderHardwareInstancing(graphicDevice, mesh, objectCount);
 
 		vmMatrix = nullptr;
-
-		mShader->EndPass();
-		mShader->EndShader();
 	}
+
+	mShader->EndPass();
+	mShader->EndShader();
 }
 
 _bool StaticRendererSystem::AttachComponent(const _uniqueId entityId, const char* meshName)

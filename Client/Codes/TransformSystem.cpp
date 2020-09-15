@@ -2,6 +2,7 @@
 #include "TransformSystem.h"
 
 #include "StaticRendererSystem.h"
+#include "DynamicRendererSystem.h"
 
 IMPLEMENT_SINGLETON(TransformSystem)
 
@@ -44,9 +45,13 @@ void TransformSystem::Update(const _double timeDelta)
 		component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z * position;
 	}
 
-	StaticRendererSystem* staticRendererSystem = StaticRendererSystem::GetInstance();
+	StaticRendererSystem* const staticRendererSystem = StaticRendererSystem::GetInstance();
 	for (_uniqueId i = 0; i < mEntitySize; ++i)
 		staticRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
+
+	DynamicRendererSystem* const dynamicRendererSystem = DynamicRendererSystem::GetInstance();
+	for (_uniqueId i = 0; i < mEntitySize; ++i)
+		dynamicRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
 }
 
 void TransformSystem::LateUpdate(const _double timeDelta)

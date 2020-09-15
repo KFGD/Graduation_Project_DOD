@@ -8,6 +8,21 @@ DynamicMesh::DynamicMesh()
 {
 }
 
+AnimationCtrl * DynamicMesh::CloneAnimationCtrl()
+{
+	return mAnimationCtrl->Clone();
+}
+
+const vector<D3DXMESHCONTAINER_DERIVED*> DynamicMesh::GetMeshContainerList()
+{
+	return mMeshContainerList;
+}
+
+_bool DynamicMesh::UpdateCombinedTransformationMatrices()
+{
+	return UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
+}
+
 _bool DynamicMesh::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix & pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";

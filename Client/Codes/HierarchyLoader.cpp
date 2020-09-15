@@ -294,3 +294,4 @@ void HierarchyLoader::Free()
 {
 	SafeRelease(mGraphicDevice);
 }
+

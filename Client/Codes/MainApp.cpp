@@ -15,17 +15,17 @@
 //	OOD
 //
 //////////////////////////
-#include "World_Object.h"
 #include "ComponentManager_Object.h"
 
 ///////////////////////////
 //
-//	OOD
+//	DOD
 //
 //////////////////////////
 #include "EntityManager.h"
 #include "TransformSystem.h"
 #include "StaticRendererSystem.h"
+#include "DynamicRendererSystem.h"
 
 #include "ModeController.h"
 #include "CameraController.h"
@@ -156,6 +156,9 @@ void MainApp::Free()
 
 	if (0 != StaticRendererSystem::DestroyInstance())
 		MSG_BOX("StaticRendererSystem Release Failed!");
+
+	if (0 != DynamicRendererSystem::DestroyInstance())
+		MSG_BOX("DynamicRendererSystem Release Failed!");
 
 	//	Destroy: OOD
 	if (0 != ComponentManager_Object::DestroyInstance())
