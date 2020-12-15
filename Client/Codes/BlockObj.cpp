@@ -26,6 +26,15 @@ void BlockObj::Render()
 {
 }
 
+class A abstract
+{
+protected:
+	virtual ~A() = default;
+
+	unsigned long t;
+	unsigned long t2;
+};
+
 _bool BlockObj::Initialize(const BlockObj::Data & data)
 {
 	GameObject::AddComponent("Transform", "Transform", (Component_Object**)&mTransform, &Transform_Object::Data(data.Scale, data.Rotation, data.Position));
@@ -43,7 +52,7 @@ void BlockObj::Free()
 BlockObj * BlockObj::Create(const BlockObj::Data & data)
 {
 	BlockObj*	pInstnace = new BlockObj();
-
+	
 	if (false == pInstnace->Initialize(data))
 	{
 		SafeRelease(pInstnace);

@@ -71,7 +71,7 @@ private:
 	PipeLine*	mPipeLine = nullptr;
 
 private:
-	static constexpr _uint			mBlockRenderBatchSize = 100;
+	static constexpr _uint			mBlockRenderBatchSize = 1000;
 	LPDIRECT3DVERTEXBUFFER9			mVertexBuffer = nullptr;
 	LPDIRECT3DVERTEXDECLARATION9	mVertexDeclaration = nullptr;
 

@@ -9,6 +9,7 @@ HierarchyLoader::HierarchyLoader(LPDIRECT3DDEVICE9 graphicDevice)
 
 HRESULT HierarchyLoader::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 {
+	//	준비 단계 처리
 	if (!mIsMeasured)
 	{
 		mFrameCount += 1;
@@ -16,18 +17,23 @@ HRESULT HierarchyLoader::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 		return S_OK;
 	}
 	
-	D3DXFRAME_DERIVED& frame = mFrameList[mFrameIdx];
-	::ZeroMemory(&frame, sizeof(D3DXFRAME_DERIVED));
+	//	생성 단계 처리
+	{
+		//	미리 확보한 메모리 공간에 뼈대 정보 기록
+		D3DXFRAME_DERIVED& frame = mFrameList[mFrameIdx];
+		::ZeroMemory(&frame, sizeof(D3DXFRAME_DERIVED));
 
-	if (false == SetUp_Name(&frame.Name, Name))
-		return E_FAIL;
+		//	뼈대 정보 초기화
+		{
+			if (false == SetUp_Name(&frame.Name, Name))
+				return E_FAIL;
+			D3DXMatrixIdentity(&frame.TransformationMatrix);
+			D3DXMatrixIdentity(&frame.CombinedTransformationMatrix);
 
-	D3DXMatrixIdentity(&frame.TransformationMatrix);
-	D3DXMatrixIdentity(&frame.CombinedTransformationMatrix);
-
-	*ppNewFrame = &frame;
-
-	mFrameIdx += 1;
+			*ppNewFrame = &frame;
+			mFrameIdx += 1;
+		}
+	}
 
 	return S_OK;
 }
@@ -253,6 +259,7 @@ void HierarchyLoader::SetMeasured(const _bool isMeasured)
 		mFrameIdx = 0;
 		mMeshContainerIdx = 0;
 
+		//	뼈대 정보를 저장할 메모리 공간 확보
 		mFrameList.resize(mFrameCount);
 		mMeshContainerList.resize(mMeshContainerCount);
 	}

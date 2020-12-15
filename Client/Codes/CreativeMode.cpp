@@ -261,7 +261,6 @@ _bool CreativeMode::PickingObject(_int& selectedIndex, _vec3& hitWorldPos)
 
 		case Game::Block:
 		{
-			continue;
 			LPD3DXMESH mesh = mBlockMesh->GetMesh();
 			D3DXIntersect(mesh, &localRayPos, &localRayDir, &bHit, NULL, NULL, NULL, &hitDis, NULL, NULL);
 			if (bHit)

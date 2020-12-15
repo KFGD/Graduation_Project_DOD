@@ -60,8 +60,10 @@ _bool DynamicMeshRenderer_Object::PlayAnimation(const _double timeDelta)
 	if (nullptr == mAnimationCtrl)
 		return false;
 
+	//	애니메이션 동작
 	mAnimationCtrl->PlayAnimation(timeDelta);
 
+	//	뼈대 정보 갱신
 	UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
 
 	return true;
@@ -72,63 +74,78 @@ void DynamicMeshRenderer_Object::Render(Shader * shader, const _int meshContaine
 	D3DXMESHCONTAINER_DERIVED* meshContainer = mMeshContainerList[meshContainerIndex];
 	LPD3DXBONECOMBINATION boneComb = reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
 
-	shader->BeginShader(nullptr);
-	shader->BeginPass(0);
-
+	// 셰이더 세팅
+	{
+		shader->BeginShader(nullptr);
+		shader->BeginPass(0);
+	}
 	for (_int i = 0; i < (_int)meshContainer->dwNumAttributeGroups; ++i)
 	{
+		//	행렬 팔레트 갱신
 		for (_int paletteEntry = 0; paletteEntry < (_int)meshContainer->dwNumPaletteEntries; ++paletteEntry)
 		{
 			_int matrixIndex = boneComb[i].BoneId[paletteEntry];
 
 			if (UINT_MAX != matrixIndex)
-				D3DXMatrixMultiply(&meshContainer->pRenderMatrices[paletteEntry], &meshContainer->pOffsetMatrices[matrixIndex], meshContainer->ppCombinedTransformationMatrices[matrixIndex]);
+				D3DXMatrixMultiply(&meshContainer->pRenderMatrices[paletteEntry], &meshContainer->pOffsetMatrices[matrixIndex], 
+					meshContainer->ppCombinedTransformationMatrices[matrixIndex]);
 		}
-		_ulong numInflu = meshContainer->dwNumInfl - 1;
 
+		//	셰이더 상수 세팅
+		{
+		const _ulong numInflu = meshContainer->dwNumInfl - 1;
 		shader->Get_EffectHandle()->SetMatrixArray("gMatrixPalette", meshContainer->pRenderMatrices, meshContainer->dwNumPaletteEntries);
-
 		shader->Get_EffectHandle()->SetValue("gNumBoneInfluences", &numInflu, sizeof(_ulong));
 		shader->SetTexture("gDiffuseTexture", meshContainer->pMeshTexture[boneComb[i].AttribId]);
 		shader->CommitChanges();
+		}
+
+		//	렌더링
 		meshContainer->MeshData.pMesh->DrawSubset(i);
-
 	}
-
-	shader->EndPass();
-	shader->EndShader();
+	// 셰이더 세팅 해제
+	{
+		shader->EndPass();
+		shader->EndShader();
+	}
 }
 
-_bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix& pivotMatrix)
+_bool DynamicMeshRenderer_Object::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, 
+	const _tchar * fileName, const _matrix& pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
+	{
+		lstrcpy(fullPath, filePath);
+		lstrcat(fullPath, fileName);
 	
-	lstrcpy(fullPath, filePath);
-	lstrcat(fullPath, fileName);
-
-	mHierarchyLoader = HierarchyLoader_Object::Create(graphicDevice, filePath);
-	if (nullptr == mHierarchyLoader)
-		return false;
+		mHierarchyLoader = HierarchyLoader_Object::Create(graphicDevice, filePath);
+		if (nullptr == mHierarchyLoader)
+			return false;
+	}
 
 	LPD3DXANIMATIONCONTROLLER	dxAniCtrl = nullptr;
 
-	if (FAILED(D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, nullptr, &mRootFrame, &dxAniCtrl)))
+	//	메시 데이터 및 애니메이션 컨트롤러 생성
+	if (FAILED(D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, 
+		nullptr, &mRootFrame, &dxAniCtrl)))
 		return false;
+
+	{
 
 	mAnimationCtrl = AnimationCtrl_Object::Create(dxAniCtrl);
 	if (nullptr == mAnimationCtrl)
 		return false;
 
-	SafeRelease(dxAniCtrl);
+		SafeRelease(dxAniCtrl);
 
-	mPivotMatrix = pivotMatrix;
+		mPivotMatrix = pivotMatrix;
 
-	SetUpCombinedTransformationMatricesPointer(mRootFrame);
-	UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
-	
-	for (_int i = 0; i < mMeshContainerList.size(); ++i)
-		UpdateSoftwareSkinnedMesh(i);
+		SetUpCombinedTransformationMatricesPointer(mRootFrame);
+		UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
 
+		for (_int i = 0; i < mMeshContainerList.size(); ++i)
+			UpdateSoftwareSkinnedMesh(i);
+	}
 	return true;
 }
 
@@ -143,7 +160,6 @@ _bool DynamicMeshRenderer_Object::UpdateCombinedTransformationMatrices(D3DXFRAME
 
 	if (nullptr != pFrame_Derived->pFrameFirstChild)
 		UpdateCombinedTransformationMatrices(pFrame_Derived->pFrameFirstChild, pFrame_Derived->CombinedTransformationMatrix);
-
 
 	return true;
 }

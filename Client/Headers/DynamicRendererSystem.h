@@ -36,6 +36,7 @@ public:
 	virtual void	Update(const _double timeDelta) override;
 	virtual void	LateUpdate(const _double timeDelta) override;
 	void			Render(LPDIRECT3DDEVICE9 graphicDevice);
+	void			Render2(LPDIRECT3DDEVICE9 graphicDevice);
 
 public:
 	_bool	AttachComponent(const _uniqueId entityId, const char* meshName);

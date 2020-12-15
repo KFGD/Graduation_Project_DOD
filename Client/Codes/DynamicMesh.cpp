@@ -23,42 +23,48 @@ _bool DynamicMesh::UpdateCombinedTransformationMatrices()
 	return UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
 }
 
-_bool DynamicMesh::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, const _tchar * fileName, const _matrix & pivotMatrix)
+_bool DynamicMesh::Initialize(LPDIRECT3DDEVICE9 graphicDevice, const _tchar * filePath, 
+	const _tchar * fileName, const _matrix & pivotMatrix)
 {
 	_tchar fullPath[MAX_PATH] = L"";
-
+	{
 	lstrcpy(fullPath, filePath);
 	lstrcat(fullPath, fileName);
 
 	mHierarchyLoader = HierarchyLoader::Create(graphicDevice, filePath);
 	if (nullptr == mHierarchyLoader)
 		return false;
+	}
 
 	//	사전 조사: Frame 개수, MeshContainer 개수
 	D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, nullptr, &mRootFrame, nullptr);
+	
+	//	중간 처리
 	mHierarchyLoader->DestroyFrame(mRootFrame);
 	mRootFrame = nullptr;
-
-	//	Skinned Mesh 생성
 	mHierarchyLoader->SetMeasured(true);
 
+	//	메시 데이터 및 애니메이션 컨트롤러 생성
 	LPD3DXANIMATIONCONTROLLER	dxAniCtrl = nullptr;
-	if (FAILED(D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, nullptr, &mRootFrame, &dxAniCtrl)))
+	if (FAILED(D3DXLoadMeshHierarchyFromX(fullPath, D3DXMESH_MANAGED, graphicDevice, mHierarchyLoader, 
+		nullptr, &mRootFrame, &dxAniCtrl)))
 		return false;
 
-	mAnimationCtrl = AnimationCtrl::Create(dxAniCtrl);
-	if (nullptr == mAnimationCtrl)
-		return false;
+	{
+		mAnimationCtrl = AnimationCtrl::Create(dxAniCtrl);
+		if (nullptr == mAnimationCtrl)
+			return false;
 
-	SafeRelease(dxAniCtrl);
+		SafeRelease(dxAniCtrl);
 
-	mPivotMatrix = pivotMatrix;
+		mPivotMatrix = pivotMatrix;
 
-	SetUpCombinedTransformationMatricesPointer(mRootFrame);
-	UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
+		SetUpCombinedTransformationMatricesPointer(mRootFrame);
+		UpdateCombinedTransformationMatrices(mRootFrame, mPivotMatrix);
 
-	for (_int i = 0; i < mMeshContainerList.size(); ++i)
-		UpdateSoftwareSkinnedMesh(i);
+		for (_int i = 0; i < mMeshContainerList.size(); ++i)
+			UpdateSoftwareSkinnedMesh(i);
+	}
 
 	return true;
 }

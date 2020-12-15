@@ -18,21 +18,21 @@ Bot::Bot()
 void Bot::SetUp(World_Object * world)
 {
 	GameObject::SetUp(world);
-
-	NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
-	mCellIndex = naviMesh->FindCellIndex(mTransform->GetPosition());
+	
+	//NaviMesh_Object* naviMesh = world->GetNaviMeshObject();
+	//mCellIndex = naviMesh->FindCellIndex(mTransform->GetPosition());
 }
 
 void Bot::Update(const _double timeDelta)
 {
-	if (mCurState != mNextState)
-	{
-		if (mArrBotState[mCurState]->CanStop())
-		{
-			mArrBotState[mNextState]->Start();
-			mCurState = mNextState;
-		}
-	}
+	//if (mCurState != mNextState)
+	//{
+	//	if (mArrBotState[mCurState]->CanStop())
+	//	{
+	//		mArrBotState[mNextState]->Start();
+	//		mCurState = mNextState;
+	//	}
+	//}
 
 	mTransform->CalculateWorldMatrix();
 }
@@ -40,18 +40,23 @@ void Bot::Update(const _double timeDelta)
 void Bot::LateUpdate(const _double timeDelta)
 {
 	mTimeDelta = timeDelta;
-	mArrBotState[mCurState]->LateUpdate(timeDelta);
+	//mArrBotState[mCurState]->LateUpdate(timeDelta);
 }
 
 void Bot::Render()
 {
+	//	애니메이션 실행
 	mDynamicMesh->PlayAnimation(mTimeDelta);
 
-	PipeLine* pipeLine = PipeLine::GetInstance();
-	const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
-	mShader->Get_EffectHandle()->SetMatrix("gMatWorld", &mTransform->GetWorldMatrix());
-	mShader->Get_EffectHandle()->SetMatrix("gMatVP", &matVP);
-	
+	//	셰이더 상수 세팅
+	{
+		PipeLine* pipeLine = PipeLine::GetInstance();
+		const _matrix matVP = pipeLine->GetTransform(D3DTS_VIEW) * pipeLine->GetTransform(D3DTS_PROJECTION);
+		mShader->Get_EffectHandle()->SetMatrix("gMatWorld", &mTransform->GetWorldMatrix());
+		mShader->Get_EffectHandle()->SetMatrix("gMatVP", &matVP);
+	}
+
+	//	스켈레탈 메시 렌더링
 	for (_int i = 0; i < mDynamicMesh->GetMeshContinerSize(); ++i)
 		mDynamicMesh->Render(mShader, i);
 }
@@ -94,7 +99,7 @@ _bool Bot::Initialize(const Bot::Data & data)
 
 	mArrBotState[BotState::IDLE] = BotIdle::Create(this);
 	mArrBotState[BotState::RUN] = BotRun::Create(this);
-
+	
 	return true;
 }
 

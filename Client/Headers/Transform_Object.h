@@ -31,7 +31,7 @@ public:
 	const _matrix&	GetWorldMatrix() const { return mWorldMatrix; }
 	
 public:
-	void	CalculateWorldMatrix(const _matrix& pivotMatrix = IDENTITY_MATRIX);
+	void	CalculateWorldMatrix();
 
 private:
 	Data	mSRT;

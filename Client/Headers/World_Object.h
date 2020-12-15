@@ -36,15 +36,16 @@ public:
 private:
 	_bool	Initialize();
 	_bool	ReadyComponent();
+	void	StoreMemoryInfo();
 	void	RenderBlock();
 	void	RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock);
-
+	
 private:
 	PipeLine*	mPipeLine = nullptr;
 	ComponentManager_Object*	mComponentManager = nullptr;
 
 private:
-	static constexpr _uint			mBlockRenderBatchSize = 100;
+	static constexpr _uint			mBlockRenderBatchSize = 1000;
 	LPDIRECT3DVERTEXBUFFER9			mVertexBuffer = nullptr;
 	LPDIRECT3DVERTEXDECLARATION9	mVertexDeclaration = nullptr;
 

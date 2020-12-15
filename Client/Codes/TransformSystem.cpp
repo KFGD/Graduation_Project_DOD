@@ -32,30 +32,38 @@ void TransformSystem::ClearSystem()
 
 void TransformSystem::Update(const _double timeDelta)
 {
-	for(_uniqueId i = 0; i < mEntitySize; ++i)
 	{
-		Component& component = mComponentList[i];
+		EASY_FUNCTION(profiler::colors::Gold);
+		for (_uniqueId i = 0; i < mEntitySize; ++i)
+		{
+			Component& component = mComponentList[i];
 
-		_matrix scale = *D3DXMatrixScaling(&scale, component.Scale.x, component.Scale.y, component.Scale.z);
-		_matrix rotation_x = *D3DXMatrixRotationX(&rotation_x, D3DXToRadian(component.Rotation.x));
-		_matrix rotation_y = *D3DXMatrixRotationY(&rotation_y, D3DXToRadian(component.Rotation.y));
-		_matrix rotation_z = *D3DXMatrixRotationZ(&rotation_z, D3DXToRadian(component.Rotation.z));
-		_matrix position = *D3DXMatrixTranslation(&position, component.Position.x, component.Position.y, component.Position.z);
+			_matrix scale = *D3DXMatrixScaling(&scale, component.Scale.x, component.Scale.y, component.Scale.z);
+			_matrix rotation_x = *D3DXMatrixRotationX(&rotation_x, D3DXToRadian(component.Rotation.x));
+			_matrix rotation_y = *D3DXMatrixRotationY(&rotation_y, D3DXToRadian(component.Rotation.y));
+			_matrix rotation_z = *D3DXMatrixRotationZ(&rotation_z, D3DXToRadian(component.Rotation.z));
+			_matrix position = *D3DXMatrixTranslation(&position, component.Position.x, component.Position.y, component.Position.z);
 
-		component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z * position;
+			component.WorldMatrix = scale * rotation_x * rotation_y * rotation_z * position;
+		}
+
 	}
-
 	StaticRendererSystem* const staticRendererSystem = StaticRendererSystem::GetInstance();
 	for (_uniqueId i = 0; i < mEntitySize; ++i)
 		staticRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
 
-	DynamicRendererSystem* const dynamicRendererSystem = DynamicRendererSystem::GetInstance();
-	for (_uniqueId i = 0; i < mEntitySize; ++i)
-		dynamicRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
+	//	DynamicRenderingSystem의 Component 갱신 요청
+	{
+		DynamicRendererSystem* const dynamicRendererSystem = DynamicRendererSystem::GetInstance();
+		for (_uniqueId i = 0; i < mEntitySize; ++i)
+			dynamicRendererSystem->SetWorldMatrix(i, mComponentList[i].WorldMatrix);
+
+	}
 }
 
 void TransformSystem::LateUpdate(const _double timeDelta)
 {
+	
 }
 
 _bool TransformSystem::AttachComponent(const _uniqueId entityId, const _vec3& scale, const _vec3& rotation, const _vec3& position)

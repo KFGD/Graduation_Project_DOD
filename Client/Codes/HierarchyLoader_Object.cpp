@@ -10,15 +10,17 @@ HierarchyLoader_Object::HierarchyLoader_Object(LPDIRECT3DDEVICE9 graphicDevice)
 
 HRESULT HierarchyLoader_Object::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFrame)
 {
+	//	뼈대 정보 생성
 	D3DXFRAME_DERIVED*		pFrame = new D3DXFRAME_DERIVED;
 	ZeroMemory(pFrame, sizeof(D3DXFRAME_DERIVED));
 
-	if (false == SetUp_Name(&pFrame->Name, Name))
-		return E_FAIL;
-
-	D3DXMatrixIdentity(&pFrame->TransformationMatrix);
-	D3DXMatrixIdentity(&pFrame->CombinedTransformationMatrix);
-
+	//	뼈대 정보 초기화
+	{
+		if (false == SetUp_Name(&pFrame->Name, Name))
+			return E_FAIL;
+		D3DXMatrixIdentity(&pFrame->TransformationMatrix);
+		D3DXMatrixIdentity(&pFrame->CombinedTransformationMatrix);
+	}
 	*ppNewFrame = pFrame;
 	return S_OK;
 }

@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "World_Object.h"
 
+////////////////////////////
+//
+//
+//	Windows
+//
+//
+////////////////////////////
+#include <commdlg.h>
+#include <PathCch.h>
+
 //	Core
 #include "PipeLine.h"
 
@@ -55,14 +65,13 @@ void World_Object::Update(const _double timeDelta)
 
 void World_Object::Render()
 {
+	EASY_FUNCTION(profiler::colors::Yellow)
 	for (GameObject* gameObject : mPlayerList)
 		gameObject->Render();
 	for (GameObject* gameObject : mBotList)
 		gameObject->Render();
 
 	RenderBlock();
-
-	//mNaviMesh->Render(GetGraphicDevice());
 }
 
 _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
@@ -109,6 +118,8 @@ _bool World_Object::SetUpObjectList(const vector<KObject*>& objectList)
 
 	if(!mPlayerList.empty())
 		CameraController::GetInstance()->SetCameraTarget(mPlayerList.front());
+
+	//StoreMemoryInfo();
 
 	return true;
 }
@@ -192,33 +203,72 @@ _bool World_Object::ReadyComponent()
 	return true;
 }
 
+void World_Object::StoreMemoryInfo()
+{
+	_tchar initFilePath[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, initFilePath);
+	PathCchRemoveFileSpec(initFilePath, sizeof(initFilePath));
+	lstrcat(initFilePath, L"\\Data");
+
+	_tchar selectFilePath[MAX_PATH] = L"";
+
+	OPENFILENAME ofn;
+	::ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = g_hWnd;
+	ofn.lpstrFilter = L"Text File(.txt)\0*.txt\0All File(*.*)\0*.*;*.doc\0";
+	ofn.lpstrFile = selectFilePath;
+	ofn.nMaxFile = 256;
+	ofn.lpstrInitialDir = initFilePath;
+	if (0 != GetSaveFileName(&ofn))
+	{
+
+		HANDLE hFile = CreateFile(selectFilePath, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+
+		DWORD dwBytes = 0;
+		
+		string temp;
+
+		for(BlockObj* block : mBlockList)
+		{
+			temp.clear();
+			temp.append(to_string(reinterpret_cast<unsigned long long>(block)));
+			temp.append("\n");
+			WriteFile(hFile, temp.c_str(), temp.size(), &dwBytes, nullptr);
+		}
+
+		CloseHandle(hFile);
+
+	}
+}
+
 void World_Object::RenderBlock()
 {
 	if (0 == mBlockList.size())
 		return;
 
-
-
 	Shader*	shader = mBlockList[0]->GetSahder();
 	StaticMeshRenderer_Object*	staticMesh = mBlockList[0]->GetStaticMesh();
+	
+	// 셰이더 세팅 및 공통 상수 설정과 기타 로직
+	{
+		const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
 
-	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
+		shader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+		shader->SetTexture("gDiffuseTexture", staticMesh->GetTexutre(0));
 
-	shader->SetValue("gMatVP", &matVP, sizeof(_matrix));
-	shader->SetTexture("gDiffuseTexture", staticMesh->GetTexutre(0));
-
-	shader->BeginShader(nullptr);
-	shader->BeginPass(0);
-
+		shader->BeginShader(nullptr);
+		shader->BeginPass(0);
+	}
+	
 	_int numBlock = 0;
 	_matrix*	worldMatrixList = nullptr;
-
+	
 	mVertexBuffer->Lock(0, 0, (void**)&worldMatrixList, 0);
 	for (_int i = 0; i < mBlockList.size(); ++i)
 	{
 		_int index = i % mBlockRenderBatchSize;
 		worldMatrixList[index] = mBlockList[i]->GetTransform()->GetWorldMatrix();
-		//memcpy(worldMatrixList[i], mBlockList[i]->GetTransform()->GetWorldMatrix(), sizeof(_matrix));
 
 		++numBlock;
 
@@ -234,15 +284,20 @@ void World_Object::RenderBlock()
 
 	if (0 < numBlock)
 		RenderHardwareInstancing(staticMesh, numBlock);
+	
+	// 셰이더 세팅 해제
+	{
+		worldMatrixList = nullptr;
 
-	worldMatrixList = nullptr;
-
-	shader->EndPass();
-	shader->EndShader();
+		shader->EndPass();
+		shader->EndShader();
+	}
 }
 
 void World_Object::RenderHardwareInstancing(StaticMeshRenderer_Object* staticMesh, _int numBlock)
 {
+	LPDIRECT3DDEVICE9 graphicDevice = GetGraphicDevice();
+
 	LPDIRECT3DVERTEXBUFFER9 blockVB = nullptr;
 	staticMesh->GetVertexBuffer(blockVB);
 
@@ -251,21 +306,21 @@ void World_Object::RenderHardwareInstancing(StaticMeshRenderer_Object* staticMes
 
 	const _ulong blockVertexSize = staticMesh->GetVertexSize();
 
-	GetGraphicDevice()->SetVertexDeclaration(mVertexDeclaration);
-	GetGraphicDevice()->SetStreamSource(0, blockVB, 0, blockVertexSize);
-	GetGraphicDevice()->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | numBlock);
+	graphicDevice->SetVertexDeclaration(mVertexDeclaration);
+	graphicDevice->SetStreamSource(0, blockVB, 0, blockVertexSize);
+	graphicDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | numBlock);
 
-	GetGraphicDevice()->SetStreamSource(1, mVertexBuffer, 0, sizeof(_matrix));
-	GetGraphicDevice()->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
-	GetGraphicDevice()->SetIndices(blockIB);
+	graphicDevice->SetStreamSource(1, mVertexBuffer, 0, sizeof(_matrix));
+	graphicDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1ul);
+	graphicDevice->SetIndices(blockIB);
 	
-	GetGraphicDevice()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, staticMesh->GetVertexNum(), 0, staticMesh->GetFacesNum());
+	graphicDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, staticMesh->GetVertexNum(), 0, staticMesh->GetFacesNum());
 
 	SafeRelease(blockIB);
 	SafeRelease(blockVB);
 
-	GetGraphicDevice()->SetStreamSourceFreq(0, 1);
-	GetGraphicDevice()->SetStreamSourceFreq(1, 1);
+	graphicDevice->SetStreamSourceFreq(0, 1);
+	graphicDevice->SetStreamSourceFreq(1, 1);
 }
 
 void World_Object::Free()

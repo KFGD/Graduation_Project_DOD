@@ -79,13 +79,15 @@ void DynamicRendererSystem::LateUpdate(const _double timeDelta)
 
 void DynamicRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 {
-	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
+	//	셰이더 세팅 및 공통 셰이더 상수 세팅
+	{
+		const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
 
-	mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
-	mShader->BeginShader(nullptr);
-	mShader->BeginPass(0);
-
-	for (auto RenderingInfo : mRenderingInfoMap)
+		mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+		mShader->BeginShader(nullptr);
+		mShader->BeginPass(0);
+	}
+	for (auto& RenderingInfo : mRenderingInfoMap)
 	{
 		DynamicMesh* const mesh = mDynamicMeshMap.find(RenderingInfo.first)->second;
 		const vector<D3DXMESHCONTAINER_DERIVED*>& meshContainerList = mesh->GetMeshContainerList();
@@ -94,17 +96,22 @@ void DynamicRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 		{
 			const _uniqueId index = mIndexTable[entityId];
 
-			mShader->SetValue("gMatWorld", &mComponentList[index].WorldMatrix, sizeof(_matrix));
-			mComponentList[index].Controller->SetUpAnimation(0);
-			mComponentList[index].Controller->PlayAnimation(mTimeDelta);
-			mesh->UpdateCombinedTransformationMatrices();
+			//	셰이더 상수 세팅(1) 및 애니메이션 실행과 뼈대 정보 갱신
+			{
+				mShader->SetValue("gMatWorld", &mComponentList[index].WorldMatrix, sizeof(_matrix));
+				mComponentList[index].Controller->PlayAnimation(mTimeDelta);
+				mesh->UpdateCombinedTransformationMatrices();
+			}
 
-			//	Rendering
+			//	메시 렌더링 루프
 			for (auto meshContainer : meshContainerList)
 			{
-				LPD3DXBONECOMBINATION boneComb = reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
+				LPD3DXBONECOMBINATION boneComb = 
+					reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
+
 				for (_ulong i = 0; i < meshContainer->dwNumAttributeGroups; ++i)
 				{
+					//	행렬 팔레트 갱신
 					for (_ulong paletteEntry = 0; paletteEntry < meshContainer->dwNumPaletteEntries; ++paletteEntry)
 					{
 						const _int matrixIndex = boneComb[i].BoneId[paletteEntry];
@@ -112,21 +119,92 @@ void DynamicRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 						if (UINT_MAX != matrixIndex)
 							D3DXMatrixMultiply(&meshContainer->pRenderMatrices[paletteEntry], &meshContainer->pOffsetMatrices[matrixIndex], meshContainer->ppCombinedTransformationMatrices[matrixIndex]);
 					}
-					_ulong numInflu = meshContainer->dwNumInfl - 1;
+					
+					//	셰이더 상수 세팅 2
+					{
+						_ulong numInflu = meshContainer->dwNumInfl - 1;
+						mShader->Get_EffectHandle()->SetMatrixArray("gMatrixPalette", meshContainer->pRenderMatrices, meshContainer->dwNumPaletteEntries);
+						mShader->Get_EffectHandle()->SetValue("gNumBoneInfluences", &numInflu, sizeof(_ulong));
+						mShader->SetTexture("gDiffuseTexture", meshContainer->pMeshTexture[boneComb[i].AttribId]);
+						mShader->CommitChanges();
+					}
 
-					mShader->Get_EffectHandle()->SetMatrixArray("gMatrixPalette", meshContainer->pRenderMatrices, meshContainer->dwNumPaletteEntries);
-
-					mShader->Get_EffectHandle()->SetValue("gNumBoneInfluences", &numInflu, sizeof(_ulong));
-					mShader->SetTexture("gDiffuseTexture", meshContainer->pMeshTexture[boneComb[i].AttribId]);
-					mShader->CommitChanges();
+					//	렌더링
 					meshContainer->MeshData.pMesh->DrawSubset(i);
 				}
 			}
 		}
 	}
+	//	셰이더 세팅 해제
+	{
+		mShader->EndPass();
+		mShader->EndShader();
+	}
+}
 
-	mShader->EndPass();
-	mShader->EndShader();
+void DynamicRendererSystem::Render2(LPDIRECT3DDEVICE9 graphicDevice)
+{
+	for (auto& RenderingInfo : mRenderingInfoMap)
+	{
+		DynamicMesh* const mesh = mDynamicMeshMap.find(RenderingInfo.first)->second;
+		const vector<D3DXMESHCONTAINER_DERIVED*>& meshContainerList = mesh->GetMeshContainerList();
+
+		for (auto entityId : RenderingInfo.second)
+		{
+			const _uniqueId index = mIndexTable[entityId];
+
+			//	셰이더 세팅
+			{
+				mShader->BeginShader(nullptr);
+				mShader->BeginPass(0);
+			}
+
+			//	셰이더 공통 상수 세팅(1) 및 애니메이션 실행과 뼈대 정보 갱신
+			{
+				const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
+				mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+				mShader->SetValue("gMatWorld", &mComponentList[index].WorldMatrix, sizeof(_matrix));
+				mComponentList[index].Controller->PlayAnimation(mTimeDelta);
+				mesh->UpdateCombinedTransformationMatrices();
+			}
+
+			//	메시 렌더링 루프
+			for (auto meshContainer : meshContainerList)
+			{
+				LPD3DXBONECOMBINATION boneComb 
+					= reinterpret_cast<LPD3DXBONECOMBINATION>(meshContainer->pBoneCombinationBuf->GetBufferPointer());
+
+				for (_ulong i = 0; i < meshContainer->dwNumAttributeGroups; ++i)
+				{
+					//	행렬 팔레트 갱신
+					for (_ulong paletteEntry = 0; paletteEntry < meshContainer->dwNumPaletteEntries; ++paletteEntry)
+					{
+						const _int matrixIndex = boneComb[i].BoneId[paletteEntry];
+
+						if (UINT_MAX != matrixIndex)
+							D3DXMatrixMultiply(&meshContainer->pRenderMatrices[paletteEntry], &meshContainer->pOffsetMatrices[matrixIndex], meshContainer->ppCombinedTransformationMatrices[matrixIndex]);
+					}
+					
+					//	셰이더 상수 세팅(2)
+					{
+						_ulong numInflu = meshContainer->dwNumInfl - 1;
+						mShader->Get_EffectHandle()->SetMatrixArray("gMatrixPalette", meshContainer->pRenderMatrices, meshContainer->dwNumPaletteEntries);
+						mShader->Get_EffectHandle()->SetValue("gNumBoneInfluences", &numInflu, sizeof(_ulong));
+						mShader->SetTexture("gDiffuseTexture", meshContainer->pMeshTexture[boneComb[i].AttribId]);
+						mShader->CommitChanges();
+					}
+
+					//	렌더링
+					meshContainer->MeshData.pMesh->DrawSubset(i);
+				}
+			}
+			//	셰이더 세팅 해제
+			{
+				mShader->EndPass();
+				mShader->EndShader();
+			}
+		}
+	}
 }
 
 _bool DynamicRendererSystem::AttachComponent(const _uniqueId entityId, const char* meshName)
@@ -193,4 +271,3 @@ void DynamicRendererSystem::Free()
 
 	ComponentSystem::Free();
 }
-

@@ -18,7 +18,7 @@ public:
 	_bool	SetUpAnimation(const _uint index);
 	_bool	PlayAnimation(const _double timeDelta);
 	void	Render(Shader* shader, const _int meshContainerIndex);
-
+	
 public:
 
 	D3DXMESHCONTAINER_DERIVED*	GetMeshContainer(const _size_t index) { return mMeshContainerList[index]; }

@@ -26,7 +26,7 @@ World_Data::World_Data(const LPDIRECT3DDEVICE9 graphicDevice)
 
 void World_Data::Update(const _double timeDelta)
 {
-	EASY_FUNCTION(profiler::colors::Yellow);
+	EASY_FUNCTION(profiler::colors::Blue);
 	mTransformSystem->Update(timeDelta);
 	mStaticRendererSystem->Update(timeDelta);
 	mDynamicRendererSystem->Update(timeDelta);
@@ -38,9 +38,10 @@ void World_Data::Update(const _double timeDelta)
 
 void World_Data::Render()
 {
+	EASY_FUNCTION(profiler::colors::Green)
 	LPDIRECT3DDEVICE9 graphicDevice = World::GetGraphicDev();
 	mStaticRendererSystem->Render(graphicDevice);
-	mDynamicRendererSystem->Render(graphicDevice);
+	mDynamicRendererSystem->Render2(graphicDevice);
 }
 
 _bool World_Data::SetUpObjectList(const vector<KObject*>& objectList)

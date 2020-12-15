@@ -7,7 +7,7 @@ Transform_Object::Transform_Object(const Data & data)
 {
 }
 
-void Transform_Object::CalculateWorldMatrix(const _matrix & pivotMatrix)
+void Transform_Object::CalculateWorldMatrix()
 {
 	_matrix scale = *D3DXMatrixScaling(&scale, mSRT.Scale.x, mSRT.Scale.y, mSRT.Scale.z);
 	_matrix rotation_x = *D3DXMatrixRotationX(&rotation_x, D3DXToRadian(mSRT.Rotation.x));

@@ -61,7 +61,7 @@ bool MainApp::Render()
 	if (nullptr == mGraphicDevice)
 		return false;
 
-	if (FAILED(mGraphicDevice->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), 1.f, 0)))
+	if (FAILED(mGraphicDevice->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f), 1.f, 0)))
 		return false;
 
 	if (FAILED(mGraphicDevice->BeginScene()))

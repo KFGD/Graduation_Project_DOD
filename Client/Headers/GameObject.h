@@ -29,9 +29,9 @@ private:
 	World_Object*	mWorld = nullptr;
 
 private:
-	map<string, Component_Object*>	mComponentMap;
-	typedef	map<string, Component_Object*>	COMPONENT_MAP;
-	typedef pair<const string, Component_Object*>	COMPONENT_PAIR;
+	unordered_map<string, Component_Object*>			mComponentMap;
+	typedef	unordered_map<string, Component_Object*>	COMPONENT_MAP;
+	typedef pair<const string, Component_Object*>		COMPONENT_PAIR;
 
 public:
 	virtual void Free() override;

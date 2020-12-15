@@ -102,34 +102,36 @@ void StaticRendererSystem::LateUpdate(const _double timeDelta)
 
 void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 {
-	const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
-
-	mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
-	mShader->BeginShader(nullptr);
-	mShader->BeginPass(0);
-
-	for (auto RenderingInfo : mRenderingInfoMap)
+	// 셰이더 세팅 및 공통 상수 세팅
 	{
+		const _matrix matVP = mPipeLine->GetTransform(D3DTS_VIEW) * mPipeLine->GetTransform(D3DTS_PROJECTION);
+		mShader->SetValue("gMatVP", &matVP, sizeof(_matrix));
+		mShader->BeginShader(nullptr);
+		mShader->BeginPass(0);
+	}
 
+	for (auto& RenderingInfo : mRenderingInfoMap)
+	{
 		StaticMesh* const mesh = mStaticMeshMap.find(RenderingInfo.first)->second;
 
-		mShader->SetTexture("gDiffuseTexture", mesh->GetTexutre(0));
-		mShader->CommitChanges();
-
-		_int objectCount = 0;
+		//	Texture 세팅 및 VertexBuffer Lock
+		{
+			mShader->SetTexture("gDiffuseTexture", mesh->GetTexutre(0));
+			mShader->CommitChanges();
+		}
 
 		_matrix* vmMatrix = nullptr;
 		mVertexBuffer->Lock(0, 0, (void**)&vmMatrix, 0);
+		_int objectCount = 0;
 
 		for (auto entityId : RenderingInfo.second)
 		{
 			const _uniqueId index = mIndexTable[entityId];
-
 			const _int vmIndex = objectCount % mBlockRenderBatchSize;
 			vmMatrix[vmIndex] = mComponentList[index].WorldMatrix;
-
 			objectCount += 1;
 
+			//	HardwareInstancing을 활용한 렌더링
 			if (mBlockRenderBatchSize == objectCount)
 			{
 				mVertexBuffer->Unlock();
@@ -141,37 +143,44 @@ void StaticRendererSystem::Render(LPDIRECT3DDEVICE9 graphicDevice)
 			}
 		}
 
-		mVertexBuffer->Unlock();
+		//	잔여 오브젝트들 렌더링
+		{
+			mVertexBuffer->Unlock();
 
-		if (0 < objectCount)
-			RenderHardwareInstancing(graphicDevice, mesh, objectCount);
+			if (0 < objectCount)
+				RenderHardwareInstancing(graphicDevice, mesh, objectCount);
 
-		vmMatrix = nullptr;
+			vmMatrix = nullptr;
+		}
 	}
 
-	mShader->EndPass();
-	mShader->EndShader();
+	//	셰이더 세팅 해제
+	{
+		mShader->EndPass();
+		mShader->EndShader();
+	}
 }
 
 _bool StaticRendererSystem::AttachComponent(const _uniqueId entityId, const char* meshName)
 {
+	//	Component 추가 유무 확인
 	if (0 == mIndexQueue.size())
 		return false;
 
+	//	리소스 확인
 	const _uint hashCode = HashCode(meshName);
-
 	auto resIter = mStaticMeshMap.find(hashCode);
 
 	if (resIter == mStaticMeshMap.end())
 		return false;
 
-	//	Attach Component
+	//	Entity에 컴포넌트 추가
 	const _uniqueId index = mIndexQueue.front();
 	mIndexQueue.pop();
 
 	mIndexTable[entityId] = index;
 
-	//	Add RenderingInfo
+	//	렌더링 정보 추가
 	auto renderIter = mRenderingInfoMap.find(hashCode);
 	if (renderIter == mRenderingInfoMap.end())
 	{

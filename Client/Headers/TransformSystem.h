@@ -9,11 +9,11 @@ class TransformSystem :
 public:
 	struct Component
 	{
-		_vec3	Scale;
-		_vec3	Rotation;
-		_vec3	Position;
+		_vec3	Scale;			//12Bytes
+		_vec3	Rotation;		//12Bytes
+		_vec3	Position;		//12Bytes
 
-		_matrix	WorldMatrix;
+		_matrix	WorldMatrix;	//64Bytes
 
 		Component(const _vec3& scale = _vec3(0.f, 0.f, 0.f), const _vec3& rotation = _vec3(0.f, 0.f, 0.f), const _vec3& position = _vec3(0.f, 0.f, 0.f))
 			: Scale(scale), Rotation(rotation), Position(position)
